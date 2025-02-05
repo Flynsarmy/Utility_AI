@@ -139,6 +139,10 @@
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/godot.hpp>
 
+#ifdef TESTS_ENABLED
+#include "../tests/tests.hpp"
+#endif
+
 using namespace godot;
 
 // Singletons
@@ -268,9 +272,11 @@ void register_scene_classes() {
     GDREGISTER_CLASS(UtilityAIDebuggerOverlay);
     gpAIDebuggerOverlay = memnew(UtilityAIDebuggerOverlay);
     Engine::get_singleton()->register_singleton("AIDebuggerOverlay", gpAIDebuggerOverlay);
+
+#ifdef TESTS_ENABLED
+    do_tests();
 #endif
-
-
+#endif
 }
 
 
@@ -304,7 +310,6 @@ void initialize_utility_ai_module(ModuleInitializationLevel p_level) {
 
         default: {} break;
     }//endswitch p_level
-
 }
 
 void uninitialize_utility_ai_module(ModuleInitializationLevel p_level) {

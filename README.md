@@ -14,7 +14,7 @@ Godot 4.1.2 or newer.
 
 ## Components
 
-* *Utility based AI Agent Behaviours* 
+* *Utility based AI Agent Behaviours*
 * *Behaviour Tree with utility support*
 * *State Tree with utility support*
 * *Node Query System*
@@ -43,3 +43,13 @@ scons platform=<valid platform>
 
 After compilation, the binaries are created in to the `demo/addons/utility_ai/` folder. If all goes well, you should be able to launch the demo project in Godot and start using the addon.
 
+## Testing
+
+Unit tests are provided in the *tests* folder. To run them compile the repository with
+```
+scons platform=<valid platform> --tests_enabled
+```
+then run the project in headless mode with
+```
+godot.exe --headless --quit --path "demo"
+```
