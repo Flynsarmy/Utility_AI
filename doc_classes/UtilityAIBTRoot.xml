@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIBTRoot" inherits="UtilityAIBehaviourTreeNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		The main node for the Utility AI Behaviour Tree nodes.
 	</brief_description>
 	<description>
+		The main node for the Utility AI Behaviour Tree nodes. The root node is ticked to update the state of the behaviour tree.
 	</description>
 	<tutorials>
 	</tutorials>
@@ -12,6 +14,7 @@
 			<param index="0" name="user_data" type="Variant" />
 			<param index="1" name="delta" type="float" />
 			<description>
+				Use this method to tick the tree. You can provide any Godot variant type as a parameter (usually a node used as an actor or a [Dictionary] used as a blackboard), along with a delta-time. These are passed to all the child nodes of the behaviour tree during ticks.
 			</description>
 		</method>
 	</methods>
