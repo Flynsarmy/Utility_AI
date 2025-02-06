@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIBTRepeater" inherits="UtilityAIBTDecoratorNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Ticks its child until [member max_repeat_times] is reached.
 	</brief_description>
 	<description>
+		The [UtilityAIBTRepeater] node ticks its child until [member max_repeat_times] is reached. If [member max_repeat_times] is set to [code]-1[/code] the child will be ticked indefinitely.
 	</description>
 	<tutorials>
 	</tutorials>
