@@ -3,6 +3,7 @@
 	<brief_description>
 	</brief_description>
 	<description>
+		This is the root node for a State Tree. To update the tree, you call the [method tick] method of its root node. This will tick all the child nodes.
 	</description>
 	<tutorials>
 	</tutorials>
@@ -17,6 +18,7 @@
 			<param index="0" name="user_data" type="Variant" />
 			<param index="1" name="delta" type="float" />
 			<description>
+				Used to update the State Tree state. You can provide any [Variant] type as a parameter (usually a [Node] used as an actor or a [Dictionary] used as a blackboard), along with a delta-time. [param user_data] and [param delta] are passed to the [code]on_enter_state()[/code], [code]on_exit_state()[/code], [code]on_tick()[/code] and [code]on_enter_condition()[/code] methods of the child nodes.
 			</description>
 		</method>
 		<method name="tick_np">
@@ -27,6 +29,7 @@
 	</methods>
 	<members>
 		<member name="total_tick_usec" type="int" setter="set_total_tick_usec" getter="get_total_tick_usec" default="0">
+			The time to complete a tick in microseconds (usec).
 		</member>
 	</members>
 </class>
