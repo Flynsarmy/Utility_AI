@@ -25,10 +25,10 @@
 			The start point of the distance vector.
 		</member>
 		<member name="is_direction_vector_calculated" type="bool" setter="set_is_direction_vector_calculated" getter="get_is_direction_vector_calculated" default="false">
-			If [code], calculates [member direction_vector].
+			If [code]true[/code], calculates [member direction_vector].
 		</member>
 		<member name="is_distance_calculated" type="bool" setter="set_is_distance_calculated" getter="get_is_distance_calculated" default="false">
-			If [code], calculates [member distance].
+			If [code]true[/code], calculates [member distance].
 		</member>
 		<member name="max_distance" type="float" setter="set_max_distance" getter="get_max_distance" default="100.0">
 		</member>

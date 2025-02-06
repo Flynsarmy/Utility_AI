@@ -61,7 +61,7 @@
 			<param index="0" name="user_data" type="Object" />
 			<param index="1" name="delta" type="float" />
 			<description>
-				Emitted when the the [code]on_enter_condition()[/code] check needs to be done. The signal must call the [code]set_on_entered_condition(bool enter_state)[/code] method with either true or [code]false[/code] as the parameter to indicate if the state should be entered or not.
+				Emitted when the the [code]on_enter_condition()[/code] check needs to be done. The signal must call the [code]set_on_entered_condition(bool enter_state)[/code] method with either [code]true[/code] or [code]false[/code] as the parameter to indicate if the state should be entered or not.
 			</description>
 		</signal>
 		<signal name="state_check_enter_condition_np">

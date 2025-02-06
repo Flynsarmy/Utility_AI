@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIDotProductVector3SearchCriterion" inherits="UtilityAINQSSearchCriteria" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Scores and filters based the angle the set dot_product_vector has compared to the search space node direction.
 	</brief_description>
 	<description>
+		The [Vector3] dot product search criterion can be used to score and filter based the angle the set dot_product_vector has compared to the search space node direction ([code]-global_transform.basis.z[/code] rotated by rotation).
 	</description>
 	<tutorials>
 	</tutorials>
 	<members>
 		<member name="dot_product_vector" type="Vector3" setter="set_dot_product_direction_vector" getter="get_dot_product_direction_vector" default="Vector3(0, 0, -1)">
+			The global direction vector to compare the search space node direction vectors to.
 		</member>
 		<member name="filtering_rule" type="int" setter="set_filtering_rule" getter="get_filtering_rule" default="1">
+			If filtering is in use, the result given by the dot product is compared to this value for filtering.
 		</member>
 		<member name="filtering_value" type="float" setter="set_filtering_value" getter="get_filtering_value" default="0.0">
+			If filtering is in use, this is the comparison that is done to decide on the filtering. The choices are: [code]LessThan:0,LessOrEqual:1,Equal:2,MoreOrEqual:3,MoreThan:4[/code]. For instance, if [i]LessThan[/i] is chosen then any node that gets a dot product value of less than the value of [member filtering_value] will be filtered out.
 		</member>
 	</members>
 </class>
