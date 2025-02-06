@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAISensorGroup" inherits="UtilityAISensors" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Aggregate input from several [UtilityAISensor]s or [UtilityAISensorGroup]s for a higher-level input to the [UtilityAIConsiderations].
 	</brief_description>
 	<description>
+		Used to aggregate input from several [UtilityAISensor]s (or [UtilityAISensorGroup]s) for a higher-level input to the [UtilityAIConsiderations] nodes.
+		It should be added as child nodes of a [UtilityAIAgent].
 	</description>
 	<tutorials>
 	</tutorials>
 	<members>
 		<member name="evaluation_method" type="int" setter="set_evaluation_method" getter="get_evaluation_method" default="3">
+			A choice of how the sensors and sensor groups that are childs of the node are aggregated. Can be one of the following: [code]Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5[/code].
 		</member>
 		<member name="invert_sensor_value" type="bool" setter="set_invert_sensor_value" getter="get_invert_sensor_value" default="false">
+			This inverts the group sensor_value by calculating: [code]sensor_value = 1.0 - sensor_value[/code]. It is applied after all the child nodes have been evaluated.
 		</member>
 	</members>
 </class>

@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAISensor" inherits="UtilityAISensors" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Used to give input data to one or more [UtilityAIConsiderations] nodes.
 	</brief_description>
 	<description>
+		Used to give input data to one or more [UtilityAIConsiderations] nodes.
+		It should be added as child nodes of a [UtilityAIAgent].
 	</description>
 	<tutorials>
 	</tutorials>
