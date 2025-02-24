@@ -45,11 +45,7 @@ public:
 	virtual void transition_to(NodePath path_to_node, Variant user_data, float delta) override;
 	bool try_transition(UtilityAIStateTreeNodes *transition_target_node, Variant user_data, float delta);
 
-	virtual void transition_to_no_params(NodePath path_to_node) override;
-	bool try_transition_no_params(UtilityAIStateTreeNodes *transition_target_node);
-
 	void tick(Variant user_data, float delta);
-	void tick_no_params();
 
 	// Godot virtuals.
 	void _ready() override;
