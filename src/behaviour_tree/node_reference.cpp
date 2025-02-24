@@ -71,7 +71,7 @@ void UtilityAIBTNodeReference::reset() {
 	_node_reference->reset();
 }
 
-int UtilityAIBTNodeReference::tick(Variant user_data, float delta) {
+UtilityAI::Status UtilityAIBTNodeReference::tick(Variant user_data, float delta) {
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
@@ -81,20 +81,20 @@ int UtilityAIBTNodeReference::tick(Variant user_data, float delta) {
 		//_cache.is_null() || !_cache.is_valid() ) {
 		_node_reference = nullptr; // Cache shows that the node reference has become invalid.
 		set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-		set_tick_result(BT_FAILURE);
+		set_tick_result(UtilityAI::Status::FAILURE);
 		//emit_signal("btnode_exited", user_data, delta);
-		return BT_FAILURE;
+		return UtilityAI::Status::FAILURE;
 	}
 	if (!_node_reference) {
 		set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-		set_tick_result(BT_FAILURE);
+		set_tick_result(UtilityAI::Status::FAILURE);
 		//emit_signal("btnode_exited", user_data, delta);
-		return BT_FAILURE;
+		return UtilityAI::Status::FAILURE;
 	}
-	int result = _node_reference->tick(user_data, delta);
+	UtilityAI::Status result = _node_reference->tick(user_data, delta);
 	set_tick_result(result);
 	//emit_signal("btnode_ticked", user_data, delta);
-	if (result != BT_RUNNING) {
+	if (result != UtilityAI::Status::RUNNING) {
 		set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
 		//emit_signal("btnode_exited", user_data, delta);
 	}

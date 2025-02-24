@@ -10,7 +10,7 @@ class UtilityAIBTFixedResult : public UtilityAIBTDecoratorNodes {
 	GDCLASS(UtilityAIBTFixedResult, UtilityAIBTDecoratorNodes)
 
 private:
-	int _fixed_result;
+	UtilityAI::Status _fixed_result;
 
 protected:
 	static void _bind_methods();
@@ -21,12 +21,12 @@ public:
 
 	// Getters and setters for attributes.
 
-	void set_fixed_result(int fixed_result);
-	int get_fixed_result() const;
+	void set_fixed_result(UtilityAI::Status fixed_result);
+	UtilityAI::Status get_fixed_result() const;
 
 	// Handling functions.
 
-	virtual int tick(Variant user_data, float delta) override;
+	virtual UtilityAI::Status tick(Variant user_data, float delta) override;
 };
 
 } //namespace godot

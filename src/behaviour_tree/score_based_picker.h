@@ -28,7 +28,7 @@ public:
 
 	virtual void reset_bt_node() override;
 
-	virtual int tick(Variant user_data, float delta) override;
+	virtual UtilityAI::Status tick(Variant user_data, float delta) override;
 };
 
 } //namespace godot

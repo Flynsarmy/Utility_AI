@@ -18,7 +18,7 @@ void UtilityAIBTFixedResult::_bind_methods() {
 // Constructor and destructor.
 
 UtilityAIBTFixedResult::UtilityAIBTFixedResult() {
-	_fixed_result = BT_SUCCESS;
+	_fixed_result = UtilityAI::Status::SUCCESS;
 }
 
 UtilityAIBTFixedResult::~UtilityAIBTFixedResult() {
@@ -26,17 +26,17 @@ UtilityAIBTFixedResult::~UtilityAIBTFixedResult() {
 
 // Getters and Setters.
 
-void UtilityAIBTFixedResult::set_fixed_result(int fixed_result) {
+void UtilityAIBTFixedResult::set_fixed_result(UtilityAI::Status fixed_result) {
 	_fixed_result = fixed_result;
 }
 
-int UtilityAIBTFixedResult::get_fixed_result() const {
+UtilityAI::Status UtilityAIBTFixedResult::get_fixed_result() const {
 	return _fixed_result;
 }
 
 // Handling methods.
 
-int UtilityAIBTFixedResult::tick(Variant user_data, float delta) {
+UtilityAI::Status UtilityAIBTFixedResult::tick(Variant user_data, float delta) {
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;

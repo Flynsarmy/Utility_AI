@@ -63,10 +63,10 @@ void UtilityAIBTLimiter::reset_bt_node() {
 	_current_repeat_times = _max_repeat_times;
 }
 
-int UtilityAIBTLimiter::tick(Variant user_data, float delta) {
+UtilityAI::Status UtilityAIBTLimiter::tick(Variant user_data, float delta) {
 	//if( !get_is_active() ) return BT_SKIP;
 	if (Engine::get_singleton()->is_editor_hint())
-		return BT_FAILURE;
+		return UtilityAI::Status::FAILURE;
 	if (get_internal_status() == BT_INTERNAL_STATUS_UNTICKED) {
 		reset_bt_node();
 	}
@@ -77,9 +77,9 @@ int UtilityAIBTLimiter::tick(Variant user_data, float delta) {
 	//}
 	if (_current_repeat_times == 0) {
 		set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-		set_tick_result(BT_FAILURE);
+		set_tick_result(UtilityAI::Status::FAILURE);
 		//emit_signal("btnode_exited", user_data, delta);
-		return BT_FAILURE;
+		return UtilityAI::Status::FAILURE;
 	}
 
 	for (int i = 0; i < get_child_count(); ++i) {
@@ -88,9 +88,9 @@ int UtilityAIBTLimiter::tick(Variant user_data, float delta) {
 				continue;
 			}
 			--_current_repeat_times;
-			int result = btnode->tick(user_data, delta);
+			UtilityAI::Status result = btnode->tick(user_data, delta);
 			set_tick_result(result);
-			if (result != BT_RUNNING) {
+			if (result != UtilityAI::Status::RUNNING) {
 				//emit_signal("btnode_exited", user_data, delta);
 				return result;
 			}
@@ -99,7 +99,7 @@ int UtilityAIBTLimiter::tick(Variant user_data, float delta) {
 	//emit_signal("btnode_ticked", user_data, delta);
 	// If we get here, there are no child nodes set.
 	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-	set_tick_result(BT_FAILURE);
+	set_tick_result(UtilityAI::Status::FAILURE);
 	//emit_signal("btnode_exited", user_data, delta);
-	return BT_FAILURE;
+	return UtilityAI::Status::FAILURE;
 }

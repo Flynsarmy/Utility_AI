@@ -70,7 +70,7 @@ void UtilityAIBTScoreBasedPicker::reset_bt_node() {
 	} //endfor children
 }
 
-int UtilityAIBTScoreBasedPicker::tick(Variant user_data, float delta) {
+UtilityAI::Status UtilityAIBTScoreBasedPicker::tick(Variant user_data, float delta) {
 	if (get_internal_status() == BT_INTERNAL_STATUS_UNTICKED) {
 		reset_bt_node();
 	}
@@ -83,18 +83,18 @@ int UtilityAIBTScoreBasedPicker::tick(Variant user_data, float delta) {
 
 	if (_current_child_index < 0) {
 		set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-		set_tick_result(BT_FAILURE);
+		set_tick_result(UtilityAI::Status::FAILURE);
 		//emit_signal("btnode_exited", user_data, delta);
-		return BT_FAILURE; // No valid child found.
+		return UtilityAI::Status::FAILURE; // No valid child found.
 	}
 
 	//UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(_current_child_index));
 	UtilityAIBehaviourTreeNodes *btnode = _child_btnodes[_current_child_index];
 	if (btnode != nullptr) {
-		int return_value = btnode->tick(user_data, delta);
+		UtilityAI::Status return_value = btnode->tick(user_data, delta);
 		set_tick_result(return_value);
 		//emit_signal("btnode_ticked", user_data, delta);
-		if (return_value == BT_FAILURE || return_value == BT_SUCCESS) {
+		if (return_value == UtilityAI::Status::FAILURE || return_value == UtilityAI::Status::SUCCESS) {
 			_current_child_index = -1;
 			set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
 			//emit_signal("btnode_exited", user_data, delta);
@@ -102,7 +102,7 @@ int UtilityAIBTScoreBasedPicker::tick(Variant user_data, float delta) {
 		return return_value;
 	} //endif node was of correct type
 	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-	set_tick_result(BT_FAILURE);
+	set_tick_result(UtilityAI::Status::FAILURE);
 	//emit_signal("btnode_exited", user_data, delta);
-	return BT_FAILURE;
+	return UtilityAI::Status::FAILURE;
 }

@@ -16,7 +16,7 @@ private:
 	float _score;
 	int _evaluation_method;
 	bool _invert_score;
-	int _tick_result;
+	UtilityAI::Status _tick_result;
 	int _internal_status;
 	int _reset_rule;
 	bool _has_reset_rule_changed;
@@ -65,8 +65,8 @@ public:
 	void set_score(float score);
 	float get_score() const;
 
-	void set_tick_result(int tick_result);
-	int get_tick_result() const;
+	void set_tick_result(UtilityAI::Status tick_result);
+	UtilityAI::Status get_tick_result() const;
 
 	void set_internal_status(int internal_status);
 	int get_internal_status() const;
@@ -85,7 +85,7 @@ public:
 
 	virtual float evaluate();
 
-	virtual int tick(Variant user_data, float delta);
+	virtual UtilityAI::Status tick(Variant user_data, float delta);
 
 	virtual void reset();
 	//virtual void reset_for_looping();

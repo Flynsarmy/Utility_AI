@@ -80,12 +80,12 @@ void UtilityAIBTRunNQSQuery::reset_bt_node() {
 	_nqs_search_space->reset_query_variables();
 }
 
-int UtilityAIBTRunNQSQuery::tick(Variant user_data, float delta) {
+UtilityAI::Status UtilityAIBTRunNQSQuery::tick(Variant user_data, float delta) {
 	if (_nqs_search_space == nullptr || !UtilityFunctions::is_instance_id_valid(_nqs_search_space->get_instance_id())) {
 		_nqs_search_space = nullptr;
 		set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-		set_tick_result(BT_FAILURE);
-		return BT_FAILURE;
+		set_tick_result(UtilityAI::Status::FAILURE);
+		return UtilityAI::Status::FAILURE;
 	}
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
@@ -99,27 +99,27 @@ int UtilityAIBTRunNQSQuery::tick(Variant user_data, float delta) {
 			//_nqs_search_space_node->start_query(_time_budget_usec);
 			_nqs->post_query(_nqs_search_space, _is_high_priority);
 			_query_state = QS_RUNNING;
-			set_tick_result(BT_RUNNING);
+			set_tick_result(UtilityAI::Status::RUNNING);
 			//emit_signal("btnode_ticked", user_data, delta);
-			return BT_RUNNING;
+			return UtilityAI::Status::RUNNING;
 		} break;
 		case QS_COMPLETED: {
 			set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-			set_tick_result(BT_SUCCESS);
+			set_tick_result(UtilityAI::Status::SUCCESS);
 			//emit_signal("btnode_exited", user_data, delta);
-			return BT_SUCCESS;
+			return UtilityAI::Status::SUCCESS;
 		} break;
 		default: {
-			set_tick_result(BT_RUNNING);
+			set_tick_result(UtilityAI::Status::RUNNING);
 			//emit_signal("btnode_ticked", user_data, delta);
-			return BT_RUNNING;
+			return UtilityAI::Status::RUNNING;
 		} break;
 	}
 	// We shouldn't get here.
 	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-	set_tick_result(BT_FAILURE);
+	set_tick_result(UtilityAI::Status::FAILURE);
 	//emit_signal("btnode_exited", user_data, delta);
-	return BT_FAILURE;
+	return UtilityAI::Status::FAILURE;
 }
 
 void UtilityAIBTRunNQSQuery::_ready() {

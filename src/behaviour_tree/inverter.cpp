@@ -23,7 +23,7 @@ UtilityAIBTInverter::~UtilityAIBTInverter() {
 
 // Handling methods.
 
-int UtilityAIBTInverter::tick(Variant user_data, float delta) {
+UtilityAI::Status UtilityAIBTInverter::tick(Variant user_data, float delta) {
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
@@ -36,10 +36,17 @@ int UtilityAIBTInverter::tick(Variant user_data, float delta) {
 			if (!btnode->get_is_active()) {
 				continue;
 			}
-			int result = -btnode->tick(user_data, delta);
+			UtilityAI::Status result = btnode->tick(user_data, delta);
+
+			if (result == UtilityAI::Status::RUNNING) {
+				result = UtilityAI::Status::FAILURE;
+			} else if (result == UtilityAI::Status::FAILURE) {
+				result = UtilityAI::Status::RUNNING;
+			}
+
 			set_tick_result(result);
 			//emit_signal("btnode_ticked", user_data, delta);
-			if (result != BT_RUNNING) {
+			if (result != UtilityAI::Status::RUNNING) {
 				set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
 				//emit_signal("btnode_exited", user_data, delta);
 			}
@@ -47,7 +54,7 @@ int UtilityAIBTInverter::tick(Variant user_data, float delta) {
 		}
 	}
 	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-	set_tick_result(BT_FAILURE);
+	set_tick_result(UtilityAI::Status::FAILURE);
 	//emit_signal("btnode_exited", user_data, delta);
-	return BT_FAILURE;
+	return UtilityAI::Status::FAILURE;
 }

@@ -32,7 +32,7 @@ public:
 
 	// Handling functions.
 	virtual void reset() override;
-	virtual int tick(Variant user_data, float delta) override;
+	virtual UtilityAI::Status tick(Variant user_data, float delta) override;
 };
 
 } //namespace godot

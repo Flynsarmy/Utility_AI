@@ -44,13 +44,13 @@ bool UtilityAIBTParallel::get_is_reactive() const {
 }
 /**/
 
-int UtilityAIBTParallel::tick(Variant user_data, float delta) {
+UtilityAI::Status UtilityAIBTParallel::tick(Variant user_data, float delta) {
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
 	//    emit_signal("btnode_entered", user_data, delta);
 	//}
-	int parallelresult = BT_SUCCESS;
+	UtilityAI::Status parallelresult = UtilityAI::Status::SUCCESS;
 	//for( int i = 0; i < get_child_count(); ++i ) {
 	//    UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i));
 	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
@@ -59,11 +59,11 @@ int UtilityAIBTParallel::tick(Variant user_data, float delta) {
 		if (!btnode->get_is_active()) {
 			continue;
 		}
-		int result = btnode->tick(user_data, delta);
-		if (result == BT_FAILURE) {
-			parallelresult = BT_FAILURE;
-		} else if (result == BT_RUNNING) {
-			parallelresult = BT_RUNNING;
+		UtilityAI::Status result = btnode->tick(user_data, delta);
+		if (result == UtilityAI::Status::FAILURE) {
+			parallelresult = UtilityAI::Status::FAILURE;
+		} else if (result == UtilityAI::Status::RUNNING) {
+			parallelresult = UtilityAI::Status::RUNNING;
 		}
 		//}//endif node was of correct type
 	} //endfor btnodes

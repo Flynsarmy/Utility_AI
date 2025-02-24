@@ -13,7 +13,6 @@ class UtilityAIBTPassBy : public UtilityAIBTTaskNodes {
 private:
 	//int _tick_result;
 	bool _has_on_tick_method;
-	bool _has_tick_method;
 
 protected:
 	static void _bind_methods();
@@ -29,7 +28,7 @@ public:
 
 	// Handling functions.
 
-	virtual int tick(Variant user_data, float delta) override;
+	virtual UtilityAI::Status tick(Variant user_data, float delta) override;
 
 	// Godot virtuals.
 	void _notification(int p_what) override;

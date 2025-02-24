@@ -60,7 +60,7 @@ void UtilityAIBTRandomSequence::reset_bt_node() {
 	_child_node_order.shuffle();
 }
 
-int UtilityAIBTRandomSequence::tick(Variant user_data, float delta) {
+UtilityAI::Status UtilityAIBTRandomSequence::tick(Variant user_data, float delta) {
 	if (get_internal_status() == BT_INTERNAL_STATUS_UNTICKED) {
 		reset_bt_node();
 	}
@@ -78,21 +78,21 @@ int UtilityAIBTRandomSequence::tick(Variant user_data, float delta) {
 		//    continue;
 		//}
 		UtilityAIBehaviourTreeNodes *btnode = _child_btnodes[(int)_child_node_order[_current_child_index]];
-		int result = btnode->tick(user_data, delta);
+		UtilityAI::Status result = btnode->tick(user_data, delta);
 		set_tick_result(result);
-		if (result == BT_FAILURE) {
+		if (result == UtilityAI::Status::FAILURE) {
 			set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
 			//emit_signal("btnode_exited", user_data, delta);
-			return BT_FAILURE;
-		} else if (result == BT_RUNNING) {
-			return BT_RUNNING;
+			return UtilityAI::Status::FAILURE;
+		} else if (result == UtilityAI::Status::RUNNING) {
+			return UtilityAI::Status::RUNNING;
 		}
 		//}//endif node was of correct type
 		++_current_child_index;
 	} //endwhile children to tick
 	//_current_child_index = -1;
 	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-	set_tick_result(BT_SUCCESS);
+	set_tick_result(UtilityAI::Status::SUCCESS);
 	//emit_signal("btnode_exited", user_data, delta);
-	return BT_SUCCESS;
+	return UtilityAI::Status::SUCCESS;
 }

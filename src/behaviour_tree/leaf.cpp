@@ -16,10 +16,7 @@ void UtilityAIBTLeaf::_bind_methods() {
 
 // Constructor and destructor.
 
-UtilityAIBTLeaf::UtilityAIBTLeaf() {
-	_has_on_tick_method = false;
-	_has_tick_method = false;
-}
+UtilityAIBTLeaf::UtilityAIBTLeaf() {}
 
 UtilityAIBTLeaf::~UtilityAIBTLeaf() {
 }
@@ -43,33 +40,25 @@ int  UtilityAIBTLeaf::get_tick_result() const {
 
 // Handling methods.
 
-int UtilityAIBTLeaf::tick(Variant user_data, float delta) {
+UtilityAI::Status UtilityAIBTLeaf::tick(Variant user_data, float delta) {
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
 	//    emit_signal("btnode_entered", user_data, delta);
 	//}
-	int ret_val = BT_RUNNING;
-	if (_has_on_tick_method) {
-		godot::Variant return_value = call("on_tick", user_data, delta);
-		if (return_value.get_type() == godot::Variant::Type::INT) {
-			ret_val = (int)return_value;
-			set_tick_result(ret_val);
-		}
-	} else if (_has_tick_method) {
-		godot::Variant return_value = call("tick", user_data, delta);
-		if (return_value.get_type() == godot::Variant::Type::INT) {
-			ret_val = (int)return_value;
-			set_tick_result(ret_val);
-		}
-	}
+	godot::Variant result;
+	result = call("_tick", user_data, delta);
+	UtilityAI::Status return_value = static_cast<UtilityAI::Status>((int64_t)result); // or result.operator int64_t();
+
+	set_tick_result(return_value);
+
 	//emit_signal("btnode_ticked", user_data, delta);
-	if (ret_val == BT_FAILURE || ret_val == BT_SUCCESS) {
+	if (return_value == UtilityAI::Status::FAILURE || return_value == UtilityAI::Status::SUCCESS) {
 		set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
 		//emit_signal("btnode_exited", user_data, delta);
 	}
 
-	return ret_val;
+	return return_value;
 }
 
 // Godot virtuals.
@@ -77,6 +66,4 @@ int UtilityAIBTLeaf::tick(Variant user_data, float delta) {
 void UtilityAIBTLeaf::_notification(int p_what) {
 	if (p_what != NOTIFICATION_POST_ENTER_TREE)
 		return;
-	_has_on_tick_method = has_method("on_tick");
-	_has_tick_method = has_method("tick");
 }

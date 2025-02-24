@@ -29,7 +29,7 @@ void UtilityAIBTCooldownMsec::_bind_methods() {
 UtilityAIBTCooldownMsec::UtilityAIBTCooldownMsec() {
 	_cooldown_msec = 0;
 	_cooldown_start_timestamp = 0;
-	_cooldown_return_value = BT_FAILURE;
+	_cooldown_return_value = UtilityAI::Status::FAILURE;
 	_is_in_cooldown = false;
 }
 
@@ -54,17 +54,17 @@ int UtilityAIBTCooldownMsec::get_cooldown_start_timestamp() const {
 	return _cooldown_start_timestamp;
 }
 
-void UtilityAIBTCooldownMsec::set_cooldown_return_value(int cooldown_return_value) {
+void UtilityAIBTCooldownMsec::set_cooldown_return_value(UtilityAI::Status cooldown_return_value) {
 	_cooldown_return_value = cooldown_return_value;
 }
 
-int UtilityAIBTCooldownMsec::get_cooldown_return_value() const {
+UtilityAI::Status UtilityAIBTCooldownMsec::get_cooldown_return_value() const {
 	return _cooldown_return_value;
 }
 
 // Handling methods.
 
-int UtilityAIBTCooldownMsec::tick(Variant user_data, float delta) {
+UtilityAI::Status UtilityAIBTCooldownMsec::tick(Variant user_data, float delta) {
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
@@ -85,7 +85,7 @@ int UtilityAIBTCooldownMsec::tick(Variant user_data, float delta) {
 			if (!btnode->get_is_active()) {
 				continue;
 			}
-			int result = btnode->tick(user_data, delta);
+			UtilityAI::Status result = btnode->tick(user_data, delta);
 			set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
 			set_tick_result(result);
 			//emit_signal("btnode_exited", user_data, delta);
@@ -93,7 +93,7 @@ int UtilityAIBTCooldownMsec::tick(Variant user_data, float delta) {
 		}
 	}
 	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-	set_tick_result(BT_FAILURE);
+	set_tick_result(UtilityAI::Status::FAILURE);
 	//emit_signal("btnode_exited", user_data, delta);
-	return BT_FAILURE;
+	return UtilityAI::Status::FAILURE;
 }

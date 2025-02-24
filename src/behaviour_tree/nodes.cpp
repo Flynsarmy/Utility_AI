@@ -35,7 +35,7 @@ void UtilityAIBehaviourTreeNodes::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_internal_status"), &UtilityAIBehaviourTreeNodes::get_internal_status);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "internal_status", PROPERTY_HINT_ENUM, "Unticked:0,Ticked:1,Completed:2"), "set_internal_status", "get_internal_status");
 
-	ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBehaviourTreeNodes::tick);
+	// ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBehaviourTreeNodes::tick);
 
 	// Signals.
 	//ADD_SIGNAL(MethodInfo("btnode_entered", PropertyInfo(Variant::OBJECT, "user_data"), PropertyInfo(Variant::FLOAT, "delta")));
@@ -49,7 +49,7 @@ UtilityAIBehaviourTreeNodes::UtilityAIBehaviourTreeNodes() {
 	_score = 0.0;
 	_evaluation_method = UtilityAIBehaviourTreeNodesEvaluationMethod::Multiply;
 	_invert_score = false;
-	_tick_result = BT_SUCCESS;
+	_tick_result = UtilityAI::Status::SUCCESS;
 	_internal_status = BT_INTERNAL_STATUS_UNTICKED;
 	_reset_rule = UtilityAIBehaviourTreeNodesResetRule::WHEN_TICKED_AFTER_BEING_COMPLETED;
 	_has_reset_rule_changed = false;
@@ -83,16 +83,11 @@ float UtilityAIBehaviourTreeNodes::get_score() const {
 	return _score;
 }
 
-void UtilityAIBehaviourTreeNodes::set_tick_result(int tick_result) {
+void UtilityAIBehaviourTreeNodes::set_tick_result(UtilityAI::Status tick_result) {
 	_tick_result = tick_result;
-	if (_tick_result > 1) {
-		_tick_result = 1;
-	} else if (_tick_result < -2) {
-		_tick_result = -2;
-	}
 }
 
-int UtilityAIBehaviourTreeNodes::get_tick_result() const {
+UtilityAI::Status UtilityAIBehaviourTreeNodes::get_tick_result() const {
 	return _tick_result;
 }
 
@@ -282,8 +277,8 @@ float UtilityAIBehaviourTreeNodes::evaluate() {
 	return _score;
 }
 
-int UtilityAIBehaviourTreeNodes::tick(Variant user_data, float delta) {
-	return 0;
+UtilityAI::Status UtilityAIBehaviourTreeNodes::tick(Variant user_data, float delta) {
+	return UtilityAI::Status::RUNNING;
 }
 
 // Godot virtuals.

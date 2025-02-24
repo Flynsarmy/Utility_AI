@@ -13,7 +13,7 @@ private:
 	uint64_t _cooldown_usec;
 	uint64_t _cooldown_start_timestamp;
 
-	int _cooldown_return_value;
+	UtilityAI::Status _cooldown_return_value;
 	bool _is_in_cooldown;
 
 protected:
@@ -31,12 +31,12 @@ public:
 	void set_cooldown_start_timestamp(int cooldown_Usec);
 	int get_cooldown_start_timestamp() const;
 
-	void set_cooldown_return_value(int cooldown_return_value);
-	int get_cooldown_return_value() const;
+	void set_cooldown_return_value(UtilityAI::Status cooldown_return_value);
+	UtilityAI::Status get_cooldown_return_value() const;
 
 	// Handling functions.
 
-	virtual int tick(Variant user_data, float delta) override;
+	virtual UtilityAI::Status tick(Variant user_data, float delta) override;
 };
 
 } //namespace godot

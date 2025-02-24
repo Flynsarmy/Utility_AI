@@ -37,7 +37,7 @@ void UtilityAIBTRandomSelector::reset_bt_node() {
 
 // Handling functions.
 
-int UtilityAIBTRandomSelector::tick(Variant user_data, float delta) {
+UtilityAI::Status UtilityAIBTRandomSelector::tick(Variant user_data, float delta) {
 	if (get_internal_status() == BT_INTERNAL_STATUS_UNTICKED) {
 		reset_bt_node();
 	}
@@ -55,14 +55,14 @@ int UtilityAIBTRandomSelector::tick(Variant user_data, float delta) {
 		//if( !btnode->get_is_active() ) {
 		//    continue;
 		//}
-		int result = btnode->tick(user_data, delta);
-		if (result == BT_SUCCESS) {
+		UtilityAI::Status result = btnode->tick(user_data, delta);
+		if (result == UtilityAI::Status::SUCCESS) {
 			//_current_child_index = -1;
 			set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
 			//emit_signal("btnode_exited", user_data, delta);
-			return BT_SUCCESS;
-		} else if (result == BT_RUNNING) {
-			return BT_RUNNING;
+			return UtilityAI::Status::SUCCESS;
+		} else if (result == UtilityAI::Status::RUNNING) {
+			return UtilityAI::Status::RUNNING;
 		}
 		//}//endif node was of correct type
 		++_current_child_index;
@@ -70,5 +70,5 @@ int UtilityAIBTRandomSelector::tick(Variant user_data, float delta) {
 	//_current_child_index = -1;
 	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
 	//emit_signal("btnode_exited", user_data, delta);
-	return BT_FAILURE;
+	return UtilityAI::Status::FAILURE;
 }

@@ -73,11 +73,11 @@ void UtilityAIBTRepeater::reset_bt_node() {
 	_current_repeat_times = _repeat_times;
 }
 
-int UtilityAIBTRepeater::tick(Variant user_data, float delta) {
+UtilityAI::Status UtilityAIBTRepeater::tick(Variant user_data, float delta) {
 	if (!get_is_active())
-		return BT_FAILURE;
+		return UtilityAI::Status::FAILURE;
 	if (Engine::get_singleton()->is_editor_hint())
-		return BT_FAILURE;
+		return UtilityAI::Status::FAILURE;
 
 	if (get_internal_status() == BT_INTERNAL_STATUS_UNTICKED) {
 		reset_bt_node();
@@ -90,12 +90,12 @@ int UtilityAIBTRepeater::tick(Variant user_data, float delta) {
 
 	if (_current_repeat_times == 0) {
 		set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-		set_tick_result(BT_SUCCESS);
-		return BT_SUCCESS;
+		set_tick_result(UtilityAI::Status::SUCCESS);
+		return UtilityAI::Status::SUCCESS;
 	}
 	if (get_internal_status() == BT_INTERNAL_STATUS_COMPLETED) {
-		set_tick_result(BT_SUCCESS);
-		return BT_SUCCESS;
+		set_tick_result(UtilityAI::Status::SUCCESS);
+		return UtilityAI::Status::SUCCESS;
 	}
 
 	//emit_signal("btnode_ticked",user_data, delta);
@@ -112,16 +112,16 @@ int UtilityAIBTRepeater::tick(Variant user_data, float delta) {
 		//    }
 	}
 	if (_current_repeat_times > 0 || _current_repeat_times < 0) {
-		set_tick_result(BT_RUNNING);
-		return BT_RUNNING;
+		set_tick_result(UtilityAI::Status::RUNNING);
+		return UtilityAI::Status::RUNNING;
 	} else if (_current_repeat_times == 0) {
 		set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-		set_tick_result(BT_SUCCESS);
+		set_tick_result(UtilityAI::Status::SUCCESS);
 		//emit_signal("btnode_exited", user_data, delta);
-		return BT_SUCCESS;
+		return UtilityAI::Status::SUCCESS;
 	}
 	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-	set_tick_result(BT_FAILURE);
+	set_tick_result(UtilityAI::Status::FAILURE);
 	//emit_signal("btnode_exited", user_data, delta);
-	return BT_FAILURE;
+	return UtilityAI::Status::FAILURE;
 }
