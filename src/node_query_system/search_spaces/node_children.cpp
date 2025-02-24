@@ -11,7 +11,7 @@ UtilityAINodeChildrenSearchSpace::UtilityAINodeChildrenSearchSpace() {
 
 
 UtilityAINodeChildrenSearchSpace::~UtilityAINodeChildrenSearchSpace() {
-    
+
 }
 
 
@@ -42,7 +42,7 @@ Node* UtilityAINodeChildrenSearchSpace::get_parent_node() const {
 
 
 TypedArray<Node> UtilityAINodeChildrenSearchSpace::get_searchspace_nodes() const {
-    if( _parent_node == nullptr || !UtilityFunctions::is_instance_valid(_parent_node) ) {
+    if( _parent_node == nullptr || !UtilityFunctions::is_instance_id_valid(_parent_node->get_instance_id()) ) {
         TypedArray<Node> emptyarray;
         return emptyarray;
     }
@@ -56,6 +56,6 @@ void UtilityAINodeChildrenSearchSpace::_ready() {
     if( Engine::get_singleton()->is_editor_hint() ) return;
 
     //_parent_node = get_node_or_null(_parent_node_path);
-    
+
 }
 /**/

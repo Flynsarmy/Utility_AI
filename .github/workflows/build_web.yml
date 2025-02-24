@@ -9,11 +9,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - precision: double
+          - precision: single
             arch: wasm32
             platform: web
             target-type: template_debug
-          - precision: double
+          - precision: single
             arch: wasm32
             platform: web
             target-type: template_release

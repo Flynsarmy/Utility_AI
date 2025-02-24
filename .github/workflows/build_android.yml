@@ -9,19 +9,19 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - precision: double
+          - precision: single
             arch: arm64
             platform: android
             target-type: template_debug
-          - precision: double
+          - precision: single
             arch: x86_64
             platform: android
             target-type: template_debug
-          - precision: double
+          - precision: single
             arch: arm64
             platform: android
             target-type: template_release
-          - precision: double
+          - precision: single
             arch: x86_64
             platform: android
             target-type: template_release

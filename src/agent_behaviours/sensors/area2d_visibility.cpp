@@ -216,7 +216,7 @@ float UtilityAIArea2DVisibilitySensor::evaluate_sensor_value() {
     if( _visibility_volume == nullptr ) {
         return get_sensor_value();
     }
-    if( !UtilityFunctions::is_instance_valid(_visibility_volume) ) {
+    if( !UtilityFunctions::is_instance_id_valid(_cache) ) {
         _visibility_volume = nullptr;
         return get_sensor_value();
     }

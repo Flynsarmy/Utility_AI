@@ -21,7 +21,7 @@ void UtilityAIBTRunNQSQuery::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_is_high_priority", "is_high_priority"), &UtilityAIBTRunNQSQuery::set_is_high_priority);
     ClassDB::bind_method(D_METHOD("get_is_high_priority"), &UtilityAIBTRunNQSQuery::get_is_high_priority);
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_high_priority", PROPERTY_HINT_NONE), "set_is_high_priority","get_is_high_priority");
-    
+
 }
 
 
@@ -48,7 +48,7 @@ UtilityAIBTRunNQSQuery::~UtilityAIBTRunNQSQuery() {
 void UtilityAIBTRunNQSQuery::set_nqs_search_space( UtilityAINQSSearchSpaces* nqs_search_space ) {
     _nqs_search_space = nqs_search_space;
     //_nqs_search_space_cache = ObjectID();
-    
+
 }
 
 
@@ -91,8 +91,8 @@ void UtilityAIBTRunNQSQuery::reset_bt_node() {
     _nqs_search_space->reset_query_variables();
 }
 
-int UtilityAIBTRunNQSQuery::tick(Variant user_data, float delta) { 
-    if( _nqs_search_space == nullptr || !UtilityFunctions::is_instance_valid(_nqs_search_space) ) {
+int UtilityAIBTRunNQSQuery::tick(Variant user_data, float delta) {
+    if( _nqs_search_space == nullptr || !UtilityFunctions::is_instance_id_valid(_nqs_search_space->get_instance_id()) ) {
         _nqs_search_space = nullptr;
         set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
         set_tick_result(BT_FAILURE);
@@ -122,11 +122,11 @@ int UtilityAIBTRunNQSQuery::tick(Variant user_data, float delta) {
             //emit_signal("btnode_exited", user_data, delta);
             return BT_SUCCESS;
         }
-        break;    
+        break;
         default: {
             set_tick_result(BT_RUNNING);
             //emit_signal("btnode_ticked", user_data, delta);
-            return BT_RUNNING;            
+            return BT_RUNNING;
         }
         break;
     }

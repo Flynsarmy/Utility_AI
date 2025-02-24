@@ -9,11 +9,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - precision: double
+          - precision: single
             arch: x86_64
             platform: linux
             target-type: template_debug
-          - precision: double
+          - precision: single
             arch: x86_64
             platform: linux
             target-type: template_release

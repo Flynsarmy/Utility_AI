@@ -9,12 +9,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - precision: double
+          - precision: single
             arch: x86_64
             opencl_arch: x64
             target-type: template_debug
             platform: windows
-          - precision: double
+          - precision: single
             arch: x86_64
             opencl_arch: x64
             target-type: template_release
