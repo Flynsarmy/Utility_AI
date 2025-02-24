@@ -1,81 +1,83 @@
 #include "node_reference.h"
 
-#include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
-
 
 using namespace godot;
 
 // Method binds.
 
 void UtilityAIBTNodeReference::_bind_methods() {
+<<<<<<< HEAD
 
     ClassDB::bind_method(D_METHOD("set_node_reference", "node_reference"), &UtilityAIBTNodeReference::set_node_reference);
     ClassDB::bind_method(D_METHOD("get_node_reference"), &UtilityAIBTNodeReference::get_node_reference);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "node_reference", PROPERTY_HINT_NODE_TYPE, "UtilityAIBehaviourTreeNodes" ), "set_node_reference","get_node_reference");
 
     //ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBTNodeReference::tick);
+=======
+	ClassDB::bind_method(D_METHOD("set_node_reference", "node_reference"), &UtilityAIBTNodeReference::set_node_reference);
+	ClassDB::bind_method(D_METHOD("get_node_reference"), &UtilityAIBTNodeReference::get_node_reference);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "node_reference", PROPERTY_HINT_NODE_TYPE, "UtilityAIBehaviourTreeNodes"), "set_node_reference", "get_node_reference");
+>>>>>>> lint2
 
+	//ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBTNodeReference::tick);
 }
-
 
 // Constructor and destructor.
 
 UtilityAIBTNodeReference::UtilityAIBTNodeReference() {
-    //_tick_result = 1;
-    _node_reference = nullptr;
+	//_tick_result = 1;
+	_node_reference = nullptr;
 }
-
 
 UtilityAIBTNodeReference::~UtilityAIBTNodeReference() {
 }
 
-
 // Getters and Setters.
 
-void UtilityAIBTNodeReference::set_node_reference(UtilityAIBehaviourTreeNodes* node_reference) {
-    if( _node_reference == node_reference || (node_reference != nullptr && (this == node_reference || node_reference->is_ancestor_of(this) || this->is_ancestor_of(node_reference))) ) {
-        return;
-    }
+void UtilityAIBTNodeReference::set_node_reference(UtilityAIBehaviourTreeNodes *node_reference) {
+	if (_node_reference == node_reference || (node_reference != nullptr && (this == node_reference || node_reference->is_ancestor_of(this) || this->is_ancestor_of(node_reference)))) {
+		return;
+	}
 
-    _node_reference = node_reference;
-    _update_cache();
+	_node_reference = node_reference;
+	_update_cache();
 }
 
-UtilityAIBehaviourTreeNodes* UtilityAIBTNodeReference::get_node_reference() const {
-    return _node_reference;
+UtilityAIBehaviourTreeNodes *UtilityAIBTNodeReference::get_node_reference() const {
+	return _node_reference;
 }
 
 /**
 void UtilityAIBTNodeReference::set_tick_result( int tick_result ) {
-    _tick_result = tick_result;
+	_tick_result = tick_result;
 }
 
 
 int  UtilityAIBTNodeReference::get_tick_result() const {
-    return _tick_result;
+	return _tick_result;
 }
 /**/
 
 // Handling methods.
 
 void UtilityAIBTNodeReference::_update_cache() {
-    _cache = ObjectID();
-    if( _node_reference != nullptr ) {
-    	_cache = _node_reference->get_instance_id();
-    }
+	_cache = ObjectID();
+	if (_node_reference != nullptr) {
+		_cache = _node_reference->get_instance_id();
+	}
 }
 
-
 void UtilityAIBTNodeReference::reset() {
-    if( _cache.is_null() || !_cache.is_valid() ) {
-        return;
-    }
-    if(!_node_reference) {
-        return;
-    }
-    _node_reference->reset();
+	if (_cache.is_null() || !_cache.is_valid()) {
+		return;
+	}
+	if (!_node_reference) {
+		return;
+	}
+	_node_reference->reset();
 }
 
 
@@ -108,4 +110,3 @@ int UtilityAIBTNodeReference::tick(Variant user_data, float delta) {
     }
     return result;
 }
-
