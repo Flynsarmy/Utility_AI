@@ -10,8 +10,7 @@ UtilityAINodeChildrenSearchSpace::UtilityAINodeChildrenSearchSpace() {
 
 UtilityAINodeChildrenSearchSpace::~UtilityAINodeChildrenSearchSpace() {
 <<<<<<< HEAD
-
-=======
+	== == == =
 >>>>>>> lint2
 }
 
@@ -39,11 +38,11 @@ Node *UtilityAINodeChildrenSearchSpace::get_parent_node() const {
 }
 
 TypedArray<Node> UtilityAINodeChildrenSearchSpace::get_searchspace_nodes() const {
-    if( _parent_node == nullptr || !UtilityFunctions::is_instance_id_valid(_parent_node->get_instance_id()) ) {
-        TypedArray<Node> emptyarray;
-        return emptyarray;
-    }
-    return _parent_node->get_children();
+	if (_parent_node == nullptr || !UtilityFunctions::is_instance_id_valid(_parent_node->get_instance_id())) {
+		TypedArray<Node> emptyarray;
+		return emptyarray;
+	}
+	return _parent_node->get_children();
 }
 
 /**
@@ -54,7 +53,7 @@ void UtilityAINodeChildrenSearchSpace::_ready() {
 	//_parent_node = get_node_or_null(_parent_node_path);
 
 <<<<<<< HEAD
-    //_parent_node = get_node_or_null(_parent_node_path);
+	//_parent_node = get_node_or_null(_parent_node_path);
 
 =======
 >>>>>>> lint2

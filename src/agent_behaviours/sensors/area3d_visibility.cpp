@@ -197,17 +197,17 @@ void UtilityAIArea3DVisibilitySensor::uninitialize_sensor() {
 }
 
 float UtilityAIArea3DVisibilitySensor::evaluate_sensor_value() {
-    if( _visibility_volume == nullptr ) {
-        return get_sensor_value();
-    }
-    if( !UtilityFunctions::is_instance_id_valid(_cache) ) {
-        _visibility_volume = nullptr;
-        return get_sensor_value();
-    }
-    //if( _cache.is_null() || !_cache.is_valid() ) {
-    //    _visibility_volume = nullptr; // Cache shows that the node reference has become invalid.
-    //    return get_sensor_value();
-    //}
+	if (_visibility_volume == nullptr) {
+		return get_sensor_value();
+	}
+	if (!UtilityFunctions::is_instance_id_valid(_cache)) {
+		_visibility_volume = nullptr;
+		return get_sensor_value();
+	}
+	//if( _cache.is_null() || !_cache.is_valid() ) {
+	//    _visibility_volume = nullptr; // Cache shows that the node reference has become invalid.
+	//    return get_sensor_value();
+	//}
 
 	//Ref<World3D> w3d = _visibility_volume_node->get_world_3d();
 	//ERR_FAIL_COND_V(w3d.is_null(), get_sensor_value());

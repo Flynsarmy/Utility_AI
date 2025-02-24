@@ -29,15 +29,6 @@ void UtilityAIArea2DSearchSpace::_bind_methods() {
 
 <<<<<<< HEAD
 
-void UtilityAIArea2DSearchSpace::on_area_entered(Area2D* area ) {
-    if( area == nullptr ) {
-        return;
-    }
-    if( _intersecting_areas.has(area) ) {
-        return;
-    }
-    _intersecting_areas.push_back(area);
-=======
 void UtilityAIArea2DSearchSpace::on_area_entered(Area2D *area) {
 	if (area == nullptr) {
 		return;
@@ -46,63 +37,72 @@ void UtilityAIArea2DSearchSpace::on_area_entered(Area2D *area) {
 		return;
 	}
 	_intersecting_areas.push_back(area);
+	== == == =
+					 void UtilityAIArea2DSearchSpace::on_area_entered(Area2D * area) {
+		if (area == nullptr) {
+			return;
+		}
+		if (_intersecting_areas.has(area)) {
+			return;
+		}
+		_intersecting_areas.push_back(area);
 >>>>>>> lint2
-}
-
-void UtilityAIArea2DSearchSpace::on_area_exited(Area2D *area) {
-	if (area == nullptr) {
-		return;
 	}
-	if (!_intersecting_areas.has(area)) {
-		return;
+
+	void UtilityAIArea2DSearchSpace::on_area_exited(Area2D * area) {
+		if (area == nullptr) {
+			return;
+		}
+		if (!_intersecting_areas.has(area)) {
+			return;
+		}
+		int index = _intersecting_areas.find(area);
+		if (index < 0) {
+			return;
+		}
+		_intersecting_areas.remove_at(index);
 	}
-	int index = _intersecting_areas.find(area);
-	if (index < 0) {
-		return;
+
+	// Getters and setters for attributes.
+
+	void UtilityAIArea2DSearchSpace::set_area2d(Area2D * area2d) {
+		_area2d = area2d;
 	}
-	_intersecting_areas.remove_at(index);
-}
 
-// Getters and setters for attributes.
-
-void UtilityAIArea2DSearchSpace::set_area2d(Area2D *area2d) {
-	_area2d = area2d;
-}
-
-Area2D *UtilityAIArea2DSearchSpace::get_area2d() const {
-	return _area2d;
-}
-
-void UtilityAIArea2DSearchSpace::set_intersecting_areas(TypedArray<Area2D> intersecting_areas) {
-	_intersecting_areas = intersecting_areas;
-}
-
-TypedArray<Area2D> UtilityAIArea2DSearchSpace::get_intersecting_areas() const {
-	return _intersecting_areas;
-}
-
-// Handling methods.
-
-TypedArray<Node> UtilityAIArea2DSearchSpace::get_searchspace_nodes() const {
-	return _intersecting_areas;
-}
-
-void UtilityAIArea2DSearchSpace::_initialize_search_space() {
-    ERR_FAIL_COND_MSG( _area2d == nullptr || !UtilityFunctions::is_instance_id_valid(_area2d->get_instance_id()), "UtilityAIArea2DSearchSpace::_initialize_search_space() - Error, the node for the Area2D has not been set.");
-
-    // Connect to the area entered and exited signals.
-    Error error_visibility_volume_on_entered = _area2d->connect("area_entered", Callable(this, "on_area_entered"));
-    Error error_visibility_volume_on_exited  = _area2d->connect("area_exited", Callable(this, "on_area_exited"));
-
-	// Connect to the area entered and exited signals.
-	Error error_visibility_volume_on_entered = _area2d->connect("area_entered", Callable(this, "on_area_entered"));
-	Error error_visibility_volume_on_exited = _area2d->connect("area_exited", Callable(this, "on_area_exited"));
-}
-
-void UtilityAIArea2DSearchSpace::_uninitialize_search_space() {
-	if (_area2d != nullptr) {
-		_area2d->disconnect("area_entered", Callable(this, "on_area_entered"));
-		_area2d->disconnect("area_exited", Callable(this, "on_area_exited"));
+	Area2D *UtilityAIArea2DSearchSpace::get_area2d() const {
+		return _area2d;
 	}
-	_area2d = nullptr;
-}
+
+	void UtilityAIArea2DSearchSpace::set_intersecting_areas(TypedArray<Area2D> intersecting_areas) {
+		_intersecting_areas = intersecting_areas;
+	}
+
+	TypedArray<Area2D> UtilityAIArea2DSearchSpace::get_intersecting_areas() const {
+		return _intersecting_areas;
+	}
+
+	// Handling methods.
+
+	TypedArray<Node> UtilityAIArea2DSearchSpace::get_searchspace_nodes() const {
+		return _intersecting_areas;
+	}
+
+	void UtilityAIArea2DSearchSpace::_initialize_search_space() {
+		ERR_FAIL_COND_MSG(_area2d == nullptr || !UtilityFunctions::is_instance_id_valid(_area2d->get_instance_id()), "UtilityAIArea2DSearchSpace::_initialize_search_space() - Error, the node for the Area2D has not been set.");
+
+		// Connect to the area entered and exited signals.
+		Error error_visibility_volume_on_entered = _area2d->connect("area_entered", Callable(this, "on_area_entered"));
+		Error error_visibility_volume_on_exited = _area2d->connect("area_exited", Callable(this, "on_area_exited"));
+
+		// Connect to the area entered and exited signals.
+		Error error_visibility_volume_on_entered = _area2d->connect("area_entered", Callable(this, "on_area_entered"));
+		Error error_visibility_volume_on_exited = _area2d->connect("area_exited", Callable(this, "on_area_exited"));
+	}
+
+	void UtilityAIArea2DSearchSpace::_uninitialize_search_space() {
+		if (_area2d != nullptr) {
+			_area2d->disconnect("area_entered", Callable(this, "on_area_entered"));
+			_area2d->disconnect("area_exited", Callable(this, "on_area_exited"));
+		}
+		_area2d = nullptr;
+	}
