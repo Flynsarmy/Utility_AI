@@ -27,8 +27,6 @@ void UtilityAIArea2DSearchSpace::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "intersecting_areas", PROPERTY_HINT_ARRAY_TYPE, vformat("%s/%s:%s", Variant::OBJECT, PROPERTY_HINT_RESOURCE_TYPE, "Area2D")), "set_intersecting_areas", "get_intersecting_areas");
 }
 
-<<<<<<< HEAD
-
 void UtilityAIArea2DSearchSpace::on_area_entered(Area2D *area) {
 	if (area == nullptr) {
 		return;
@@ -37,16 +35,6 @@ void UtilityAIArea2DSearchSpace::on_area_entered(Area2D *area) {
 		return;
 	}
 	_intersecting_areas.push_back(area);
-	== == == =
-					 void UtilityAIArea2DSearchSpace::on_area_entered(Area2D * area) {
-		if (area == nullptr) {
-			return;
-		}
-		if (_intersecting_areas.has(area)) {
-			return;
-		}
-		_intersecting_areas.push_back(area);
->>>>>>> lint2
 	}
 
 	void UtilityAIArea2DSearchSpace::on_area_exited(Area2D * area) {
@@ -89,10 +77,6 @@ void UtilityAIArea2DSearchSpace::on_area_entered(Area2D *area) {
 
 	void UtilityAIArea2DSearchSpace::_initialize_search_space() {
 		ERR_FAIL_COND_MSG(_area2d == nullptr || !UtilityFunctions::is_instance_id_valid(_area2d->get_instance_id()), "UtilityAIArea2DSearchSpace::_initialize_search_space() - Error, the node for the Area2D has not been set.");
-
-		// Connect to the area entered and exited signals.
-		Error error_visibility_volume_on_entered = _area2d->connect("area_entered", Callable(this, "on_area_entered"));
-		Error error_visibility_volume_on_exited = _area2d->connect("area_exited", Callable(this, "on_area_exited"));
 
 		// Connect to the area entered and exited signals.
 		Error error_visibility_volume_on_entered = _area2d->connect("area_entered", Callable(this, "on_area_entered"));

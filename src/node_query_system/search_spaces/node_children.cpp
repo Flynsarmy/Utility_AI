@@ -9,9 +9,6 @@ UtilityAINodeChildrenSearchSpace::UtilityAINodeChildrenSearchSpace() {
 }
 
 UtilityAINodeChildrenSearchSpace::~UtilityAINodeChildrenSearchSpace() {
-<<<<<<< HEAD
-	== == == =
->>>>>>> lint2
 }
 
 void UtilityAINodeChildrenSearchSpace::_bind_methods() {
@@ -51,11 +48,5 @@ void UtilityAINodeChildrenSearchSpace::_ready() {
 	if( Engine::get_singleton()->is_editor_hint() ) return;
 
 	//_parent_node = get_node_or_null(_parent_node_path);
-
-<<<<<<< HEAD
-	//_parent_node = get_node_or_null(_parent_node_path);
-
-=======
->>>>>>> lint2
 }
 /**/

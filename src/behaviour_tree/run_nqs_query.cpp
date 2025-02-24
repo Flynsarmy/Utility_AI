@@ -17,20 +17,9 @@ void UtilityAIBTRunNQSQuery::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_top_n_to_find"), &UtilityAIBTRunNQSQuery::get_top_n_to_find);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "top_n_to_find", PROPERTY_HINT_RANGE, "1,32,or_greater"), "set_top_n_to_find", "get_top_n_to_find");
 
-<<<<<<< HEAD
-	ClassDB::bind_method(D_METHOD("set_top_n_to_find", "top_n_to_find"), &UtilityAIBTRunNQSQuery::set_top_n_to_find);
-	ClassDB::bind_method(D_METHOD("get_top_n_to_find"), &UtilityAIBTRunNQSQuery::get_top_n_to_find);
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "top_n_to_find", PROPERTY_HINT_RANGE, "1,32,or_greater"), "set_top_n_to_find", "get_top_n_to_find");
-
 	ClassDB::bind_method(D_METHOD("set_is_high_priority", "is_high_priority"), &UtilityAIBTRunNQSQuery::set_is_high_priority);
 	ClassDB::bind_method(D_METHOD("get_is_high_priority"), &UtilityAIBTRunNQSQuery::get_is_high_priority);
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_high_priority", PROPERTY_HINT_NONE), "set_is_high_priority", "get_is_high_priority");
-
-	== == == =
-					 ClassDB::bind_method(D_METHOD("set_is_high_priority", "is_high_priority"), &UtilityAIBTRunNQSQuery::set_is_high_priority);
-	ClassDB::bind_method(D_METHOD("get_is_high_priority"), &UtilityAIBTRunNQSQuery::get_is_high_priority);
-	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_high_priority", PROPERTY_HINT_NONE), "set_is_high_priority", "get_is_high_priority");
->>>>>>> lint2
 }
 
 // Constructor and destructor.
@@ -51,17 +40,10 @@ UtilityAIBTRunNQSQuery::~UtilityAIBTRunNQSQuery() {
 
 // Getters and Setters.
 
-<<<<<<< HEAD
 void UtilityAIBTRunNQSQuery::set_nqs_search_space(UtilityAINQSSearchSpaces *nqs_search_space) {
 	_nqs_search_space = nqs_search_space;
 	//_nqs_search_space_cache = ObjectID();
-
-	== == == =
-					 void UtilityAIBTRunNQSQuery::set_nqs_search_space(UtilityAINQSSearchSpaces * nqs_search_space) {
-		_nqs_search_space = nqs_search_space;
-		//_nqs_search_space_cache = ObjectID();
->>>>>>> lint2
-	}
+}
 
 	UtilityAINQSSearchSpaces *UtilityAIBTRunNQSQuery::get_nqs_search_space() const {
 		return _nqs_search_space;

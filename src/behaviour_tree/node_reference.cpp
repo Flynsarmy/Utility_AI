@@ -9,17 +9,9 @@ using namespace godot;
 // Method binds.
 
 void UtilityAIBTNodeReference::_bind_methods() {
-<<<<<<< HEAD
 	ClassDB::bind_method(D_METHOD("set_node_reference", "node_reference"), &UtilityAIBTNodeReference::set_node_reference);
 	ClassDB::bind_method(D_METHOD("get_node_reference"), &UtilityAIBTNodeReference::get_node_reference);
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "node_reference", PROPERTY_HINT_NODE_TYPE, "UtilityAIBehaviourTreeNodes"), "set_node_reference", "get_node_reference");
-
-	//ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBTNodeReference::tick);
-	== == == =
-					 ClassDB::bind_method(D_METHOD("set_node_reference", "node_reference"), &UtilityAIBTNodeReference::set_node_reference);
-	ClassDB::bind_method(D_METHOD("get_node_reference"), &UtilityAIBTNodeReference::get_node_reference);
-	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "node_reference", PROPERTY_HINT_NODE_TYPE, "UtilityAIBehaviourTreeNodes"), "set_node_reference", "get_node_reference");
->>>>>>> lint2
 
 	//ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBTNodeReference::tick);
 }
