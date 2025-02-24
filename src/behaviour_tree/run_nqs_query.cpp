@@ -45,99 +45,99 @@ void UtilityAIBTRunNQSQuery::set_nqs_search_space(UtilityAINQSSearchSpaces *nqs_
 	//_nqs_search_space_cache = ObjectID();
 }
 
-	UtilityAINQSSearchSpaces *UtilityAIBTRunNQSQuery::get_nqs_search_space() const {
-		return _nqs_search_space;
-	}
+UtilityAINQSSearchSpaces *UtilityAIBTRunNQSQuery::get_nqs_search_space() const {
+	return _nqs_search_space;
+}
 
-	void UtilityAIBTRunNQSQuery::set_time_budget_usec(int time_budget_usec) {
-		_time_budget_usec = time_budget_usec;
-	}
+void UtilityAIBTRunNQSQuery::set_time_budget_usec(int time_budget_usec) {
+	_time_budget_usec = time_budget_usec;
+}
 
-	int UtilityAIBTRunNQSQuery::get_time_budget_usec() const {
-		return _time_budget_usec;
-	}
+int UtilityAIBTRunNQSQuery::get_time_budget_usec() const {
+	return _time_budget_usec;
+}
 
-	void UtilityAIBTRunNQSQuery::set_top_n_to_find(int top_n_to_find) {
-		_top_n_to_find = top_n_to_find;
-	}
+void UtilityAIBTRunNQSQuery::set_top_n_to_find(int top_n_to_find) {
+	_top_n_to_find = top_n_to_find;
+}
 
-	int UtilityAIBTRunNQSQuery::get_top_n_to_find() const {
-		return _top_n_to_find;
-	}
+int UtilityAIBTRunNQSQuery::get_top_n_to_find() const {
+	return _top_n_to_find;
+}
 
-	void UtilityAIBTRunNQSQuery::set_is_high_priority(bool is_high_priority) {
-		_is_high_priority = is_high_priority;
-	}
+void UtilityAIBTRunNQSQuery::set_is_high_priority(bool is_high_priority) {
+	_is_high_priority = is_high_priority;
+}
 
-	bool UtilityAIBTRunNQSQuery::get_is_high_priority() const {
-		return _is_high_priority;
-	}
+bool UtilityAIBTRunNQSQuery::get_is_high_priority() const {
+	return _is_high_priority;
+}
 
-	// Handling methods.
+// Handling methods.
 
-	void UtilityAIBTRunNQSQuery::reset_bt_node() {
-		_query_state = QS_IDLE;
-		_nqs_search_space->reset_query_variables();
-	}
+void UtilityAIBTRunNQSQuery::reset_bt_node() {
+	_query_state = QS_IDLE;
+	_nqs_search_space->reset_query_variables();
+}
 
-	int UtilityAIBTRunNQSQuery::tick(Variant user_data, float delta) {
-		if (_nqs_search_space == nullptr || !UtilityFunctions::is_instance_id_valid(_nqs_search_space->get_instance_id())) {
-			_nqs_search_space = nullptr;
-			set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-			set_tick_result(BT_FAILURE);
-			return BT_FAILURE;
-		}
-		set_internal_status(BT_INTERNAL_STATUS_TICKED);
-		//if( _is_first_tick ) {
-		//    _is_first_tick = false;
-		//    emit_signal("btnode_entered", user_data, delta);
-		//}
-
-		switch (_query_state) {
-			case QS_IDLE: {
-				_nqs_search_space->set_top_n_to_find(_top_n_to_find);
-				//_nqs_search_space_node->start_query(_time_budget_usec);
-				_nqs->post_query(_nqs_search_space, _is_high_priority);
-				_query_state = QS_RUNNING;
-				set_tick_result(BT_RUNNING);
-				//emit_signal("btnode_ticked", user_data, delta);
-				return BT_RUNNING;
-			} break;
-			case QS_COMPLETED: {
-				set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-				set_tick_result(BT_SUCCESS);
-				//emit_signal("btnode_exited", user_data, delta);
-				return BT_SUCCESS;
-			} break;
-			default: {
-				set_tick_result(BT_RUNNING);
-				//emit_signal("btnode_ticked", user_data, delta);
-				return BT_RUNNING;
-			} break;
-		}
-		// We shouldn't get here.
+int UtilityAIBTRunNQSQuery::tick(Variant user_data, float delta) {
+	if (_nqs_search_space == nullptr || !UtilityFunctions::is_instance_id_valid(_nqs_search_space->get_instance_id())) {
+		_nqs_search_space = nullptr;
 		set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
 		set_tick_result(BT_FAILURE);
-		//emit_signal("btnode_exited", user_data, delta);
 		return BT_FAILURE;
 	}
+	set_internal_status(BT_INTERNAL_STATUS_TICKED);
+	//if( _is_first_tick ) {
+	//    _is_first_tick = false;
+	//    emit_signal("btnode_entered", user_data, delta);
+	//}
 
-	void UtilityAIBTRunNQSQuery::_ready() {
-		if (Engine::get_singleton()->is_editor_hint())
-			return;
-		_nqs = godot::Object::cast_to<UtilityAINodeQuerySystem>(Engine::get_singleton()->get_singleton("NodeQuerySystem"));
-		// godot::Object::cast_to<UtilityAINodeQuerySystem>(godot::Engine::get_singleton("NodeQuerySystem"));
+	switch (_query_state) {
+		case QS_IDLE: {
+			_nqs_search_space->set_top_n_to_find(_top_n_to_find);
+			//_nqs_search_space_node->start_query(_time_budget_usec);
+			_nqs->post_query(_nqs_search_space, _is_high_priority);
+			_query_state = QS_RUNNING;
+			set_tick_result(BT_RUNNING);
+			//emit_signal("btnode_ticked", user_data, delta);
+			return BT_RUNNING;
+		} break;
+		case QS_COMPLETED: {
+			set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+			set_tick_result(BT_SUCCESS);
+			//emit_signal("btnode_exited", user_data, delta);
+			return BT_SUCCESS;
+		} break;
+		default: {
+			set_tick_result(BT_RUNNING);
+			//emit_signal("btnode_ticked", user_data, delta);
+			return BT_RUNNING;
+		} break;
 	}
+	// We shouldn't get here.
+	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+	set_tick_result(BT_FAILURE);
+	//emit_signal("btnode_exited", user_data, delta);
+	return BT_FAILURE;
+}
 
-	void UtilityAIBTRunNQSQuery::_physics_process(double delta) {
-		if (_nqs_search_space == nullptr)
-			return;
-		if (_nqs == nullptr)
-			return;
-		if (_query_state == QS_RUNNING) {
-			bool is_still_running = _nqs_search_space->get_is_query_still_running(); //->execute_query(_time_budget_usec);
-			if (!is_still_running) {
-				_query_state = QS_COMPLETED;
-			}
+void UtilityAIBTRunNQSQuery::_ready() {
+	if (Engine::get_singleton()->is_editor_hint())
+		return;
+	_nqs = godot::Object::cast_to<UtilityAINodeQuerySystem>(Engine::get_singleton()->get_singleton("NodeQuerySystem"));
+	// godot::Object::cast_to<UtilityAINodeQuerySystem>(godot::Engine::get_singleton("NodeQuerySystem"));
+}
+
+void UtilityAIBTRunNQSQuery::_physics_process(double delta) {
+	if (_nqs_search_space == nullptr)
+		return;
+	if (_nqs == nullptr)
+		return;
+	if (_query_state == QS_RUNNING) {
+		bool is_still_running = _nqs_search_space->get_is_query_still_running(); //->execute_query(_time_budget_usec);
+		if (!is_still_running) {
+			_query_state = QS_COMPLETED;
 		}
 	}
+}
