@@ -12,12 +12,13 @@
 		<method name="get_active_states" qualifiers="const">
 			<return type="UtilityAIStateTreeNodes[]" />
 			<description>
-				Returns a list of currently active states.
+				Returns a list of currently active states. This number won't update until [method UtilityAIStateTreeNodes.transition_to] is called.
 			</description>
 		</method>
 		<method name="get_child_sensors">
 			<return type="UtilityAISensors[]" />
 			<description>
+				Returns a list of child sensors.
 			</description>
 		</method>
 		<method name="tick">
