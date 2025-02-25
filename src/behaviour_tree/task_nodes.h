@@ -15,9 +15,9 @@ private:
 protected:
 	static void _bind_methods();
 
-	virtual UtilityAI::Status _tick(godot::Variant p_variant, double p_delta) { return UtilityAI::Status::FAILURE; };
+	virtual Status on_tick(Variant blackboard, double delta) { return Status::FAILURE; };
 
-	GDVIRTUAL2R(UtilityAI::Status, _tick, godot::Variant, double);
+	GDVIRTUAL2R(Status, on_tick, Variant, double);
 
 public:
 	UtilityAIBTTaskNodes();

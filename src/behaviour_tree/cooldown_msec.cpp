@@ -29,7 +29,7 @@ void UtilityAIBTCooldownMsec::_bind_methods() {
 UtilityAIBTCooldownMsec::UtilityAIBTCooldownMsec() {
 	_cooldown_msec = 0;
 	_cooldown_start_timestamp = 0;
-	_cooldown_return_value = UtilityAI::Status::FAILURE;
+	_cooldown_return_value = Status::FAILURE;
 	_is_in_cooldown = false;
 }
 
@@ -54,21 +54,21 @@ int UtilityAIBTCooldownMsec::get_cooldown_start_timestamp() const {
 	return _cooldown_start_timestamp;
 }
 
-void UtilityAIBTCooldownMsec::set_cooldown_return_value(UtilityAI::Status cooldown_return_value) {
+void UtilityAIBTCooldownMsec::set_cooldown_return_value(Status cooldown_return_value) {
 	_cooldown_return_value = cooldown_return_value;
 }
 
-UtilityAI::Status UtilityAIBTCooldownMsec::get_cooldown_return_value() const {
+UtilityAIBehaviourTreeNodes::Status UtilityAIBTCooldownMsec::get_cooldown_return_value() const {
 	return _cooldown_return_value;
 }
 
 // Handling methods.
 
-UtilityAI::Status UtilityAIBTCooldownMsec::tick(Variant user_data, float delta) {
+UtilityAIBehaviourTreeNodes::Status UtilityAIBTCooldownMsec::tick(Variant blackboard, float delta) {
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
-	//    emit_signal("btnode_entered", user_data, delta);
+	//    emit_signal("btnode_entered", blackboard, delta);
 	//}
 	if (_is_in_cooldown) {
 		uint64_t wait_time = godot::Time::get_singleton()->get_ticks_msec() - _cooldown_start_timestamp;
@@ -85,15 +85,15 @@ UtilityAI::Status UtilityAIBTCooldownMsec::tick(Variant user_data, float delta) 
 			if (!btnode->get_is_active()) {
 				continue;
 			}
-			UtilityAI::Status result = btnode->tick(user_data, delta);
+			Status result = btnode->tick(blackboard, delta);
 			set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
 			set_tick_result(result);
-			//emit_signal("btnode_exited", user_data, delta);
+			//emit_signal("btnode_exited", blackboard, delta);
 			return result;
 		}
 	}
 	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-	set_tick_result(UtilityAI::Status::FAILURE);
-	//emit_signal("btnode_exited", user_data, delta);
-	return UtilityAI::Status::FAILURE;
+	set_tick_result(Status::FAILURE);
+	//emit_signal("btnode_exited", blackboard, delta);
+	return Status::FAILURE;
 }

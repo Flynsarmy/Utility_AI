@@ -13,7 +13,7 @@ void UtilityAIBTNodeReference::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_node_reference"), &UtilityAIBTNodeReference::get_node_reference);
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "node_reference", PROPERTY_HINT_NODE_TYPE, "UtilityAIBehaviourTreeNodes"), "set_node_reference", "get_node_reference");
 
-	//ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBTNodeReference::tick);
+	//ClassDB::bind_method(D_METHOD("_tick", "blackboard", "delta"), &UtilityAIBTNodeReference::tick);
 }
 
 // Constructor and destructor.
@@ -71,32 +71,32 @@ void UtilityAIBTNodeReference::reset() {
 	_node_reference->reset();
 }
 
-UtilityAI::Status UtilityAIBTNodeReference::tick(Variant user_data, float delta) {
+UtilityAIBehaviourTreeNodes::Status UtilityAIBTNodeReference::tick(Variant blackboard, float delta) {
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
-	//    emit_signal("btnode_entered", user_data, delta);
+	//    emit_signal("btnode_entered", blackboard, delta);
 	//}
 	if (!UtilityFunctions::is_instance_id_valid(_cache)) {
 		//_cache.is_null() || !_cache.is_valid() ) {
 		_node_reference = nullptr; // Cache shows that the node reference has become invalid.
 		set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-		set_tick_result(UtilityAI::Status::FAILURE);
-		//emit_signal("btnode_exited", user_data, delta);
-		return UtilityAI::Status::FAILURE;
+		set_tick_result(Status::FAILURE);
+		//emit_signal("btnode_exited", blackboard, delta);
+		return Status::FAILURE;
 	}
 	if (!_node_reference) {
 		set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-		set_tick_result(UtilityAI::Status::FAILURE);
-		//emit_signal("btnode_exited", user_data, delta);
-		return UtilityAI::Status::FAILURE;
+		set_tick_result(Status::FAILURE);
+		//emit_signal("btnode_exited", blackboard, delta);
+		return Status::FAILURE;
 	}
-	UtilityAI::Status result = _node_reference->tick(user_data, delta);
+	Status result = _node_reference->tick(blackboard, delta);
 	set_tick_result(result);
-	//emit_signal("btnode_ticked", user_data, delta);
-	if (result != UtilityAI::Status::RUNNING) {
+	//emit_signal("btnode_ticked", blackboard, delta);
+	if (result != Status::RUNNING) {
 		set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-		//emit_signal("btnode_exited", user_data, delta);
+		//emit_signal("btnode_exited", blackboard, delta);
 	}
 	return result;
 }

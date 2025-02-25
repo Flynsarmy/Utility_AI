@@ -9,5 +9,5 @@ UtilityAIBTTaskNodes::~UtilityAIBTTaskNodes() {
 }
 
 void UtilityAIBTTaskNodes::_bind_methods() {
-	GDVIRTUAL_BIND(_tick, "blackboard", "delta");
+	GDVIRTUAL_BIND(on_tick, "blackboard", "delta");
 }

@@ -17,7 +17,7 @@ void UtilityAIBTParallel::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_score"), &UtilityAIBTParallel::get_score);
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "score", PROPERTY_HINT_NONE ), "set_score","get_score");
 	/**/
-	//ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBTParallel::tick);
+	//ClassDB::bind_method(D_METHOD("_tick", "blackboard", "delta"), &UtilityAIBTParallel::tick);
 }
 
 // Constructor and destructor.
@@ -44,13 +44,13 @@ bool UtilityAIBTParallel::get_is_reactive() const {
 }
 /**/
 
-UtilityAI::Status UtilityAIBTParallel::tick(Variant user_data, float delta) {
+UtilityAIBehaviourTreeNodes::Status UtilityAIBTParallel::tick(Variant blackboard, float delta) {
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
-	//    emit_signal("btnode_entered", user_data, delta);
+	//    emit_signal("btnode_entered", blackboard, delta);
 	//}
-	UtilityAI::Status parallelresult = UtilityAI::Status::SUCCESS;
+	Status parallelresult = Status::SUCCESS;
 	//for( int i = 0; i < get_child_count(); ++i ) {
 	//    UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i));
 	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
@@ -59,18 +59,18 @@ UtilityAI::Status UtilityAIBTParallel::tick(Variant user_data, float delta) {
 		if (!btnode->get_is_active()) {
 			continue;
 		}
-		UtilityAI::Status result = btnode->tick(user_data, delta);
-		if (result == UtilityAI::Status::FAILURE) {
-			parallelresult = UtilityAI::Status::FAILURE;
-		} else if (result == UtilityAI::Status::RUNNING) {
-			parallelresult = UtilityAI::Status::RUNNING;
+		Status result = btnode->tick(blackboard, delta);
+		if (result == Status::FAILURE) {
+			parallelresult = Status::FAILURE;
+		} else if (result == Status::RUNNING) {
+			parallelresult = Status::RUNNING;
 		}
 		//}//endif node was of correct type
 	} //endfor btnodes
-	//emit_signal("btnode_ticked", user_data, delta);
+	//emit_signal("btnode_ticked", blackboard, delta);
 	if (parallelresult != 0) {
 		set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-		//emit_signal("btnode_exited", user_data, delta);
+		//emit_signal("btnode_exited", blackboard, delta);
 	}
 	set_tick_result(parallelresult);
 	return parallelresult;

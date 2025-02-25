@@ -11,7 +11,7 @@ void UtilityAIBTLeaf::_bind_methods() {
 	//ClassDB::bind_method(D_METHOD("set_tick_result", "tick_result"), &UtilityAIBTLeaf::set_tick_result);
 	//ClassDB::bind_method(D_METHOD("get_tick_result"), &UtilityAIBTLeaf::get_tick_result);
 	//ADD_PROPERTY(PropertyInfo(Variant::INT, "tick_result", PROPERTY_HINT_ENUM, "Running:0,Success:1,Failure:-1" ), "set_tick_result","get_tick_result");
-	//ADD_SIGNAL(MethodInfo("ticked", PropertyInfo(Variant::OBJECT, "user_data"), PropertyInfo(Variant::FLOAT, "delta"), PropertyInfo(Variant::OBJECT, "leaf_node")));
+	//ADD_SIGNAL(MethodInfo("ticked", PropertyInfo(Variant::OBJECT, "blackboard"), PropertyInfo(Variant::FLOAT, "delta"), PropertyInfo(Variant::OBJECT, "leaf_node")));
 }
 
 // Constructor and destructor.
@@ -40,22 +40,22 @@ int  UtilityAIBTLeaf::get_tick_result() const {
 
 // Handling methods.
 
-UtilityAI::Status UtilityAIBTLeaf::tick(Variant user_data, float delta) {
+UtilityAIBehaviourTreeNodes::Status UtilityAIBTLeaf::tick(Variant blackboard, float delta) {
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
-	//    emit_signal("btnode_entered", user_data, delta);
+	//    emit_signal("btnode_entered", blackboard, delta);
 	//}
 	godot::Variant result;
-	result = call("_tick", user_data, delta);
-	UtilityAI::Status return_value = static_cast<UtilityAI::Status>((int64_t)result); // or result.operator int64_t();
+	result = call("on_tick", blackboard, delta);
+	Status return_value = static_cast<Status>((int64_t)result); // or result.operator int64_t();
 
 	set_tick_result(return_value);
 
-	//emit_signal("btnode_ticked", user_data, delta);
-	if (return_value == UtilityAI::Status::FAILURE || return_value == UtilityAI::Status::SUCCESS) {
+	//emit_signal("btnode_ticked", blackboard, delta);
+	if (return_value == Status::FAILURE || return_value == Status::SUCCESS) {
 		set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-		//emit_signal("btnode_exited", user_data, delta);
+		//emit_signal("btnode_exited", blackboard, delta);
 	}
 
 	return return_value;

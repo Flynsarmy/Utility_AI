@@ -33,12 +33,18 @@ void UtilityAIStateTreeNodes::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("get_tree_root"), &UtilityAIStateTreeNodes::get_tree_root);
 
-	ClassDB::bind_method(D_METHOD("transition_to", "new_state_nodepath", "user_data", "delta"), &UtilityAIStateTreeNodes::transition_to);
+	ClassDB::bind_method(D_METHOD("transition_to", "new_state_nodepath", "blackboard", "delta"), &UtilityAIStateTreeNodes::transition_to);
 
-	ADD_SIGNAL(MethodInfo("state_check_enter_condition", PropertyInfo(Variant::OBJECT, "user_data"), PropertyInfo(Variant::FLOAT, "delta")));
-	ADD_SIGNAL(MethodInfo("state_entered", PropertyInfo(Variant::OBJECT, "user_data"), PropertyInfo(Variant::FLOAT, "delta")));
-	ADD_SIGNAL(MethodInfo("state_ticked", PropertyInfo(Variant::OBJECT, "user_data"), PropertyInfo(Variant::FLOAT, "delta")));
-	ADD_SIGNAL(MethodInfo("state_exited", PropertyInfo(Variant::OBJECT, "user_data"), PropertyInfo(Variant::FLOAT, "delta")));
+	GDVIRTUAL_BIND(on_enter_condition, "blackboard", "delta");
+	GDVIRTUAL_BIND(on_enter_state, "blackboard", "delta");
+	GDVIRTUAL_BIND(on_exit_state, "blackboard", "delta");
+	GDVIRTUAL_BIND(on_tick, "blackboard", "delta");
+	GDVIRTUAL_BIND(transition_to, "path_to_node", "blackboard", "delta");
+
+	ADD_SIGNAL(MethodInfo("state_check_enter_condition", PropertyInfo(Variant::OBJECT, "blackboard"), PropertyInfo(Variant::FLOAT, "delta")));
+	ADD_SIGNAL(MethodInfo("state_entered", PropertyInfo(Variant::OBJECT, "blackboard"), PropertyInfo(Variant::FLOAT, "delta")));
+	ADD_SIGNAL(MethodInfo("state_ticked", PropertyInfo(Variant::OBJECT, "blackboard"), PropertyInfo(Variant::FLOAT, "delta")));
+	ADD_SIGNAL(MethodInfo("state_exited", PropertyInfo(Variant::OBJECT, "blackboard"), PropertyInfo(Variant::FLOAT, "delta")));
 }
 
 // Constructor and destructor.
@@ -245,46 +251,46 @@ float UtilityAIStateTreeNodes::evaluate() {
 	return _score;
 }
 
-bool UtilityAIStateTreeNodes::on_enter_condition(Variant user_data, float delta) {
+bool UtilityAIStateTreeNodes::on_enter_condition(Variant blackboard, float delta) {
 	if (_has_on_entered_condition_method) {
-		return call("on_enter_condition", user_data, delta);
+		return call("on_enter_condition", blackboard, delta);
 	}
-	emit_signal("state_check_enter_condition", user_data, delta);
+	emit_signal("state_check_enter_condition", blackboard, delta);
 	return _is_on_entered_condition_true;
 }
 
-void UtilityAIStateTreeNodes::on_enter_state(Variant user_data, float delta) {
+void UtilityAIStateTreeNodes::on_enter_state(Variant blackboard, float delta) {
 	if (_has_on_entered_method) {
-		call("on_enter_state", user_data, delta);
+		call("on_enter_state", blackboard, delta);
 	}
-	emit_signal("state_entered", user_data, delta);
+	emit_signal("state_entered", blackboard, delta);
 }
 
-void UtilityAIStateTreeNodes::on_exit_state(Variant user_data, float delta) {
+void UtilityAIStateTreeNodes::on_exit_state(Variant blackboard, float delta) {
 	if (_has_on_exited_method) {
-		call("on_exit_state", user_data, delta);
+		call("on_exit_state", blackboard, delta);
 	}
-	emit_signal("state_exited", user_data, delta);
+	emit_signal("state_exited", blackboard, delta);
 }
 
-void UtilityAIStateTreeNodes::on_tick(Variant user_data, float delta) {
+void UtilityAIStateTreeNodes::on_tick(Variant blackboard, float delta) {
 	if (_has_on_ticked_method) {
-		call("on_tick", user_data, delta);
+		call("on_tick", blackboard, delta);
 	}
-	emit_signal("state_ticked", user_data, delta);
+	emit_signal("state_ticked", blackboard, delta);
 #ifdef DEBUG_ENABLED
 	_last_visited_timestamp = godot::Time::get_singleton()->get_ticks_usec();
 #endif
 }
 
-void UtilityAIStateTreeNodes::transition_to(NodePath path_to_node, Variant user_data, float delta) {
+void UtilityAIStateTreeNodes::transition_to(NodePath path_to_node, Variant blackboard, float delta) {
 	if (_tree_root_node == nullptr) {
 		return;
 	}
-	_tree_root_node->transition_to(path_to_node, user_data, delta);
+	_tree_root_node->transition_to(path_to_node, blackboard, delta);
 }
 
-UtilityAIStateTreeNodes *UtilityAIStateTreeNodes::evaluate_state_activation(Variant user_data, float delta) {
+UtilityAIStateTreeNodes *UtilityAIStateTreeNodes::evaluate_state_activation(Variant blackboard, float delta) {
 	unsigned int num_state_tree_childs = 0;
 
 	if (get_child_state_selection_rule() == UtilityAIStateTreeNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD) {
@@ -298,11 +304,11 @@ UtilityAIStateTreeNodes *UtilityAIStateTreeNodes::evaluate_state_activation(Vari
 			}
 
 			++num_state_tree_childs;
-			if (!stnode->on_enter_condition(user_data, delta)) {
+			if (!stnode->on_enter_condition(blackboard, delta)) {
 				continue;
 			}
 
-			if (UtilityAIStateTreeNodes *result = stnode->evaluate_state_activation(user_data, delta)) {
+			if (UtilityAIStateTreeNodes *result = stnode->evaluate_state_activation(blackboard, delta)) {
 				return result;
 			} //endif result is not nullptr
 			//}//endif valid node type
@@ -323,7 +329,7 @@ UtilityAIStateTreeNodes *UtilityAIStateTreeNodes::evaluate_state_activation(Vari
 			++num_state_tree_childs;
 			float score = stnode->evaluate();
 			if (score > highest_score) {
-				if (UtilityAIStateTreeNodes *result = stnode->evaluate_state_activation(user_data, delta)) {
+				if (UtilityAIStateTreeNodes *result = stnode->evaluate_state_activation(blackboard, delta)) {
 					highest_score = score;
 					highest_scoring_state_to_activate = result;
 				} //endif result is not nullptr

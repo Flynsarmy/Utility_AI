@@ -5,6 +5,7 @@
 #include "../resources/considerations/consideration_resources.h"
 #include "utility_ai.h"
 #include <godot_cpp/classes/node.hpp>
+#include <godot_cpp/core/gdvirtual.gen.inc>
 
 namespace godot {
 
@@ -87,13 +88,19 @@ public:
 	// Handling functions.
 
 	virtual float evaluate();
-	virtual bool on_enter_condition(Variant user_data, float delta);
-	virtual void on_enter_state(Variant user_data, float delta);
-	virtual void on_exit_state(Variant user_data, float delta);
-	virtual void on_tick(Variant user_data, float delta);
-	virtual void transition_to(NodePath path_to_node, Variant user_data, float delta);
+	virtual bool on_enter_condition(Variant blackboard, float delta);
+	virtual void on_enter_state(Variant blackboard, float delta);
+	virtual void on_exit_state(Variant blackboard, float delta);
+	virtual void on_tick(Variant blackboard, float delta);
+	virtual void transition_to(NodePath path_to_node, Variant blackboard, float delta);
 
-	virtual UtilityAIStateTreeNodes *evaluate_state_activation(Variant user_data, float delta);
+	GDVIRTUAL2R(bool, on_enter_condition, Variant, double);
+	GDVIRTUAL2(on_enter_state, Variant, double);
+	GDVIRTUAL2(on_exit_state, Variant, double);
+	GDVIRTUAL2(on_tick, Variant, double);
+	GDVIRTUAL3(transition_to, NodePath, Variant, double);
+
+	virtual UtilityAIStateTreeNodes *evaluate_state_activation(Variant blackboard, float delta);
 
 	// Godot virtuals.
 

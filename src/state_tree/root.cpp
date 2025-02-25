@@ -23,9 +23,11 @@ void UtilityAISTRoot::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "total_tick_usec", PROPERTY_HINT_NONE), "set_total_tick_usec", "get_total_tick_usec");
 #endif
 
-	ClassDB::bind_method(D_METHOD("tick", "user_data", "delta"), &UtilityAISTRoot::tick);
+	ClassDB::bind_method(D_METHOD("tick", "blackboard", "delta"), &UtilityAISTRoot::tick);
 
 	ClassDB::bind_method(D_METHOD("get_active_states"), &UtilityAISTRoot::get_active_states);
+
+	ClassDB::bind_method(D_METHOD("get_child_sensors"), &UtilityAISTRoot::get_child_sensors);
 }
 
 // Constructor and destructor.
@@ -35,6 +37,9 @@ UtilityAISTRoot::UtilityAISTRoot() {
 	_total_tick_usec = 0;
 	_total_transition_usec = 0;
 #endif
+
+	_child_sensors.clear();
+	_num_child_sensors = 0;
 }
 
 UtilityAISTRoot::~UtilityAISTRoot() {
@@ -52,21 +57,21 @@ uint64_t UtilityAISTRoot::get_total_tick_usec() const {
 }
 #endif
 
-TypedArray<Node> UtilityAISTRoot::get_active_states() const {
+TypedArray<UtilityAIStateTreeNodes> UtilityAISTRoot::get_active_states() const {
 	return _active_states;
 }
 
 // Handling methods.
 
-void UtilityAISTRoot::transition_to(NodePath path_to_node, Variant user_data, float delta) {
+void UtilityAISTRoot::transition_to(NodePath path_to_node, Variant blackboard, float delta) {
 	UtilityAIStateTreeNodes *new_state = get_node<UtilityAIStateTreeNodes>(path_to_node);
 	if (new_state == nullptr) {
 		return;
 	}
-	bool result = try_transition(new_state, user_data, delta);
+	bool result = try_transition(new_state, blackboard, delta);
 }
 
-bool UtilityAISTRoot::try_transition(UtilityAIStateTreeNodes *transition_target_node, Variant user_data, float delta) {
+bool UtilityAISTRoot::try_transition(UtilityAIStateTreeNodes *transition_target_node, Variant blackboard, float delta) {
 #ifdef DEBUG_ENABLED
 	uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
 #endif
@@ -93,7 +98,7 @@ bool UtilityAISTRoot::try_transition(UtilityAIStateTreeNodes *transition_target_
 		return false;
 	}
 	bool new_state_found = false;
-	if (UtilityAIStateTreeNodes *new_state = transition_target_node->evaluate_state_activation(user_data, delta)) {
+	if (UtilityAIStateTreeNodes *new_state = transition_target_node->evaluate_state_activation(blackboard, delta)) {
 		// We got a new leaf state. Get the new state list.
 		_active_states_vector.clear();
 		TypedArray<UtilityAIStateTreeNodes> new_active_states;
@@ -112,7 +117,7 @@ bool UtilityAISTRoot::try_transition(UtilityAIStateTreeNodes *transition_target_
 		for (int i = 0; i < _active_states.size(); ++i) {
 			UtilityAIStateTreeNodes *cur_active_state = godot::Object::cast_to<UtilityAIStateTreeNodes>(_active_states[i]);
 			if (!new_active_states.has(cur_active_state)) {
-				cur_active_state->on_exit_state(user_data, delta);
+				cur_active_state->on_exit_state(blackboard, delta);
 			}
 		}
 
@@ -121,8 +126,8 @@ bool UtilityAISTRoot::try_transition(UtilityAIStateTreeNodes *transition_target_
 		for (int i = _active_states_vector.size() - 1; i > -1; --i) {
 			if (!is_existing_state[i]) {
 				//UtilityAIStateTreeNodes* cur_active_state = godot::Object::cast_to<UtilityAIStateTreeNodes>(_active_states[i]);
-				//cur_active_state->on_enter_state(user_data, delta);
-				_active_states_vector[i]->on_enter_state(user_data, delta);
+				//cur_active_state->on_enter_state(blackboard, delta);
+				_active_states_vector[i]->on_enter_state(blackboard, delta);
 			}
 		}
 		new_state_found = true;
@@ -134,22 +139,23 @@ bool UtilityAISTRoot::try_transition(UtilityAIStateTreeNodes *transition_target_
 	return new_state_found;
 }
 
-void UtilityAISTRoot::tick(Variant user_data, float delta) {
+void UtilityAISTRoot::tick(Variant blackboard, float delta) {
 #ifdef DEBUG_ENABLED
 	uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
 #endif
 
 	// No states, so try transition to the root.
 	if (_active_states_vector.size() == 0) {
-		try_transition(this, user_data, delta);
+		try_transition(this, blackboard, delta);
 	}
 
 	// Update the sensors.
 	//for( int i = 0; i < get_child_count(); ++i ) {
 	//    Node* node = get_child(i);
 	//    if( UtilityAISensors* sensor = godot::Object::cast_to<UtilityAISensors>(node) ) {
-	for (unsigned int i = 0; i < _num_child_sensors; ++i) {
-		UtilityAISensors *sensor = _child_sensors[i];
+	for (unsigned int i = 0; i < _num_child_sensors; i++) {
+		UtilityAISensors *sensor = godot::Object::cast_to<UtilityAISensors>(_child_sensors[i]);
+		// UtilityAISensors *sensor = _child_sensors[i];
 		if (!sensor->get_is_active()) {
 			continue;
 		}
@@ -166,7 +172,7 @@ void UtilityAISTRoot::tick(Variant user_data, float delta) {
 			UtilityAIStateTreeNodes *stnode = _active_states_vector[i];
 
 			//if( UtilityAIStateTreeNodes* stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(_active_states[i]) ) {
-			stnode->on_tick(user_data, delta);
+			stnode->on_tick(blackboard, delta);
 			//}
 		}
 	}
@@ -178,20 +184,24 @@ void UtilityAISTRoot::tick(Variant user_data, float delta) {
 
 // Godot virtuals.
 
-/**/
-void UtilityAISTRoot::_ready() {
-	if (Engine::get_singleton()->is_editor_hint())
-		return;
-	set_root_node(this);
-	_child_sensors.clear();
-	for (int i = 0; i < get_child_count(); ++i) {
-		if (UtilityAISensors *sensor = godot::Object::cast_to<UtilityAISensors>(get_child(i))) {
-			_child_sensors.push_back(sensor);
+void UtilityAISTRoot::_notification(int p_what) {
+	if (p_what == NOTIFICATION_READY || p_what == NOTIFICATION_CHILD_ORDER_CHANGED) {
+		if (Engine::get_singleton()->is_editor_hint())
+			return;
+
+		set_root_node(this);
+		_child_sensors.clear();
+		for (int i = 0; i < get_child_count(); ++i) {
+			if (UtilityAISensors *sensor = godot::Object::cast_to<UtilityAISensors>(get_child(i))) {
+				_child_sensors.push_back(sensor);
+			}
 		}
-	}
-	_num_child_sensors = (unsigned int)_child_sensors.size();
+		_num_child_sensors = (unsigned int)_child_sensors.size();
+
 #ifdef DEBUG_ENABLED
-	UtilityAIDebuggerOverlay::get_singleton()->register_state_tree(this->get_instance_id());
+		UtilityAIDebuggerOverlay::get_singleton()->register_state_tree(this->get_instance_id());
 #endif
+
+		return;
+	}
 }
-/**/

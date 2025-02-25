@@ -1,4 +1,4 @@
-name: Build Linux
+name: Group Builds
 on:
   workflow_dispatch:
   workflow_call:

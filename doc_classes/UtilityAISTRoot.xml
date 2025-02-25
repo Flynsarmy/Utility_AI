@@ -10,21 +10,22 @@
 	</tutorials>
 	<methods>
 		<method name="get_active_states" qualifiers="const">
-			<return type="Node[]" />
+			<return type="UtilityAIStateTreeNodes[]" />
+			<description>
+				Returns a list of currently active states.
+			</description>
+		</method>
+		<method name="get_child_sensors">
+			<return type="UtilityAISensors[]" />
 			<description>
 			</description>
 		</method>
 		<method name="tick">
 			<return type="void" />
-			<param index="0" name="user_data" type="Variant" />
+			<param index="0" name="blackboard" type="Variant" />
 			<param index="1" name="delta" type="float" />
 			<description>
-				The [method tick] method is used to update the State Tree state. You can provide any Godot variant type as a parameter (usually a node used as an actor or a dictionary used as a blackboard), along with a delta-time. User_data and delta are passed to the [code]on_enter_state()[/code], [code]on_exit_state()[/code], [code]on_tick()[/code] and [code]on_enter_condition()[/code] methods of the child nodes.
-			</description>
-		</method>
-		<method name="tick_np">
-			<return type="void" />
-			<description>
+				The [method tick] method is used to update the State Tree state. You can provide any Godot variant type as a parameter (usually a node used as an actor or a dictionary used as a blackboard), along with a delta-time. [code]blackboard[/code] and [code]delta[/code] are passed to the [method UtilityAIStateTreeNodes.on_enter_state], [method UtilityAIStateTreeNodes.on_exit_state], [method UtilityAIStateTreeNodes.on_tick] and [method UtilityAIStateTreeNodes.on_enter_condition] methods of the child nodes.
 			</description>
 		</method>
 	</methods>

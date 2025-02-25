@@ -37,7 +37,7 @@ void UtilityAIBTRandomSelector::reset_bt_node() {
 
 // Handling functions.
 
-UtilityAI::Status UtilityAIBTRandomSelector::tick(Variant user_data, float delta) {
+UtilityAIBehaviourTreeNodes::Status UtilityAIBTRandomSelector::tick(Variant blackboard, float delta) {
 	if (get_internal_status() == BT_INTERNAL_STATUS_UNTICKED) {
 		reset_bt_node();
 	}
@@ -45,9 +45,9 @@ UtilityAI::Status UtilityAIBTRandomSelector::tick(Variant user_data, float delta
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
-	//    emit_signal("btnode_entered", user_data, delta);
+	//    emit_signal("btnode_entered", blackboard, delta);
 	//}
-	//emit_signal("btnode_ticked", user_data, delta);
+	//emit_signal("btnode_ticked", blackboard, delta);
 	while (_current_child_index < _child_node_order.size()) {
 		//UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(_child_node_order[_current_child_index]));
 		UtilityAIBehaviourTreeNodes *btnode = _child_btnodes[(int)_child_node_order[_current_child_index]];
@@ -55,20 +55,20 @@ UtilityAI::Status UtilityAIBTRandomSelector::tick(Variant user_data, float delta
 		//if( !btnode->get_is_active() ) {
 		//    continue;
 		//}
-		UtilityAI::Status result = btnode->tick(user_data, delta);
-		if (result == UtilityAI::Status::SUCCESS) {
+		Status result = btnode->tick(blackboard, delta);
+		if (result == Status::SUCCESS) {
 			//_current_child_index = -1;
 			set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-			//emit_signal("btnode_exited", user_data, delta);
-			return UtilityAI::Status::SUCCESS;
-		} else if (result == UtilityAI::Status::RUNNING) {
-			return UtilityAI::Status::RUNNING;
+			//emit_signal("btnode_exited", blackboard, delta);
+			return Status::SUCCESS;
+		} else if (result == Status::RUNNING) {
+			return Status::RUNNING;
 		}
 		//}//endif node was of correct type
 		++_current_child_index;
 	} //endwhile children to tick
 	//_current_child_index = -1;
 	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-	//emit_signal("btnode_exited", user_data, delta);
-	return UtilityAI::Status::FAILURE;
+	//emit_signal("btnode_exited", blackboard, delta);
+	return Status::FAILURE;
 }

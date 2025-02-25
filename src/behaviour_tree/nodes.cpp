@@ -9,6 +9,11 @@ using namespace godot;
 // Method binds.
 
 void UtilityAIBehaviourTreeNodes::_bind_methods() {
+	BIND_ENUM_CONSTANT(RUNNING);
+	BIND_ENUM_CONSTANT(FAILURE);
+	BIND_ENUM_CONSTANT(SUCCESS);
+	BIND_ENUM_CONSTANT(SKIP);
+
 	ClassDB::bind_method(D_METHOD("set_reset_rule", "reset_rule"), &UtilityAIBehaviourTreeNodes::set_reset_rule);
 	ClassDB::bind_method(D_METHOD("get_reset_rule"), &UtilityAIBehaviourTreeNodes::get_reset_rule);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "reset_rule", PROPERTY_HINT_ENUM, "WhenTicked:0,WhenCompleted:1,WhenTickedAfterBeingCompleted:2,Never:3"), "set_reset_rule", "get_reset_rule");
@@ -35,12 +40,12 @@ void UtilityAIBehaviourTreeNodes::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_internal_status"), &UtilityAIBehaviourTreeNodes::get_internal_status);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "internal_status", PROPERTY_HINT_ENUM, "Unticked:0,Ticked:1,Completed:2"), "set_internal_status", "get_internal_status");
 
-	// ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBehaviourTreeNodes::tick);
+	// ClassDB::bind_method(D_METHOD("_tick", "blackboard", "delta"), &UtilityAIBehaviourTreeNodes::tick);
 
 	// Signals.
-	//ADD_SIGNAL(MethodInfo("btnode_entered", PropertyInfo(Variant::OBJECT, "user_data"), PropertyInfo(Variant::FLOAT, "delta")));
-	//ADD_SIGNAL(MethodInfo("btnode_ticked", PropertyInfo(Variant::OBJECT, "user_data"), PropertyInfo(Variant::FLOAT, "delta")));
-	//ADD_SIGNAL(MethodInfo("btnode_exited", PropertyInfo(Variant::OBJECT, "user_data"), PropertyInfo(Variant::FLOAT, "delta")));
+	//ADD_SIGNAL(MethodInfo("btnode_entered", PropertyInfo(Variant::OBJECT, "blackboard"), PropertyInfo(Variant::FLOAT, "delta")));
+	//ADD_SIGNAL(MethodInfo("btnode_ticked", PropertyInfo(Variant::OBJECT, "blackboard"), PropertyInfo(Variant::FLOAT, "delta")));
+	//ADD_SIGNAL(MethodInfo("btnode_exited", PropertyInfo(Variant::OBJECT, "blackboard"), PropertyInfo(Variant::FLOAT, "delta")));
 }
 
 // Constructor and destructor.
@@ -49,7 +54,7 @@ UtilityAIBehaviourTreeNodes::UtilityAIBehaviourTreeNodes() {
 	_score = 0.0;
 	_evaluation_method = UtilityAIBehaviourTreeNodesEvaluationMethod::Multiply;
 	_invert_score = false;
-	_tick_result = UtilityAI::Status::SUCCESS;
+	_tick_result = Status::SUCCESS;
 	_internal_status = BT_INTERNAL_STATUS_UNTICKED;
 	_reset_rule = UtilityAIBehaviourTreeNodesResetRule::WHEN_TICKED_AFTER_BEING_COMPLETED;
 	_has_reset_rule_changed = false;
@@ -83,11 +88,11 @@ float UtilityAIBehaviourTreeNodes::get_score() const {
 	return _score;
 }
 
-void UtilityAIBehaviourTreeNodes::set_tick_result(UtilityAI::Status tick_result) {
+void UtilityAIBehaviourTreeNodes::set_tick_result(Status tick_result) {
 	_tick_result = tick_result;
 }
 
-UtilityAI::Status UtilityAIBehaviourTreeNodes::get_tick_result() const {
+UtilityAIBehaviourTreeNodes::Status UtilityAIBehaviourTreeNodes::get_tick_result() const {
 	return _tick_result;
 }
 
@@ -277,8 +282,8 @@ float UtilityAIBehaviourTreeNodes::evaluate() {
 	return _score;
 }
 
-UtilityAI::Status UtilityAIBehaviourTreeNodes::tick(Variant user_data, float delta) {
-	return UtilityAI::Status::RUNNING;
+UtilityAIBehaviourTreeNodes::Status UtilityAIBehaviourTreeNodes::tick(Variant blackboard, float delta) {
+	return Status::RUNNING;
 }
 
 // Godot virtuals.

@@ -12,13 +12,13 @@ void UtilityAIBTFixedResult::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_fixed_result"), &UtilityAIBTFixedResult::get_fixed_result);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "fixed_result", PROPERTY_HINT_ENUM, "Running:0,Success:1,Failure:-1"), "set_fixed_result", "get_fixed_result");
 
-	//ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBTFixedResult::tick);
+	//ClassDB::bind_method(D_METHOD("_tick", "blackboard", "delta"), &UtilityAIBTFixedResult::tick);
 }
 
 // Constructor and destructor.
 
 UtilityAIBTFixedResult::UtilityAIBTFixedResult() {
-	_fixed_result = UtilityAI::Status::SUCCESS;
+	_fixed_result = Status::SUCCESS;
 }
 
 UtilityAIBTFixedResult::~UtilityAIBTFixedResult() {
@@ -26,21 +26,21 @@ UtilityAIBTFixedResult::~UtilityAIBTFixedResult() {
 
 // Getters and Setters.
 
-void UtilityAIBTFixedResult::set_fixed_result(UtilityAI::Status fixed_result) {
+void UtilityAIBTFixedResult::set_fixed_result(Status fixed_result) {
 	_fixed_result = fixed_result;
 }
 
-UtilityAI::Status UtilityAIBTFixedResult::get_fixed_result() const {
+UtilityAIBehaviourTreeNodes::Status UtilityAIBTFixedResult::get_fixed_result() const {
 	return _fixed_result;
 }
 
 // Handling methods.
 
-UtilityAI::Status UtilityAIBTFixedResult::tick(Variant user_data, float delta) {
+UtilityAIBehaviourTreeNodes::Status UtilityAIBTFixedResult::tick(Variant blackboard, float delta) {
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
-	//    emit_signal("btnode_entered", user_data, delta);
+	//    emit_signal("btnode_entered", blackboard, delta);
 	//}
 
 	set_tick_result(_fixed_result);
@@ -50,12 +50,12 @@ UtilityAI::Status UtilityAIBTFixedResult::tick(Variant user_data, float delta) {
 			if (!btnode->get_is_active()) {
 				continue;
 			}
-			btnode->tick(user_data, delta);
-			//emit_signal("btnode_ticked", user_data, delta);
+			btnode->tick(blackboard, delta);
+			//emit_signal("btnode_ticked", blackboard, delta);
 			break;
 		}
 	}
 	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-	//emit_signal("btnode_exited", user_data, delta);
+	//emit_signal("btnode_exited", blackboard, delta);
 	return _fixed_result;
 }

@@ -15,13 +15,6 @@ protected:
 	static void _bind_methods();
 
 public:
-	enum Status {
-		SKIP = -2,
-		FAILURE = -1,
-		RUNNING = 0,
-		SUCCESS = 1,
-	};
-
 	UtilityAI();
 	~UtilityAI();
 
@@ -31,7 +24,5 @@ public:
 };
 
 } //namespace godot
-
-VARIANT_ENUM_CAST(UtilityAI::Status)
 
 #endif

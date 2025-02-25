@@ -80,17 +80,17 @@ void UtilityAIBTRunNQSQuery::reset_bt_node() {
 	_nqs_search_space->reset_query_variables();
 }
 
-UtilityAI::Status UtilityAIBTRunNQSQuery::tick(Variant user_data, float delta) {
+UtilityAIBehaviourTreeNodes::Status UtilityAIBTRunNQSQuery::tick(Variant blackboard, float delta) {
 	if (_nqs_search_space == nullptr || !UtilityFunctions::is_instance_id_valid(_nqs_search_space->get_instance_id())) {
 		_nqs_search_space = nullptr;
 		set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-		set_tick_result(UtilityAI::Status::FAILURE);
-		return UtilityAI::Status::FAILURE;
+		set_tick_result(Status::FAILURE);
+		return Status::FAILURE;
 	}
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
-	//    emit_signal("btnode_entered", user_data, delta);
+	//    emit_signal("btnode_entered", blackboard, delta);
 	//}
 
 	switch (_query_state) {
@@ -99,27 +99,27 @@ UtilityAI::Status UtilityAIBTRunNQSQuery::tick(Variant user_data, float delta) {
 			//_nqs_search_space_node->start_query(_time_budget_usec);
 			_nqs->post_query(_nqs_search_space, _is_high_priority);
 			_query_state = QS_RUNNING;
-			set_tick_result(UtilityAI::Status::RUNNING);
-			//emit_signal("btnode_ticked", user_data, delta);
-			return UtilityAI::Status::RUNNING;
+			set_tick_result(Status::RUNNING);
+			//emit_signal("btnode_ticked", blackboard, delta);
+			return Status::RUNNING;
 		} break;
 		case QS_COMPLETED: {
 			set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-			set_tick_result(UtilityAI::Status::SUCCESS);
-			//emit_signal("btnode_exited", user_data, delta);
-			return UtilityAI::Status::SUCCESS;
+			set_tick_result(Status::SUCCESS);
+			//emit_signal("btnode_exited", blackboard, delta);
+			return Status::SUCCESS;
 		} break;
 		default: {
-			set_tick_result(UtilityAI::Status::RUNNING);
-			//emit_signal("btnode_ticked", user_data, delta);
-			return UtilityAI::Status::RUNNING;
+			set_tick_result(Status::RUNNING);
+			//emit_signal("btnode_ticked", blackboard, delta);
+			return Status::RUNNING;
 		} break;
 	}
 	// We shouldn't get here.
 	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-	set_tick_result(UtilityAI::Status::FAILURE);
-	//emit_signal("btnode_exited", user_data, delta);
-	return UtilityAI::Status::FAILURE;
+	set_tick_result(Status::FAILURE);
+	//emit_signal("btnode_exited", blackboard, delta);
+	return Status::FAILURE;
 }
 
 void UtilityAIBTRunNQSQuery::_ready() {

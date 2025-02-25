@@ -52,7 +52,7 @@ uint64_t UtilityAIBTRoot::get_total_tick_usec() const {
 
 // Handling functions.
 
-UtilityAI::Status UtilityAIBTRoot::tick(Variant user_data, float delta) {
+UtilityAIBehaviourTreeNodes::Status UtilityAIBTRoot::tick(Variant blackboard, float delta) {
 #ifdef DEBUG_ENABLED
 	uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
 #endif
@@ -61,14 +61,14 @@ UtilityAI::Status UtilityAIBTRoot::tick(Variant user_data, float delta) {
 		_total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
 		UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_behaviour_trees_usec(_total_tick_usec);
 #endif
-		return UtilityAI::Status::FAILURE;
+		return Status::FAILURE;
 	}
 #ifdef DEBUG_ENABLED
 	if (Engine::get_singleton()->is_editor_hint()) {
 		_total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
 		UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_behaviour_trees_usec(_total_tick_usec);
 
-		return UtilityAI::Status::FAILURE;
+		return Status::FAILURE;
 	}
 #endif
 
@@ -84,7 +84,7 @@ UtilityAI::Status UtilityAIBTRoot::tick(Variant user_data, float delta) {
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
-	//    emit_signal("btnode_entered", user_data, delta);
+	//    emit_signal("btnode_entered", blackboard, delta);
 	//}
 	for (unsigned int i = 0; i < _num_child_sensors; ++i) {
 		UtilityAISensors *sensor = _child_sensors[i];
@@ -99,11 +99,11 @@ UtilityAI::Status UtilityAIBTRoot::tick(Variant user_data, float delta) {
 		if (!btnode->get_is_active()) {
 			continue;
 		}
-		UtilityAI::Status result = btnode->tick(user_data, delta);
+		Status result = btnode->tick(blackboard, delta);
 		set_tick_result(result);
 		if (btnode->get_internal_status() == BT_INTERNAL_STATUS_COMPLETED) {
 			set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-			//emit_signal("btnode_exited", user_data, delta);
+			//emit_signal("btnode_exited", blackboard, delta);
 		}
 #ifdef DEBUG_ENABLED
 		_total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
@@ -125,11 +125,11 @@ UtilityAI::Status UtilityAIBTRoot::tick(Variant user_data, float delta) {
 			if( !btnode->get_is_active() ) {
 				continue;
 			}
-			UtilityAI::Status result = btnode->tick(user_data, delta);
+			Status result = btnode->tick(blackboard, delta);
 			set_tick_result(result);
 			if( btnode->get_internal_status() == BT_INTERNAL_STATUS_COMPLETED ) {
 				set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-				//emit_signal("btnode_exited", user_data, delta);
+				//emit_signal("btnode_exited", blackboard, delta);
 			}
 			#ifdef DEBUG_ENABLED
 			_total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
@@ -140,12 +140,12 @@ UtilityAI::Status UtilityAIBTRoot::tick(Variant user_data, float delta) {
 	}
 	*/
 	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-//emit_signal("btnode_exited", user_data, delta);
+//emit_signal("btnode_exited", blackboard, delta);
 #ifdef DEBUG_ENABLED
 	_total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
 	UtilityAIPerformanceMonitorSingleton::get_singleton()->increment_total_time_elapsed_behaviour_trees_usec(_total_tick_usec);
 #endif
-	return UtilityAI::Status::FAILURE; // We shouldn't get here. If we do, there were no child nodes.
+	return Status::FAILURE; // We shouldn't get here. If we do, there were no child nodes.
 }
 
 // Godot virtuals.

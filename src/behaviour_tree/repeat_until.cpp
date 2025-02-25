@@ -35,7 +35,7 @@ void UtilityAIBTRepeatUntil::_bind_methods() {
 UtilityAIBTRepeatUntil::UtilityAIBTRepeatUntil() {
 	_max_repeat_times = -1;
 	_current_max_repeat_times = -1;
-	_expected_tick_result = UtilityAI::Status::SUCCESS;
+	_expected_tick_result = Status::SUCCESS;
 	set_reset_rule(UtilityAIBehaviourTreeNodesResetRule::NEVER);
 }
 
@@ -80,10 +80,10 @@ void UtilityAIBTRepeatUntil::reset_bt_node() {
 	_is_expected_tick_result_reached = false;
 }
 
-UtilityAI::Status UtilityAIBTRepeatUntil::tick(Variant user_data, float delta) {
-	//if( !get_is_active() ) return UtilityAI::Status::FAILURE;
+UtilityAIBehaviourTreeNodes::Status UtilityAIBTRepeatUntil::tick(Variant blackboard, float delta) {
+	//if( !get_is_active() ) return Status::FAILURE;
 	if (Engine::get_singleton()->is_editor_hint())
-		return UtilityAI::Status::FAILURE;
+		return Status::FAILURE;
 
 	if (get_internal_status() == BT_INTERNAL_STATUS_UNTICKED) {
 		reset_bt_node();
@@ -92,15 +92,15 @@ UtilityAI::Status UtilityAIBTRepeatUntil::tick(Variant user_data, float delta) {
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
-	//    emit_signal("btnode_entered", user_data, delta);
+	//    emit_signal("btnode_entered", blackboard, delta);
 	//}
 
 	if (_is_expected_tick_result_reached) {
 		set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-		set_tick_result(UtilityAI::Status::FAILURE);
-		return UtilityAI::Status::FAILURE;
+		set_tick_result(Status::FAILURE);
+		return Status::FAILURE;
 	}
-	//emit_signal("btnode_ticked", user_data, delta);
+	//emit_signal("btnode_ticked", blackboard, delta);
 	//for( int i = 0; i < get_child_count(); ++i ) {
 	//    if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i)) ) {
 	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
@@ -111,26 +111,26 @@ UtilityAI::Status UtilityAIBTRepeatUntil::tick(Variant user_data, float delta) {
 		if (_current_max_repeat_times > 0) {
 			--_current_max_repeat_times;
 		}
-		UtilityAI::Status result = btnode->tick(user_data, delta);
+		Status result = btnode->tick(blackboard, delta);
 		if (result == _expected_tick_result) {
 			_is_expected_tick_result_reached = true;
 			set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-			set_tick_result(UtilityAI::Status::SUCCESS);
-			//emit_signal("btnode_exited", user_data, delta);
-			return UtilityAI::Status::SUCCESS;
+			set_tick_result(Status::SUCCESS);
+			//emit_signal("btnode_exited", blackboard, delta);
+			return Status::SUCCESS;
 		}
 		if (_current_max_repeat_times > 0 || _current_max_repeat_times < 0) {
-			set_tick_result(UtilityAI::Status::RUNNING);
-			return UtilityAI::Status::RUNNING;
+			set_tick_result(Status::RUNNING);
+			return Status::RUNNING;
 		} else if (_current_max_repeat_times == 0) {
 			set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-			set_tick_result(UtilityAI::Status::SUCCESS);
-			//emit_signal("btnode_exited", user_data, delta);
-			return UtilityAI::Status::SUCCESS;
+			set_tick_result(Status::SUCCESS);
+			//emit_signal("btnode_exited", blackboard, delta);
+			return Status::SUCCESS;
 		}
 		//}
 	}
 	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-	set_tick_result(UtilityAI::Status::FAILURE);
-	return UtilityAI::Status::FAILURE;
+	set_tick_result(Status::FAILURE);
+	return Status::FAILURE;
 }

@@ -33,7 +33,7 @@ public:
 
 	// Handling functions.
 
-	virtual UtilityAI::Status tick(Variant user_data, float delta) override;
+	virtual Status tick(Variant blackboard, float delta) override;
 
 	// Godot virtuals.
 	void _ready() override;

@@ -63,23 +63,23 @@ void UtilityAIBTLimiter::reset_bt_node() {
 	_current_repeat_times = _max_repeat_times;
 }
 
-UtilityAI::Status UtilityAIBTLimiter::tick(Variant user_data, float delta) {
+UtilityAIBehaviourTreeNodes::Status UtilityAIBTLimiter::tick(Variant blackboard, float delta) {
 	//if( !get_is_active() ) return BT_SKIP;
 	if (Engine::get_singleton()->is_editor_hint())
-		return UtilityAI::Status::FAILURE;
+		return Status::FAILURE;
 	if (get_internal_status() == BT_INTERNAL_STATUS_UNTICKED) {
 		reset_bt_node();
 	}
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
-	//    emit_signal("btnode_entered", user_data, delta);
+	//    emit_signal("btnode_entered", blackboard, delta);
 	//}
 	if (_current_repeat_times == 0) {
 		set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-		set_tick_result(UtilityAI::Status::FAILURE);
-		//emit_signal("btnode_exited", user_data, delta);
-		return UtilityAI::Status::FAILURE;
+		set_tick_result(Status::FAILURE);
+		//emit_signal("btnode_exited", blackboard, delta);
+		return Status::FAILURE;
 	}
 
 	for (int i = 0; i < get_child_count(); ++i) {
@@ -88,18 +88,18 @@ UtilityAI::Status UtilityAIBTLimiter::tick(Variant user_data, float delta) {
 				continue;
 			}
 			--_current_repeat_times;
-			UtilityAI::Status result = btnode->tick(user_data, delta);
+			Status result = btnode->tick(blackboard, delta);
 			set_tick_result(result);
-			if (result != UtilityAI::Status::RUNNING) {
-				//emit_signal("btnode_exited", user_data, delta);
+			if (result != Status::RUNNING) {
+				//emit_signal("btnode_exited", blackboard, delta);
 				return result;
 			}
 		}
 	}
-	//emit_signal("btnode_ticked", user_data, delta);
+	//emit_signal("btnode_ticked", blackboard, delta);
 	// If we get here, there are no child nodes set.
 	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-	set_tick_result(UtilityAI::Status::FAILURE);
-	//emit_signal("btnode_exited", user_data, delta);
-	return UtilityAI::Status::FAILURE;
+	set_tick_result(Status::FAILURE);
+	//emit_signal("btnode_exited", blackboard, delta);
+	return Status::FAILURE;
 }

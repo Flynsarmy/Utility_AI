@@ -12,7 +12,7 @@ void UtilityAIBTPassBy::_bind_methods() {
 	//ClassDB::bind_method(D_METHOD("get_tick_result"), &UtilityAIBTPassBy::get_tick_result);
 	//ADD_PROPERTY(PropertyInfo(Variant::INT, "tick_result", PROPERTY_HINT_ENUM, "Running:0,Success:1,Failure:-1" ), "set_tick_result","get_tick_result");
 
-	//ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBTPassBy::tick);
+	//ClassDB::bind_method(D_METHOD("_tick", "blackboard", "delta"), &UtilityAIBTPassBy::tick);
 }
 
 // Constructor and destructor.
@@ -44,22 +44,22 @@ int  UtilityAIBTPassBy::get_tick_result() const {
 
 // Handling methods.
 
-UtilityAI::Status UtilityAIBTPassBy::tick(Variant user_data, float delta) {
+UtilityAIBehaviourTreeNodes::Status UtilityAIBTPassBy::tick(Variant blackboard, float delta) {
 	// The passBy node just calls its tick and then ticks the first
 	// behaviour tree node child and returns the result of the child.
 	// Otherwise it returns what ever is set as the tick result property.
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
-	//    emit_signal("btnode_entered", user_data, delta);
+	//    emit_signal("btnode_entered", blackboard, delta);
 	//}
 	if (_has_on_tick_method) {
-		call("on_tick", user_data, delta);
+		call("on_tick", blackboard, delta);
 	}
-	//emit_signal("btnode_ticked", user_data, delta);
+	//emit_signal("btnode_ticked", blackboard, delta);
 	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-	//emit_signal("btnode_exited", user_data, delta);
-	return UtilityAI::Status::SUCCESS;
+	//emit_signal("btnode_exited", blackboard, delta);
+	return Status::SUCCESS;
 }
 
 // Godot virtuals.

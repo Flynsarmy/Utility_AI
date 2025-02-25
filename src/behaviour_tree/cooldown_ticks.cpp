@@ -22,7 +22,7 @@ void UtilityAIBTCooldownTicks::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_current_cooldown_ticks"), &UtilityAIBTCooldownTicks::get_current_cooldown_ticks);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "current_cooldown_ticks", PROPERTY_HINT_RANGE, "0,1000,or_greater"), "set_current_cooldown_ticks", "get_current_cooldown_ticks");
 
-	//ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBTCooldownTicks::tick);
+	//ClassDB::bind_method(D_METHOD("_tick", "blackboard", "delta"), &UtilityAIBTCooldownTicks::tick);
 }
 
 // Constructor and destructor.
@@ -30,7 +30,7 @@ void UtilityAIBTCooldownTicks::_bind_methods() {
 UtilityAIBTCooldownTicks::UtilityAIBTCooldownTicks() {
 	_cooldown_ticks = 0;
 	_current_cooldown_ticks = 0;
-	_cooldown_return_value = UtilityAI::Status::FAILURE;
+	_cooldown_return_value = Status::FAILURE;
 }
 
 UtilityAIBTCooldownTicks::~UtilityAIBTCooldownTicks() {
@@ -54,43 +54,43 @@ int UtilityAIBTCooldownTicks::get_current_cooldown_ticks() const {
 	return _current_cooldown_ticks;
 }
 
-void UtilityAIBTCooldownTicks::set_cooldown_return_value(UtilityAI::Status cooldown_return_value) {
+void UtilityAIBTCooldownTicks::set_cooldown_return_value(Status cooldown_return_value) {
 	_cooldown_return_value = cooldown_return_value;
 }
 
-UtilityAI::Status UtilityAIBTCooldownTicks::get_cooldown_return_value() const {
+UtilityAIBehaviourTreeNodes::Status UtilityAIBTCooldownTicks::get_cooldown_return_value() const {
 	return _cooldown_return_value;
 }
 
 // Handling methods.
 
-UtilityAI::Status UtilityAIBTCooldownTicks::tick(Variant user_data, float delta) {
+UtilityAIBehaviourTreeNodes::Status UtilityAIBTCooldownTicks::tick(Variant blackboard, float delta) {
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
-	//    emit_signal("btnode_entered", user_data, delta);
+	//    emit_signal("btnode_entered", blackboard, delta);
 	//}
 	if (_current_cooldown_ticks > 1) {
 		--_current_cooldown_ticks;
 		return _cooldown_return_value;
 	}
 	_current_cooldown_ticks = _cooldown_ticks;
-	//emit_signal("btnode_ticked", user_data, delta);
+	//emit_signal("btnode_ticked", blackboard, delta);
 	for (int i = 0; i < get_child_count(); ++i) {
 		Node *node = get_child(i);
 		if (UtilityAIBehaviourTreeNodes *btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(node)) {
 			if (!btnode->get_is_active()) {
 				continue;
 			}
-			UtilityAI::Status result = btnode->tick(user_data, delta);
+			Status result = btnode->tick(blackboard, delta);
 			set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
 			set_tick_result(result);
-			//emit_signal("btnode_exited", user_data, delta);
+			//emit_signal("btnode_exited", blackboard, delta);
 			return result;
 		}
 	}
 	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-	set_tick_result(UtilityAI::Status::FAILURE);
-	//emit_signal("btnode_exited", user_data, delta);
-	return UtilityAI::Status::FAILURE;
+	set_tick_result(Status::FAILURE);
+	//emit_signal("btnode_exited", blackboard, delta);
+	return Status::FAILURE;
 }

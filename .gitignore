@@ -131,3 +131,4 @@ compile_commands.json
 utility_ai.code-workspace
 .vscode/settings.json
 src/gen/*
+demo/reports

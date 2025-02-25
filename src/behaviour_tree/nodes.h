@@ -12,29 +12,6 @@ namespace godot {
 class UtilityAIBehaviourTreeNodes : public UtilityAI {
 	GDCLASS(UtilityAIBehaviourTreeNodes, UtilityAI)
 
-private:
-	float _score;
-	int _evaluation_method;
-	bool _invert_score;
-	UtilityAI::Status _tick_result;
-	int _internal_status;
-	int _reset_rule;
-	bool _has_reset_rule_changed;
-
-	TypedArray<UtilityAIConsiderationResources> _considerations;
-
-protected:
-	static void _bind_methods();
-
-	//bool   _is_first_tick;
-	std::vector<UtilityAIBehaviourTreeNodes *> _child_btnodes;
-	unsigned int _num_child_btnodes;
-	std::vector<UtilityAIConsiderations *> _child_considerations;
-	unsigned int _num_child_considerations;
-#ifdef DEBUG_ENABLED
-	uint64_t _last_evaluated_timestamp;
-	uint64_t _last_visited_timestamp;
-#endif
 public:
 	UtilityAIBehaviourTreeNodes();
 	~UtilityAIBehaviourTreeNodes();
@@ -52,6 +29,13 @@ public:
 	void set_evaluation_method(int evaluation_method);
 	int get_evaluation_method() const;
 
+	enum Status {
+		SKIP = -2,
+		FAILURE = -1,
+		RUNNING = 0,
+		SUCCESS = 1,
+	};
+
 	enum UtilityAIBehaviourTreeNodesEvaluationMethod {
 		Sum = 0,
 		Min = 1,
@@ -65,8 +49,8 @@ public:
 	void set_score(float score);
 	float get_score() const;
 
-	void set_tick_result(UtilityAI::Status tick_result);
-	UtilityAI::Status get_tick_result() const;
+	void set_tick_result(Status tick_result);
+	Status get_tick_result() const;
 
 	void set_internal_status(int internal_status);
 	int get_internal_status() const;
@@ -85,7 +69,7 @@ public:
 
 	virtual float evaluate();
 
-	virtual UtilityAI::Status tick(Variant user_data, float delta);
+	virtual Status tick(Variant blackboard, float delta);
 
 	virtual void reset();
 	//virtual void reset_for_looping();
@@ -97,8 +81,34 @@ public:
 	// Godot virtuals.
 	// none.
 	virtual void _notification(int p_what);
+
+private:
+	float _score;
+	int _evaluation_method;
+	bool _invert_score;
+	Status _tick_result;
+	int _internal_status;
+	int _reset_rule;
+	bool _has_reset_rule_changed;
+
+	TypedArray<UtilityAIConsiderationResources> _considerations;
+
+protected:
+	static void _bind_methods();
+
+	//bool   _is_first_tick;
+	std::vector<UtilityAIBehaviourTreeNodes *> _child_btnodes;
+	unsigned int _num_child_btnodes;
+	std::vector<UtilityAIConsiderations *> _child_considerations;
+	unsigned int _num_child_considerations;
+#ifdef DEBUG_ENABLED
+	uint64_t _last_evaluated_timestamp;
+	uint64_t _last_visited_timestamp;
+#endif
 };
 
 } //namespace godot
+
+VARIANT_ENUM_CAST(UtilityAIBehaviourTreeNodes::Status)
 
 #endif

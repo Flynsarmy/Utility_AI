@@ -8,7 +8,7 @@ using namespace godot;
 // Method binds.
 
 void UtilityAIBTInverter::_bind_methods() {
-	//ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBTInverter::tick);
+	//ClassDB::bind_method(D_METHOD("_tick", "blackboard", "delta"), &UtilityAIBTInverter::tick);
 }
 
 // Constructor and destructor.
@@ -23,11 +23,11 @@ UtilityAIBTInverter::~UtilityAIBTInverter() {
 
 // Handling methods.
 
-UtilityAI::Status UtilityAIBTInverter::tick(Variant user_data, float delta) {
+UtilityAIBehaviourTreeNodes::Status UtilityAIBTInverter::tick(Variant blackboard, float delta) {
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
-	//    emit_signal("btnode_entered", user_data, delta);
+	//    emit_signal("btnode_entered", blackboard, delta);
 	//}
 
 	for (int i = 0; i < get_child_count(); ++i) {
@@ -36,25 +36,25 @@ UtilityAI::Status UtilityAIBTInverter::tick(Variant user_data, float delta) {
 			if (!btnode->get_is_active()) {
 				continue;
 			}
-			UtilityAI::Status result = btnode->tick(user_data, delta);
+			Status result = btnode->tick(blackboard, delta);
 
-			if (result == UtilityAI::Status::RUNNING) {
-				result = UtilityAI::Status::FAILURE;
-			} else if (result == UtilityAI::Status::FAILURE) {
-				result = UtilityAI::Status::RUNNING;
+			if (result == Status::RUNNING) {
+				result = Status::FAILURE;
+			} else if (result == Status::FAILURE) {
+				result = Status::RUNNING;
 			}
 
 			set_tick_result(result);
-			//emit_signal("btnode_ticked", user_data, delta);
-			if (result != UtilityAI::Status::RUNNING) {
+			//emit_signal("btnode_ticked", blackboard, delta);
+			if (result != Status::RUNNING) {
 				set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-				//emit_signal("btnode_exited", user_data, delta);
+				//emit_signal("btnode_exited", blackboard, delta);
 			}
 			return result;
 		}
 	}
 	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-	set_tick_result(UtilityAI::Status::FAILURE);
-	//emit_signal("btnode_exited", user_data, delta);
-	return UtilityAI::Status::FAILURE;
+	set_tick_result(Status::FAILURE);
+	//emit_signal("btnode_exited", blackboard, delta);
+	return Status::FAILURE;
 }

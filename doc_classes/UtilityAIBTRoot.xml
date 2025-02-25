@@ -10,8 +10,8 @@
 	</tutorials>
 	<methods>
 		<method name="tick">
-			<return type="int" />
-			<param index="0" name="user_data" type="Variant" />
+			<return type="int" enum="UtilityAIBehaviourTreeNodes.Status" />
+			<param index="0" name="blackboard" type="Variant" />
 			<param index="1" name="delta" type="float" />
 			<description>
 				This is the behaviour tree tick-method you should be using to tick the tree. You can provide any [Variant] type as a parameter (usually a node used as an actor or a dictionary used as a blackboard), along with a delta-time. These are passed to all the child nodes of the behaviour tree during ticks.

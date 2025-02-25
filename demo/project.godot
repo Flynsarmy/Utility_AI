@@ -11,8 +11,18 @@ config_version=5
 [application]
 
 config/name="UtilityAI Demo"
-config/features=PackedStringArray("4.3", "GL Compatibility")
+run/main_scene="uid://cxdnms85j3rw1"
+config/features=PackedStringArray("4.4", "GL Compatibility")
+run/max_fps=60
 config/icon="res://icon.svg"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
+
+[gdunit4]
+
+settings/test/test_lookup_folder="tests"
 
 [rendering]
 

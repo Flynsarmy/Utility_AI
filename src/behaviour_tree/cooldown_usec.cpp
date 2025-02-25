@@ -23,7 +23,7 @@ void UtilityAIBTCooldownUsec::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_cooldown_start_timestamp"), &UtilityAIBTCooldownUsec::get_cooldown_start_timestamp);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "cooldown_start_timestamp", PROPERTY_HINT_RANGE, "0,1000,or_greater"), "set_cooldown_start_timestamp", "get_cooldown_start_timestamp");
 
-	//ClassDB::bind_method(D_METHOD("_tick", "user_data", "delta"), &UtilityAIBTCooldownUsec::tick);
+	//ClassDB::bind_method(D_METHOD("_tick", "blackboard", "delta"), &UtilityAIBTCooldownUsec::tick);
 }
 
 // Constructor and destructor.
@@ -31,7 +31,7 @@ void UtilityAIBTCooldownUsec::_bind_methods() {
 UtilityAIBTCooldownUsec::UtilityAIBTCooldownUsec() {
 	_cooldown_usec = 0;
 	_cooldown_start_timestamp = 0;
-	_cooldown_return_value = UtilityAI::Status::FAILURE;
+	_cooldown_return_value = Status::FAILURE;
 	_is_in_cooldown = false;
 }
 
@@ -56,21 +56,21 @@ int UtilityAIBTCooldownUsec::get_cooldown_start_timestamp() const {
 	return _cooldown_start_timestamp;
 }
 
-void UtilityAIBTCooldownUsec::set_cooldown_return_value(UtilityAI::Status cooldown_return_value) {
+void UtilityAIBTCooldownUsec::set_cooldown_return_value(Status cooldown_return_value) {
 	_cooldown_return_value = cooldown_return_value;
 }
 
-UtilityAI::Status UtilityAIBTCooldownUsec::get_cooldown_return_value() const {
+UtilityAIBehaviourTreeNodes::Status UtilityAIBTCooldownUsec::get_cooldown_return_value() const {
 	return _cooldown_return_value;
 }
 
 // Handling methods.
 
-UtilityAI::Status UtilityAIBTCooldownUsec::tick(Variant user_data, float delta) {
+UtilityAIBehaviourTreeNodes::Status UtilityAIBTCooldownUsec::tick(Variant blackboard, float delta) {
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
-	//    emit_signal("btnode_entered", user_data, delta);
+	//    emit_signal("btnode_entered", blackboard, delta);
 	//}
 	if (_is_in_cooldown) {
 		uint64_t wait_time = godot::Time::get_singleton()->get_ticks_usec() - _cooldown_start_timestamp;
@@ -81,22 +81,22 @@ UtilityAI::Status UtilityAIBTCooldownUsec::tick(Variant user_data, float delta) 
 	}
 	_is_in_cooldown = true;
 	_cooldown_start_timestamp = godot::Time::get_singleton()->get_ticks_usec();
-	//emit_signal("btnode_ticked", user_data, delta);
+	//emit_signal("btnode_ticked", blackboard, delta);
 	for (int i = 0; i < get_child_count(); ++i) {
 		Node *node = get_child(i);
 		if (UtilityAIBehaviourTreeNodes *btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(node)) {
 			if (!btnode->get_is_active()) {
 				continue;
 			}
-			UtilityAI::Status result = btnode->tick(user_data, delta);
+			Status result = btnode->tick(blackboard, delta);
 			set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
 			set_tick_result(result);
-			//emit_signal("btnode_exited", user_data, delta);
+			//emit_signal("btnode_exited", blackboard, delta);
 			return result;
 		}
 	}
 	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-	set_tick_result(UtilityAI::Status::FAILURE);
-	//emit_signal("btnode_exited", user_data, delta);
-	return UtilityAI::Status::FAILURE;
+	set_tick_result(Status::FAILURE);
+	//emit_signal("btnode_exited", blackboard, delta);
+	return Status::FAILURE;
 }

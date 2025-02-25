@@ -11,7 +11,7 @@ class UtilityAIBTPassThrough : public UtilityAIBTDecoratorNodes {
 	GDCLASS(UtilityAIBTPassThrough, UtilityAIBTDecoratorNodes)
 
 private:
-	UtilityAI::Status _tick_result;
+	Status _tick_result;
 	bool _has_on_tick_method;
 
 protected:
@@ -23,12 +23,12 @@ public:
 
 	// Getters and setters for attributes.
 
-	void set_tick_result(UtilityAI::Status tick_result);
-	UtilityAI::Status get_tick_result() const;
+	void set_tick_result(Status tick_result);
+	Status get_tick_result() const;
 
 	// Handling functions.
 
-	virtual UtilityAI::Status tick(Variant user_data, float delta) override;
+	virtual Status tick(Variant blackboard, float delta) override;
 
 	// Godot virtuals.
 	void _notification(int p_what) override;
