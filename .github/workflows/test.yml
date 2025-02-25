@@ -12,6 +12,10 @@ jobs:
         with:
           path:  ${{ github.workspace }}
           name: utility_ai_demo_project
+      - name: Delete existing GDUnit
+        shell: sh
+        run: |
+          rm -rf addons/gdUnit4
       - name: Run Tests
         uses: MikeSchulze/gdunit4-action@v1
         with:
