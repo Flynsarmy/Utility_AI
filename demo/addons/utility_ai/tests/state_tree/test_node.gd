@@ -8,28 +8,76 @@ extends GdUnitTestSuite
 func test_on_method_state_calls() -> void:
 	var _root: UtilityAISTRoot = UtilityAISTRoot.new()
 	var _child = load("res://addons/utility_ai/tests/state_tree/node_example_1.gd").new()
-	var blackboard: Dictionary = {}
+	var blackboard: Dictionary = {
+		"on_enter_condition": 0,
+		"on_enter_state": 0,
+		"on_tick": 0,
+		"on_exit_state": 0
+	}
 
 	_root.add_child(_child)
 	_root.tick(blackboard, 0.1)
+	assert(blackboard['on_enter_condition'] == 1)
+	assert(blackboard['on_tick'] == 1)
+	assert(blackboard['on_enter_state'] == 1)
+	assert(blackboard['on_exit_state'] == 0)
+
 	_root.tick(blackboard, 0.1)
-	verify(_child, 1).on_enter_condition(blackboard, 0.1)
-	verify(_child, 1).on_enter_state(blackboard, 0.1)
-	verify(_child, 2).on_tick(blackboard, 0.1)
-	verify(_child, 0).on_exit_state(blackboard, 0.1)
+	assert(blackboard['on_enter_condition'] == 1)
+	assert(blackboard['on_tick'] == 2)
+	assert(blackboard['on_enter_state'] == 1)
+	assert(blackboard['on_exit_state'] == 0)
+
 	_root.free()
 
+## No on_* methods should fire if on_enter_condition returns false
 func test_on_enter_condition_fail_checks() -> void:
 	var _root: UtilityAISTRoot = UtilityAISTRoot.new()
 	var _child = load("res://addons/utility_ai/tests/state_tree/node_example_2.gd").new()
-	var blackboard: Dictionary = {}
+	var blackboard: Dictionary = {
+		"on_enter_condition": 0,
+		"on_enter_state": 0,
+		"on_tick": 0,
+		"on_exit_state": 0
+	}
 
 	_root.add_child(_child)
 	_root.tick(blackboard, 0.1)
+	assert(blackboard['on_enter_condition'] == 1)
+	assert(blackboard['on_tick'] == 0)
+	assert(blackboard['on_enter_state'] == 0)
+	assert(blackboard['on_exit_state'] == 0)
+
 	_root.tick(blackboard, 0.1)
-	assert(_root.get_active_states().size() == 0)
-	verify(_child, 1).on_enter_condition(blackboard, 0.1)
-	verify(_child, 0).on_enter_state(blackboard, 0.1)
-	verify(_child, 0).on_tick(blackboard, 0.1)
-	verify(_child, 0).on_exit_state(blackboard, 0.1)
+	assert(blackboard['on_enter_condition'] == 2)
+	assert(blackboard['on_tick'] == 0)
+	assert(blackboard['on_enter_state'] == 0)
+	assert(blackboard['on_exit_state'] == 0)
+	_root.free()
+
+func test_grandchildren_on_method_calls() -> void:
+	var _root: UtilityAISTRoot = UtilityAISTRoot.new()
+	var _child = load("res://addons/utility_ai/tests/state_tree/node_example_1.gd").new()
+	var _grandchild = load("res://addons/utility_ai/tests/state_tree/node_example_1.gd").new()
+	var blackboard: Dictionary = {
+		"on_enter_condition": 0,
+		"on_enter_state": 0,
+		"on_tick": 0,
+		"on_exit_state": 0
+	}
+
+	_child.add_child(_grandchild)
+	_root.add_child(_child)
+	_root.tick(blackboard, 0.1)
+	assert(blackboard['on_enter_condition'] == 2) # 1 for child, 1 for grandchild
+	assert(blackboard['on_tick'] == 2)
+	assert(blackboard['on_enter_state'] == 2)
+	assert(blackboard['on_exit_state'] == 0)
+
+	_root.tick(blackboard, 0.1)
+	assert(blackboard['on_enter_condition'] == 2)
+	assert(blackboard['on_tick'] == 4)
+	assert(blackboard['on_enter_state'] == 2)
+	assert(blackboard['on_exit_state'] == 0)
+
 	_root.free()

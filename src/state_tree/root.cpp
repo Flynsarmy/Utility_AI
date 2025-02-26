@@ -57,7 +57,7 @@ uint64_t UtilityAISTRoot::get_total_tick_usec() const {
 }
 #endif
 
-TypedArray<UtilityAIStateTreeNodes> UtilityAISTRoot::get_active_states() const {
+TypedArray<UtilityAISTNode> UtilityAISTRoot::get_active_states() const {
 	return _active_states;
 }
 
@@ -101,13 +101,13 @@ bool UtilityAISTRoot::try_transition(UtilityAIStateTreeNodes *transition_target_
 	if (UtilityAIStateTreeNodes *new_state = transition_target_node->evaluate_state_activation(blackboard, delta)) {
 		// We got a new leaf state. Get the new state list.
 		_active_states_vector.clear();
-		TypedArray<UtilityAIStateTreeNodes> new_active_states;
+		TypedArray<UtilityAISTNode> new_active_states;
 		std::vector<bool> is_existing_state; // = new std::vector<bool>();
 		Node *cur_state = new_state;
 		while (cur_state != this) {
 			new_active_states.push_back(cur_state);
 			is_existing_state.push_back(_active_states.has(cur_state));
-			_active_states_vector.push_back(godot::Object::cast_to<UtilityAIStateTreeNodes>(cur_state));
+			_active_states_vector.push_back(godot::Object::cast_to<UtilityAISTNode>(cur_state));
 
 			cur_state = cur_state->get_parent();
 		}
@@ -115,7 +115,7 @@ bool UtilityAISTRoot::try_transition(UtilityAIStateTreeNodes *transition_target_
 		// Now that we have the new states in the list, do on_exit to those that
 		// are leaving the list.
 		for (int i = 0; i < _active_states.size(); ++i) {
-			UtilityAIStateTreeNodes *cur_active_state = godot::Object::cast_to<UtilityAIStateTreeNodes>(_active_states[i]);
+			UtilityAISTNode *cur_active_state = godot::Object::cast_to<UtilityAISTNode>(_active_states[i]);
 			if (!new_active_states.has(cur_active_state)) {
 				cur_active_state->on_exit_state(blackboard, delta);
 			}

@@ -248,7 +248,6 @@ float UtilityAIStateTreeNodes::evaluate() {
 
 bool UtilityAIStateTreeNodes::on_enter_condition(Variant blackboard, float delta) {
 	if (has_method("on_enter_condition")) {
-		ERR_PRINT("has on enter condition");
 		return call("on_enter_condition", blackboard, delta);
 	}
 	emit_signal("state_check_enter_condition", blackboard, delta);

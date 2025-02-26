@@ -1,6 +1,7 @@
 #ifndef UtilityAISTRoot_H_INCLUDED
 #define UtilityAISTRoot_H_INCLUDED
 
+#include "node.h"
 #include "nodes.h"
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/variant/dictionary.hpp>
@@ -15,8 +16,8 @@ private:
 	uint64_t _total_tick_usec;
 	uint64_t _total_transition_usec;
 #endif
-	TypedArray<UtilityAIStateTreeNodes> _active_states;
-	std::vector<UtilityAIStateTreeNodes *> _active_states_vector;
+	TypedArray<UtilityAISTNode> _active_states;
+	std::vector<UtilityAISTNode *> _active_states_vector;
 	TypedArray<UtilityAISensors> _child_sensors;
 	unsigned int _num_child_sensors;
 	bool _is_first_tick;
@@ -36,7 +37,7 @@ public:
 	void set_total_tick_usec(uint64_t total_tick_usec);
 #endif
 
-	TypedArray<UtilityAIStateTreeNodes> get_active_states() const;
+	TypedArray<UtilityAISTNode> get_active_states() const;
 
 	//UtilityAIStateTreeNodes* get_active_state() const;
 	//_active_states
