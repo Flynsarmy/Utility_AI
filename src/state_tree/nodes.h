@@ -18,10 +18,6 @@ private:
 	int _evaluation_method;
 	bool _invert_score;
 	int _child_state_selection_rule;
-	bool _has_on_entered_method;
-	bool _has_on_exited_method;
-	bool _has_on_ticked_method;
-	bool _has_on_entered_condition_method;
 	UtilityAIStateTreeNodes *_tree_root_node;
 	TypedArray<UtilityAIConsiderationResources> _considerations;
 	std::vector<UtilityAIStateTreeNodes *> _child_states;

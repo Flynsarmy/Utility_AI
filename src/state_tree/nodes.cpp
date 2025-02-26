@@ -57,11 +57,6 @@ UtilityAIStateTreeNodes::UtilityAIStateTreeNodes() {
 	_child_state_selection_rule = UtilityAIStateTreeNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD;
 	_is_on_entered_condition_true = true;
 
-	_has_on_entered_condition_method = false;
-	_has_on_entered_method = false;
-	_has_on_exited_method = false;
-	_has_on_ticked_method = false;
-
 	_num_child_states = 0;
 	_num_child_considerations = 0;
 
@@ -252,7 +247,8 @@ float UtilityAIStateTreeNodes::evaluate() {
 }
 
 bool UtilityAIStateTreeNodes::on_enter_condition(Variant blackboard, float delta) {
-	if (_has_on_entered_condition_method) {
+	if (has_method("on_enter_condition")) {
+		ERR_PRINT("has on enter condition");
 		return call("on_enter_condition", blackboard, delta);
 	}
 	emit_signal("state_check_enter_condition", blackboard, delta);
@@ -260,23 +256,17 @@ bool UtilityAIStateTreeNodes::on_enter_condition(Variant blackboard, float delta
 }
 
 void UtilityAIStateTreeNodes::on_enter_state(Variant blackboard, float delta) {
-	if (_has_on_entered_method) {
-		call("on_enter_state", blackboard, delta);
-	}
+	call("on_enter_state", blackboard, delta);
 	emit_signal("state_entered", blackboard, delta);
 }
 
 void UtilityAIStateTreeNodes::on_exit_state(Variant blackboard, float delta) {
-	if (_has_on_exited_method) {
-		call("on_exit_state", blackboard, delta);
-	}
+	call("on_exit_state", blackboard, delta);
 	emit_signal("state_exited", blackboard, delta);
 }
 
 void UtilityAIStateTreeNodes::on_tick(Variant blackboard, float delta) {
-	if (_has_on_ticked_method) {
-		call("on_tick", blackboard, delta);
-	}
+	call("on_tick", blackboard, delta);
 	emit_signal("state_ticked", blackboard, delta);
 #ifdef DEBUG_ENABLED
 	_last_visited_timestamp = godot::Time::get_singleton()->get_ticks_usec();
@@ -349,23 +339,8 @@ UtilityAIStateTreeNodes *UtilityAIStateTreeNodes::evaluate_state_activation(Vari
 	return this; // This has no state tree children, so it is a leaf node.
 }
 
-// Godot virtuals.
-/**
-void UtilityAIStateTreeNodes::_enter_tree() {
-	_has_on_entered_condition_method = has_method("on_enter_condition");
-	_has_on_entered_method = has_method("on_enter_state");
-	_has_on_exited_method = has_method("on_exit_state");
-	_has_on_ticked_method = has_method("on_tick");
-}
-/**/
-
 void UtilityAIStateTreeNodes::_notification(int p_what) {
-	if (p_what == NOTIFICATION_POST_ENTER_TREE) {
-		_has_on_entered_condition_method = has_method("on_enter_condition");
-		_has_on_entered_method = has_method("on_enter_state");
-		_has_on_exited_method = has_method("on_exit_state");
-		_has_on_ticked_method = has_method("on_tick");
-	} else if (p_what == NOTIFICATION_CHILD_ORDER_CHANGED) {
+	if (p_what == NOTIFICATION_CHILD_ORDER_CHANGED) {
 		_child_states.clear();
 		_child_considerations.clear();
 		int num_children = get_child_count();

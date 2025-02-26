@@ -12,29 +12,18 @@ jobs:
         with:
           path:  ${{ github.workspace }}
           name: utility_ai_demo_project
-      - name: Delete existing GDUnit
+      - name: Download Godot
         shell: sh
         run: |
-          rm -rf addons/gdUnit4
-      - name: Run Tests
-        uses: MikeSchulze/gdunit4-action@v1
-        with:
-          godot-version: '4.4'
-          godot-status: rc1
-          paths: 'res://addons/utility_ai/tests'
-          timeout: 10
-      # - name: Download Godot
-      #   shell: sh
-      #   run: |
-      #     curl -fLO https://github.com/godotengine/godot-builds/releases/download/4.4-rc1/Godot_v4.4-rc1_linux.x86_64.zip
-      #     unzip Godot_v4.4-rc1_linux.x86_64.zip -d /usr/local/bin
-      #     mv /usr/local/bin/Godot_v4.4-rc1_linux.x86_64 /usr/local/bin/godot
-      #     chmod +x /usr/local/bin/godot
-      # - name: Run tests
-      #   shell: sh
-      #   env:
-      #     GODOT_BIN: /usr/local/bin/godot
-      #   run: |
-      #     cd ${{ github.workspace }}
-      #     chmod +x addons/gdUnit4/runtest.sh
-      #     addons/gdUnit4/runtest.sh -a 'addons/utility_ai/tests' --headless --ignoreHeadlessMode
+          curl -fLO https://github.com/godotengine/godot-builds/releases/download/4.4-rc1/Godot_v4.4-rc1_linux.x86_64.zip
+          unzip Godot_v4.4-rc1_linux.x86_64.zip -d /usr/local/bin
+          mv /usr/local/bin/Godot_v4.4-rc1_linux.x86_64 /usr/local/bin/godot
+          chmod +x /usr/local/bin/godot
+      - name: Run tests
+        shell: sh
+        env:
+          GODOT_BIN: /usr/local/bin/godot
+        run: |
+          cd ${{ github.workspace }}
+          chmod +x addons/gdUnit4/runtest.sh
+          addons/gdUnit4/runtest.sh -a 'addons/utility_ai/tests' --headless --ignoreHeadlessMode
