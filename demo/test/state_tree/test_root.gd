@@ -65,3 +65,21 @@ func test_child_sensor_count() -> void:
 	_root.add_child(_child3)
 	assert(_root.get_child_sensors().size() == 3)
 	_root.free()
+
+## when the first child fails its _on_enter_condition() check, the second child should be entered
+func test_second_child_selected() -> void:
+	var _root: UtilityAISTRoot = UtilityAISTRoot.new()
+	var _child1 = load("res://test/state_tree/node_example_2.gd").new()
+	var _child2 = load("res://test/state_tree/node_example_1.gd").new()
+	var blackboard: Dictionary = {
+		"on_enter_condition": 0,
+		"on_enter_state": 0,
+		"on_tick": 0,
+		"on_exit_state": 0
+	}
+	_root.add_child(_child1)
+	_root.add_child(_child2)
+
+	_root.tick(blackboard, 0.1)
+	assert(_root.get_active_states().size() == 1)
+	_root.free()

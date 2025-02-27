@@ -7,7 +7,7 @@ extends GdUnitTestSuite
 ## Confirm on_* methods are called when they should be
 func test_on_method_state_calls() -> void:
 	var _root: UtilityAISTRoot = UtilityAISTRoot.new()
-	var _child = load("res://addons/utility_ai/tests/state_tree/node_example_1.gd").new()
+	var _child = load("res://test/state_tree/node_example_1.gd").new()
 	var blackboard: Dictionary = {
 		"on_enter_condition": 0,
 		"on_enter_state": 0,
@@ -33,7 +33,7 @@ func test_on_method_state_calls() -> void:
 ## No on_* methods should fire if on_enter_condition returns false
 func test_on_enter_condition_fail_checks() -> void:
 	var _root: UtilityAISTRoot = UtilityAISTRoot.new()
-	var _child = load("res://addons/utility_ai/tests/state_tree/node_example_2.gd").new()
+	var _child = load("res://test/state_tree/node_example_2.gd").new()
 	var blackboard: Dictionary = {
 		"on_enter_condition": 0,
 		"on_enter_state": 0,
@@ -57,8 +57,8 @@ func test_on_enter_condition_fail_checks() -> void:
 
 func test_grandchildren_on_method_calls() -> void:
 	var _root: UtilityAISTRoot = UtilityAISTRoot.new()
-	var _child = load("res://addons/utility_ai/tests/state_tree/node_example_1.gd").new()
-	var _grandchild = load("res://addons/utility_ai/tests/state_tree/node_example_1.gd").new()
+	var _child = load("res://test/state_tree/node_example_1.gd").new()
+	var _grandchild = load("res://test/state_tree/node_example_1.gd").new()
 	var blackboard: Dictionary = {
 		"on_enter_condition": 0,
 		"on_enter_state": 0,
