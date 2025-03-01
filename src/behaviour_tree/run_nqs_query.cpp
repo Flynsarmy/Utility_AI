@@ -80,7 +80,7 @@ void UtilityAIBTRunNQSQuery::reset_bt_node() {
 	_nqs_search_space->reset_query_variables();
 }
 
-UtilityAIBehaviourTreeNodes::Status UtilityAIBTRunNQSQuery::tick(Variant blackboard, float delta) {
+UtilityAIBTNodes::Status UtilityAIBTRunNQSQuery::tick(Variant blackboard, float delta) {
 	if (_nqs_search_space == nullptr || !UtilityFunctions::is_instance_id_valid(_nqs_search_space->get_instance_id())) {
 		_nqs_search_space = nullptr;
 		set_internal_status(BT_INTERNAL_STATUS_COMPLETED);

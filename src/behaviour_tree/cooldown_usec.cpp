@@ -60,13 +60,13 @@ void UtilityAIBTCooldownUsec::set_cooldown_return_value(Status cooldown_return_v
 	_cooldown_return_value = cooldown_return_value;
 }
 
-UtilityAIBehaviourTreeNodes::Status UtilityAIBTCooldownUsec::get_cooldown_return_value() const {
+UtilityAIBTNodes::Status UtilityAIBTCooldownUsec::get_cooldown_return_value() const {
 	return _cooldown_return_value;
 }
 
 // Handling methods.
 
-UtilityAIBehaviourTreeNodes::Status UtilityAIBTCooldownUsec::tick(Variant blackboard, float delta) {
+UtilityAIBTNodes::Status UtilityAIBTCooldownUsec::tick(Variant blackboard, float delta) {
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
@@ -84,7 +84,7 @@ UtilityAIBehaviourTreeNodes::Status UtilityAIBTCooldownUsec::tick(Variant blackb
 	//emit_signal("btnode_ticked", blackboard, delta);
 	for (int i = 0; i < get_child_count(); ++i) {
 		Node *node = get_child(i);
-		if (UtilityAIBehaviourTreeNodes *btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(node)) {
+		if (UtilityAIBTNodes *btnode = godot::Object::cast_to<UtilityAIBTNodes>(node)) {
 			if (!btnode->get_is_active()) {
 				continue;
 			}

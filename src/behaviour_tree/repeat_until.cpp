@@ -36,7 +36,7 @@ UtilityAIBTRepeatUntil::UtilityAIBTRepeatUntil() {
 	_max_repeat_times = -1;
 	_current_max_repeat_times = -1;
 	_expected_tick_result = Status::SUCCESS;
-	set_reset_rule(UtilityAIBehaviourTreeNodesResetRule::NEVER);
+	set_reset_rule(UtilityAIBTNodesResetRule::NEVER);
 }
 
 UtilityAIBTRepeatUntil::~UtilityAIBTRepeatUntil() {
@@ -80,7 +80,7 @@ void UtilityAIBTRepeatUntil::reset_bt_node() {
 	_is_expected_tick_result_reached = false;
 }
 
-UtilityAIBehaviourTreeNodes::Status UtilityAIBTRepeatUntil::tick(Variant blackboard, float delta) {
+UtilityAIBTNodes::Status UtilityAIBTRepeatUntil::tick(Variant blackboard, float delta) {
 	//if( !get_is_active() ) return Status::FAILURE;
 	if (Engine::get_singleton()->is_editor_hint())
 		return Status::FAILURE;
@@ -102,9 +102,9 @@ UtilityAIBehaviourTreeNodes::Status UtilityAIBTRepeatUntil::tick(Variant blackbo
 	}
 	//emit_signal("btnode_ticked", blackboard, delta);
 	//for( int i = 0; i < get_child_count(); ++i ) {
-	//    if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i)) ) {
+	//    if( UtilityAIBTNodes* btnode = godot::Object::cast_to<UtilityAIBTNodes>(get_child(i)) ) {
 	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
-		UtilityAIBehaviourTreeNodes *btnode = _child_btnodes[i];
+		UtilityAIBTNodes *btnode = _child_btnodes[i];
 		if (!btnode->get_is_active()) {
 			continue;
 		}

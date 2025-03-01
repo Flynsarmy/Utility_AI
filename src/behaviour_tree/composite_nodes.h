@@ -6,8 +6,8 @@
 
 namespace godot {
 
-class UtilityAIBTCompositeNodes : public UtilityAIBehaviourTreeNodes {
-	GDCLASS(UtilityAIBTCompositeNodes, UtilityAIBehaviourTreeNodes)
+class UtilityAIBTCompositeNodes : public UtilityAIBTNodes {
+	GDCLASS(UtilityAIBTCompositeNodes, UtilityAIBTNodes)
 
 private:
 protected:

@@ -47,48 +47,58 @@ int UtilityAIBTCooldownTicks::get_cooldown_ticks() const {
 }
 
 void UtilityAIBTCooldownTicks::set_current_cooldown_ticks(int current_cooldown_ticks) {
-	_current_cooldown_ticks = current_cooldown_ticks;
+	_current_cooldown_ticks = get_cooldown_ticks() - current_cooldown_ticks;
 }
 
 int UtilityAIBTCooldownTicks::get_current_cooldown_ticks() const {
-	return _current_cooldown_ticks;
+	return get_cooldown_ticks() - _current_cooldown_ticks;
 }
 
 void UtilityAIBTCooldownTicks::set_cooldown_return_value(Status cooldown_return_value) {
 	_cooldown_return_value = cooldown_return_value;
 }
 
-UtilityAIBehaviourTreeNodes::Status UtilityAIBTCooldownTicks::get_cooldown_return_value() const {
+UtilityAIBTNodes::Status UtilityAIBTCooldownTicks::get_cooldown_return_value() const {
 	return _cooldown_return_value;
 }
 
 // Handling methods.
 
-UtilityAIBehaviourTreeNodes::Status UtilityAIBTCooldownTicks::tick(Variant blackboard, float delta) {
+UtilityAIBTNodes::Status UtilityAIBTCooldownTicks::tick(Variant blackboard, float delta) {
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
 	//    emit_signal("btnode_entered", blackboard, delta);
 	//}
-	if (_current_cooldown_ticks > 1) {
-		--_current_cooldown_ticks;
+
+	if (_current_cooldown_ticks > 0) {
+		_current_cooldown_ticks--;
 		return _cooldown_return_value;
 	}
-	_current_cooldown_ticks = _cooldown_ticks;
 	//emit_signal("btnode_ticked", blackboard, delta);
-	for (int i = 0; i < get_child_count(); ++i) {
-		Node *node = get_child(i);
-		if (UtilityAIBehaviourTreeNodes *btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(node)) {
-			if (!btnode->get_is_active()) {
-				continue;
-			}
-			Status result = btnode->tick(blackboard, delta);
+	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
+		UtilityAIBTNodes *btnode = _child_btnodes[i];
+		if (!btnode->get_is_active()) {
+			continue;
+		}
+		Status result = btnode->tick(blackboard, delta);
+
+		if (result != Status::RUNNING) {
+			_current_cooldown_ticks = _cooldown_ticks;
+
 			set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
 			set_tick_result(result);
 			//emit_signal("btnode_exited", blackboard, delta);
 			return result;
+		} else {
+			set_internal_status(BT_INTERNAL_STATUS_TICKED);
+			set_tick_result(result);
+			return result;
 		}
+		break;
 	}
+
+	_current_cooldown_ticks = _cooldown_ticks;
 	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
 	set_tick_result(Status::FAILURE);
 	//emit_signal("btnode_exited", blackboard, delta);

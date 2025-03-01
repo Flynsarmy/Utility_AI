@@ -6,8 +6,8 @@
 
 namespace godot {
 
-class UtilityAISTNode : public UtilityAIStateTreeNodes {
-	GDCLASS(UtilityAISTNode, UtilityAIStateTreeNodes)
+class UtilityAISTNode : public UtilityAISTNodes {
+	GDCLASS(UtilityAISTNode, UtilityAISTNodes)
 
 private:
 protected:

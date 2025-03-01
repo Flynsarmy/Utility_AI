@@ -7,8 +7,8 @@
 
 namespace godot {
 
-class UtilityAIBTRoot : public UtilityAIBehaviourTreeNodes {
-	GDCLASS(UtilityAIBTRoot, UtilityAIBehaviourTreeNodes)
+class UtilityAIBTRoot : public UtilityAIBTNodes {
+	GDCLASS(UtilityAIBTRoot, UtilityAIBTNodes)
 
 private:
 #ifdef DEBUG_ENABLED
@@ -36,7 +36,7 @@ public:
 	virtual Status tick(Variant blackboard, float delta) override;
 
 	// Godot virtuals.
-	void _ready() override;
+	virtual void _notification(int p_what);
 };
 
 } //namespace godot

@@ -11,7 +11,7 @@ class UtilityAIBTRepeater : public UtilityAIBTDecoratorNodes {
 
 private:
 	int _repeat_times;
-	int _current_repeat_times;
+	int _times_repeated;
 	int _tick_result;
 
 protected:
@@ -26,8 +26,8 @@ public:
 	int get_repeat_times() const;
 	void set_repeat_times(int repeat_times);
 
-	int get_current_repeat_times() const;
-	void set_current_repeat_times(int repeat_times);
+	int get_times_repeated() const;
+	void set_times_repeated(int repeat_times);
 	//int get_tick_result() const;
 	//void set_tick_result( int tick_result );
 

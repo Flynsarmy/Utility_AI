@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="UtilityAIBehaviourTreeNodes" inherits="UtilityAI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+<class name="UtilityAIBTNodes" inherits="UtilityAI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
 		Base class for all UtilityAI behaviour tree nodes.
 	</brief_description>
@@ -25,8 +25,8 @@
 		<member name="score" type="float" setter="set_score" getter="get_score" default="0.0">
 			The score this node received from the Utility-based evaluation.
 		</member>
-		<member name="tick_result" type="int" setter="set_tick_result" getter="get_tick_result" enum="UtilityAIBehaviourTreeNodes.Status" default="1">
-			Result after the tick. The following choices are possible: "Running:0,Success:1,Failure:-1,Skip:-2".
+		<member name="tick_result" type="int" setter="set_tick_result" getter="get_tick_result" enum="UtilityAIBTNodes.Status" default="1">
+			Result after the tick.
 		</member>
 	</members>
 	<constants>

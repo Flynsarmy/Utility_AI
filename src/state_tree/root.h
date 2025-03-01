@@ -8,8 +8,8 @@
 
 namespace godot {
 
-class UtilityAISTRoot : public UtilityAIStateTreeNodes {
-	GDCLASS(UtilityAISTRoot, UtilityAIStateTreeNodes)
+class UtilityAISTRoot : public UtilityAISTNodes {
+	GDCLASS(UtilityAISTRoot, UtilityAISTNodes)
 
 private:
 #ifdef DEBUG_ENABLED
@@ -39,13 +39,13 @@ public:
 
 	TypedArray<UtilityAISTNode> get_active_states() const;
 
-	//UtilityAIStateTreeNodes* get_active_state() const;
+	//UtilityAISTNodes* get_active_state() const;
 	//_active_states
 
 	// Handling functions.
-	//virtual TypedArray<UtilityAIStateTreeNodes> _tick( Variant blackboard, float delta) override;
+	//virtual TypedArray<UtilityAISTNodes> _tick( Variant blackboard, float delta) override;
 	virtual void transition_to(NodePath path_to_node, Variant blackboard, float delta) override;
-	bool try_transition(UtilityAIStateTreeNodes *transition_target_node, Variant blackboard, float delta);
+	bool try_transition(UtilityAISTNodes *transition_target_node, Variant blackboard, float delta);
 
 	void tick(Variant blackboard, float delta);
 

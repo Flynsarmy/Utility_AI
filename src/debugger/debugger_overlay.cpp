@@ -344,11 +344,11 @@ void UtilityAIDebuggerOverlay::tree_add_child_nodes(Tree *tree, TreeItem *parent
 			tick_timestamp = behg->get_last_evaluated_timestamp();
 			eval_timestamp = behg->get_last_evaluated_timestamp();
 			score = behg->get_score();
-		} else if (UtilityAIBehaviourTreeNodes *btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(next_ai_node)) {
+		} else if (UtilityAIBTNodes *btnode = godot::Object::cast_to<UtilityAIBTNodes>(next_ai_node)) {
 			tick_timestamp = btnode->get_last_visited_timestamp();
 			eval_timestamp = btnode->get_last_evaluated_timestamp();
 			score = btnode->get_score();
-		} else if (UtilityAIStateTreeNodes *stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(next_ai_node)) {
+		} else if (UtilityAISTNodes *stnode = godot::Object::cast_to<UtilityAISTNodes>(next_ai_node)) {
 			tick_timestamp = stnode->get_last_visited_timestamp();
 			eval_timestamp = stnode->get_last_evaluated_timestamp();
 			score = stnode->get_score();
@@ -400,12 +400,12 @@ void  UtilityAIDebuggerOverlay::tree_update_child_nodes( Tree* tree, TreeItem* p
 			score = beh->get_score();
 		}else if( UtilityAIBehaviourGroup* behg = godot::Object::cast_to<UtilityAIBehaviourGroup>(next_ai_node)) {
 			score = behg->get_score();
-		}else if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(next_ai_node) ) {
+		}else if( UtilityAIBTNodes* btnode = godot::Object::cast_to<UtilityAIBTNodes>(next_ai_node) ) {
 			//if( btnode->get_internal_status() == )
 			next_tree_item->set_custom_bg_color(0, Color(0.0f, 0.5f, 0.0f), false);
 
 			score = btnode->get_score();
-		}else if( UtilityAIStateTreeNodes* stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(next_ai_node) ) {
+		}else if( UtilityAISTNodes* stnode = godot::Object::cast_to<UtilityAISTNodes>(next_ai_node) ) {
 
 			next_tree_item->set_custom_bg_color(0, Color(0.0f, 0.5f, 0.0f), false);
 

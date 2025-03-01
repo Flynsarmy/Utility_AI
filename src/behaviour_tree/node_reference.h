@@ -11,7 +11,7 @@ class UtilityAIBTNodeReference : public UtilityAIBTTaskNodes {
 
 private:
 	//int _tick_result;
-	UtilityAIBehaviourTreeNodes *_node_reference;
+	UtilityAIBTNodes *_node_reference;
 	ObjectID _cache;
 
 protected:
@@ -25,8 +25,8 @@ public:
 
 	// Getters and setters for attributes.
 
-	void set_node_reference(UtilityAIBehaviourTreeNodes *node_reference);
-	UtilityAIBehaviourTreeNodes *get_node_reference() const;
+	void set_node_reference(UtilityAIBTNodes *node_reference);
+	UtilityAIBTNodes *get_node_reference() const;
 	//void set_tick_result( int tick_result );
 	//int  get_tick_result() const;
 

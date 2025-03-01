@@ -95,13 +95,13 @@ void UtilityAIEditorPlugin::_on_selection_changed() {
 	}
 }
 
-void UtilityAIEditorPlugin::btree_add_child_nodes(Tree *tree, TreeItem *parent_node, UtilityAIBehaviourTreeNodes *parent_ai_node) {
+void UtilityAIEditorPlugin::btree_add_child_nodes(Tree *tree, TreeItem *parent_node, UtilityAIBTNodes *parent_ai_node) {
 	if (parent_ai_node == nullptr || parent_node == nullptr) {
 		return;
 	}
 
 	for (int i = 0; i < parent_ai_node->get_child_count(); ++i) {
-		if (UtilityAIBehaviourTreeNodes *btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(parent_ai_node->get_child(i))) {
+		if (UtilityAIBTNodes *btnode = godot::Object::cast_to<UtilityAIBTNodes>(parent_ai_node->get_child(i))) {
 			TreeItem *child_item = tree->create_item(parent_node);
 			if (child_item == nullptr)
 				return;

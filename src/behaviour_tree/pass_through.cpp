@@ -31,13 +31,13 @@ void UtilityAIBTPassThrough::set_tick_result(Status tick_result) {
 	_tick_result = tick_result;
 }
 
-UtilityAIBehaviourTreeNodes::Status UtilityAIBTPassThrough::get_tick_result() const {
+UtilityAIBTNodes::Status UtilityAIBTPassThrough::get_tick_result() const {
 	return _tick_result;
 }
 
 // Handling methods.
 
-UtilityAIBehaviourTreeNodes::Status UtilityAIBTPassThrough::tick(Variant blackboard, float delta) {
+UtilityAIBTNodes::Status UtilityAIBTPassThrough::tick(Variant blackboard, float delta) {
 	// The passthrough node just calls its tick and then ticks the first
 	// behaviour tree node child and returns the result of the child.
 	// Otherwise it returns what ever is set as the tick result property.
@@ -61,9 +61,9 @@ UtilityAIBehaviourTreeNodes::Status UtilityAIBTPassThrough::tick(Variant blackbo
 
 	//for( int i = 0; i < get_child_count(); ++i ) {
 	//    Node* node = get_child(i);
-	//    if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(node) ) {
+	//    if( UtilityAIBTNodes* btnode = godot::Object::cast_to<UtilityAIBTNodes>(node) ) {
 	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
-		UtilityAIBehaviourTreeNodes *btnode = _child_btnodes[i];
+		UtilityAIBTNodes *btnode = _child_btnodes[i];
 		if (!btnode->get_is_active()) {
 			continue;
 		}

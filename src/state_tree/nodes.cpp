@@ -8,32 +8,32 @@ using namespace godot;
 
 // Method binds.
 
-void UtilityAIStateTreeNodes::_bind_methods() {
-	ClassDB::bind_method(D_METHOD("set_child_state_selection_rule", "child_state_selection_rule"), &UtilityAIStateTreeNodes::set_child_state_selection_rule);
-	ClassDB::bind_method(D_METHOD("get_child_state_selection_rule"), &UtilityAIStateTreeNodes::get_child_state_selection_rule);
+void UtilityAISTNodes::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("set_child_state_selection_rule", "child_state_selection_rule"), &UtilityAISTNodes::set_child_state_selection_rule);
+	ClassDB::bind_method(D_METHOD("get_child_state_selection_rule"), &UtilityAISTNodes::get_child_state_selection_rule);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "child_state_selection_rule", PROPERTY_HINT_ENUM, "OnEnterConditionMethod:0,UtilityScoring:1"), "set_child_state_selection_rule", "get_child_state_selection_rule");
 
-	ClassDB::bind_method(D_METHOD("set_evaluation_method", "evaluation_method"), &UtilityAIStateTreeNodes::set_evaluation_method);
-	ClassDB::bind_method(D_METHOD("get_evaluation_method"), &UtilityAIStateTreeNodes::get_evaluation_method);
+	ClassDB::bind_method(D_METHOD("set_evaluation_method", "evaluation_method"), &UtilityAISTNodes::set_evaluation_method);
+	ClassDB::bind_method(D_METHOD("get_evaluation_method"), &UtilityAISTNodes::get_evaluation_method);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "evaluation_method", PROPERTY_HINT_ENUM, "Sum:0,Min:1,Max:2,Mean:3,Multiply:4,FirstNonZero:5"), "set_evaluation_method", "get_evaluation_method");
 
-	ClassDB::bind_method(D_METHOD("set_considerations", "considerations"), &UtilityAIStateTreeNodes::set_considerations);
-	ClassDB::bind_method(D_METHOD("get_considerations"), &UtilityAIStateTreeNodes::get_considerations);
+	ClassDB::bind_method(D_METHOD("set_considerations", "considerations"), &UtilityAISTNodes::set_considerations);
+	ClassDB::bind_method(D_METHOD("get_considerations"), &UtilityAISTNodes::get_considerations);
 	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "considerations", PROPERTY_HINT_ARRAY_TYPE, vformat("%s/%s:%s", Variant::OBJECT, PROPERTY_HINT_RESOURCE_TYPE, "UtilityAIConsiderationResources")), "set_considerations", "get_considerations");
 
-	ClassDB::bind_method(D_METHOD("set_on_entered_condition", "is_entered"), &UtilityAIStateTreeNodes::set_is_on_entered_condition_true);
-	ClassDB::bind_method(D_METHOD("get_on_entered_condition"), &UtilityAIStateTreeNodes::get_is_on_entered_condition_true);
+	ClassDB::bind_method(D_METHOD("set_on_entered_condition", "is_entered"), &UtilityAISTNodes::set_is_on_entered_condition_true);
+	ClassDB::bind_method(D_METHOD("get_on_entered_condition"), &UtilityAISTNodes::get_is_on_entered_condition_true);
 	//ADD_PROPERTY(PropertyInfo(Variant::INT, "child_state_selection_rule", PROPERTY_HINT_ENUM, "OnEnterConditionMethod:0,UtilityScoring:1" ), "set_child_state_selection_rule","get_child_state_selection_rule");
 
 	ADD_SUBGROUP("Debugging", "");
 
-	ClassDB::bind_method(D_METHOD("set_score", "score"), &UtilityAIStateTreeNodes::set_score);
-	ClassDB::bind_method(D_METHOD("get_score"), &UtilityAIStateTreeNodes::get_score);
+	ClassDB::bind_method(D_METHOD("set_score", "score"), &UtilityAISTNodes::set_score);
+	ClassDB::bind_method(D_METHOD("get_score"), &UtilityAISTNodes::get_score);
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "score", PROPERTY_HINT_NONE), "set_score", "get_score");
 
-	ClassDB::bind_method(D_METHOD("get_tree_root"), &UtilityAIStateTreeNodes::get_tree_root);
+	ClassDB::bind_method(D_METHOD("get_tree_root"), &UtilityAISTNodes::get_tree_root);
 
-	ClassDB::bind_method(D_METHOD("transition_to", "new_state_nodepath", "blackboard", "delta"), &UtilityAIStateTreeNodes::transition_to);
+	ClassDB::bind_method(D_METHOD("transition_to", "new_state_nodepath", "blackboard", "delta"), &UtilityAISTNodes::transition_to);
 
 	GDVIRTUAL_BIND(on_enter_condition, "blackboard", "delta");
 	GDVIRTUAL_BIND(on_enter_state, "blackboard", "delta");
@@ -49,9 +49,9 @@ void UtilityAIStateTreeNodes::_bind_methods() {
 
 // Constructor and destructor.
 
-UtilityAIStateTreeNodes::UtilityAIStateTreeNodes() {
+UtilityAISTNodes::UtilityAISTNodes() {
 	_score = 0.0;
-	_evaluation_method = UtilityAIStateTreeNodesEvaluationMethod::Multiply;
+	_evaluation_method = UtilityAISTNodesEvaluationMethod::Multiply;
 	_invert_score = false;
 	_tree_root_node = nullptr;
 	_child_state_selection_rule = UtilityAIStateTreeNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD;
@@ -66,71 +66,71 @@ UtilityAIStateTreeNodes::UtilityAIStateTreeNodes() {
 #endif
 }
 
-UtilityAIStateTreeNodes::~UtilityAIStateTreeNodes() {
+UtilityAISTNodes::~UtilityAISTNodes() {
 	_tree_root_node = nullptr;
 }
 
 // Getters and Setters.
 
-void UtilityAIStateTreeNodes::set_considerations(TypedArray<UtilityAIConsiderationResources> considerations) {
+void UtilityAISTNodes::set_considerations(TypedArray<UtilityAIConsiderationResources> considerations) {
 	_considerations = considerations;
 }
 
-TypedArray<UtilityAIConsiderationResources> UtilityAIStateTreeNodes::get_considerations() const {
+TypedArray<UtilityAIConsiderationResources> UtilityAISTNodes::get_considerations() const {
 	return _considerations;
 }
 
-void UtilityAIStateTreeNodes::set_is_on_entered_condition_true(bool is_on_entered_condition_true) {
+void UtilityAISTNodes::set_is_on_entered_condition_true(bool is_on_entered_condition_true) {
 	_is_on_entered_condition_true = is_on_entered_condition_true;
 }
 
-bool UtilityAIStateTreeNodes::get_is_on_entered_condition_true() const {
+bool UtilityAISTNodes::get_is_on_entered_condition_true() const {
 	return _is_on_entered_condition_true;
 }
 
-void UtilityAIStateTreeNodes::set_evaluation_method(int evaluation_method) {
+void UtilityAISTNodes::set_evaluation_method(int evaluation_method) {
 	_evaluation_method = evaluation_method;
 }
 
-int UtilityAIStateTreeNodes::get_evaluation_method() const {
+int UtilityAISTNodes::get_evaluation_method() const {
 	return _evaluation_method;
 }
 
-void UtilityAIStateTreeNodes::set_score(float score) {
+void UtilityAISTNodes::set_score(float score) {
 	_score = score;
 }
 
-float UtilityAIStateTreeNodes::get_score() const {
+float UtilityAISTNodes::get_score() const {
 	return _score;
 }
 
-UtilityAIStateTreeNodes *UtilityAIStateTreeNodes::get_tree_root() const {
+UtilityAISTNodes *UtilityAISTNodes::get_tree_root() const {
 	return _tree_root_node;
 }
 
-void UtilityAIStateTreeNodes::set_child_state_selection_rule(int child_state_selection_rule) {
+void UtilityAISTNodes::set_child_state_selection_rule(int child_state_selection_rule) {
 	_child_state_selection_rule = child_state_selection_rule;
 }
 
-int UtilityAIStateTreeNodes::get_child_state_selection_rule() const {
+int UtilityAISTNodes::get_child_state_selection_rule() const {
 	return _child_state_selection_rule;
 }
 
-void UtilityAIStateTreeNodes::set_root_node(UtilityAIStateTreeNodes *tree_root_node) {
+void UtilityAISTNodes::set_root_node(UtilityAISTNodes *tree_root_node) {
 	_tree_root_node = tree_root_node;
 	for (int i = 0; i < get_child_count(); ++i) {
-		if (UtilityAIStateTreeNodes *stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(get_child(i))) {
+		if (UtilityAISTNodes *stnode = godot::Object::cast_to<UtilityAISTNodes>(get_child(i))) {
 			stnode->set_root_node(tree_root_node);
 		}
 	} //endfor children
 }
 
 /**
-Dictionary UtilityAIStateTreeNodes::get_child_nodes_as_dictionary(UtilityAIStateTreeNodes* tree_root_node ) {
+Dictionary UtilityAISTNodes::get_child_nodes_as_dictionary(UtilityAISTNodes* tree_root_node ) {
 	_tree_root_node = tree_root_node;
 	Dictionary results;
 	for( int i = 0; i < get_child_count(); ++i ) {
-		if( UtilityAIStateTreeNodes* stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(get_child(i)) ) {
+		if( UtilityAISTNodes* stnode = godot::Object::cast_to<UtilityAISTNodes>(get_child(i)) ) {
 			results[stnode->get_name()] = stnode;
 			results.merge( stnode->get_child_nodes_as_dictionary(tree_root_node) );
 		}
@@ -141,7 +141,7 @@ Dictionary UtilityAIStateTreeNodes::get_child_nodes_as_dictionary(UtilityAIState
 
 // Handling methods.
 
-float UtilityAIStateTreeNodes::evaluate() {
+float UtilityAISTNodes::evaluate() {
 //if( !get_is_active() ) return 0.0f;
 //if( Engine::get_singleton()->is_editor_hint() ) return 0.0f;
 #ifdef DEBUG_ENABLED
@@ -191,19 +191,19 @@ float UtilityAIStateTreeNodes::evaluate() {
 		}
 
 		switch (_evaluation_method) {
-			case UtilityAIStateTreeNodesEvaluationMethod::Min: {
+			case UtilityAISTNodesEvaluationMethod::Min: {
 				if (i == 0)
 					_score = child_score;
 				if (child_score < _score)
 					_score = child_score;
 			} break;
-			case UtilityAIStateTreeNodesEvaluationMethod::Max: {
+			case UtilityAISTNodesEvaluationMethod::Max: {
 				if (i == 0)
 					_score = child_score;
 				if (child_score > _score)
 					_score = child_score;
 			} break;
-			case UtilityAIStateTreeNodesEvaluationMethod::Multiply: {
+			case UtilityAISTNodesEvaluationMethod::Multiply: {
 				if (i == 0)
 					_score = child_score;
 				else
@@ -219,7 +219,7 @@ float UtilityAIStateTreeNodes::evaluate() {
 					return 0.0f;
 				}
 			} break;
-			case UtilityAIStateTreeNodesEvaluationMethod::FirstNonZero: {
+			case UtilityAISTNodesEvaluationMethod::FirstNonZero: {
 				if (child_score > 0.0f) {
 					if (_invert_score) {
 						_score = 1.0f - child_score;
@@ -235,7 +235,7 @@ float UtilityAIStateTreeNodes::evaluate() {
 
 	} //endfor children
 
-	if (_evaluation_method == UtilityAIStateTreeNodesEvaluationMethod::Mean) {
+	if (_evaluation_method == UtilityAISTNodesEvaluationMethod::Mean) {
 		_score = _score / ((float)num_children);
 	}
 
@@ -246,7 +246,7 @@ float UtilityAIStateTreeNodes::evaluate() {
 	return _score;
 }
 
-bool UtilityAIStateTreeNodes::on_enter_condition(Variant blackboard, float delta) {
+bool UtilityAISTNodes::on_enter_condition(Variant blackboard, float delta) {
 	if (has_method("on_enter_condition")) {
 		return call("on_enter_condition", blackboard, delta);
 	}
@@ -254,17 +254,17 @@ bool UtilityAIStateTreeNodes::on_enter_condition(Variant blackboard, float delta
 	return _is_on_entered_condition_true;
 }
 
-void UtilityAIStateTreeNodes::on_enter_state(Variant blackboard, float delta) {
+void UtilityAISTNodes::on_enter_state(Variant blackboard, float delta) {
 	call("on_enter_state", blackboard, delta);
 	emit_signal("state_entered", blackboard, delta);
 }
 
-void UtilityAIStateTreeNodes::on_exit_state(Variant blackboard, float delta) {
+void UtilityAISTNodes::on_exit_state(Variant blackboard, float delta) {
 	call("on_exit_state", blackboard, delta);
 	emit_signal("state_exited", blackboard, delta);
 }
 
-void UtilityAIStateTreeNodes::on_tick(Variant blackboard, float delta) {
+void UtilityAISTNodes::on_tick(Variant blackboard, float delta) {
 	call("on_tick", blackboard, delta);
 	emit_signal("state_ticked", blackboard, delta);
 #ifdef DEBUG_ENABLED
@@ -272,22 +272,22 @@ void UtilityAIStateTreeNodes::on_tick(Variant blackboard, float delta) {
 #endif
 }
 
-void UtilityAIStateTreeNodes::transition_to(NodePath path_to_node, Variant blackboard, float delta) {
+void UtilityAISTNodes::transition_to(NodePath path_to_node, Variant blackboard, float delta) {
 	if (_tree_root_node == nullptr) {
 		return;
 	}
 	_tree_root_node->transition_to(path_to_node, blackboard, delta);
 }
 
-UtilityAIStateTreeNodes *UtilityAIStateTreeNodes::evaluate_state_activation(Variant blackboard, float delta) {
+UtilityAISTNodes *UtilityAISTNodes::evaluate_state_activation(Variant blackboard, float delta) {
 	unsigned int num_state_tree_childs = 0;
 
 	if (get_child_state_selection_rule() == UtilityAIStateTreeNodeChildStateSelectionRule::ON_ENTER_CONDITION_METHOD) {
 		// Childs are evaluated by using the user-defined on_enter_condition method.
 		//for( int i = 0; i < get_child_count(); ++i ) {
-		//    if( UtilityAIStateTreeNodes* stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(get_child(i)) ) {
+		//    if( UtilityAISTNodes* stnode = godot::Object::cast_to<UtilityAISTNodes>(get_child(i)) ) {
 		for (unsigned int i = 0; i < _num_child_states; ++i) {
-			UtilityAIStateTreeNodes *stnode = _child_states[i];
+			UtilityAISTNodes *stnode = _child_states[i];
 			if (!stnode->get_is_active()) {
 				continue;
 			}
@@ -297,19 +297,19 @@ UtilityAIStateTreeNodes *UtilityAIStateTreeNodes::evaluate_state_activation(Vari
 				continue;
 			}
 
-			if (UtilityAIStateTreeNodes *result = stnode->evaluate_state_activation(blackboard, delta)) {
+			if (UtilityAISTNodes *result = stnode->evaluate_state_activation(blackboard, delta)) {
 				return result;
 			} //endif result is not nullptr
 			//}//endif valid node type
 		} //endfor child nodes
 	} else {
 		// Childs are evaluated by using Utility-based scoring.
-		UtilityAIStateTreeNodes *highest_scoring_state_to_activate = nullptr;
+		UtilityAISTNodes *highest_scoring_state_to_activate = nullptr;
 		float highest_score = -9999999.9999;
 		//for( int i = 0; i < get_child_count(); ++i ) {
-		//if( UtilityAIStateTreeNodes* stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(get_child(i)) ) {
+		//if( UtilityAISTNodes* stnode = godot::Object::cast_to<UtilityAISTNodes>(get_child(i)) ) {
 		for (unsigned int i = 0; i < _num_child_states; ++i) {
-			UtilityAIStateTreeNodes *stnode = _child_states[i];
+			UtilityAISTNodes *stnode = _child_states[i];
 
 			if (!stnode->get_is_active()) {
 				continue;
@@ -318,7 +318,7 @@ UtilityAIStateTreeNodes *UtilityAIStateTreeNodes::evaluate_state_activation(Vari
 			++num_state_tree_childs;
 			float score = stnode->evaluate();
 			if (score > highest_score) {
-				if (UtilityAIStateTreeNodes *result = stnode->evaluate_state_activation(blackboard, delta)) {
+				if (UtilityAISTNodes *result = stnode->evaluate_state_activation(blackboard, delta)) {
 					highest_score = score;
 					highest_scoring_state_to_activate = result;
 				} //endif result is not nullptr
@@ -338,13 +338,13 @@ UtilityAIStateTreeNodes *UtilityAIStateTreeNodes::evaluate_state_activation(Vari
 	return this; // This has no state tree children, so it is a leaf node.
 }
 
-void UtilityAIStateTreeNodes::_notification(int p_what) {
+void UtilityAISTNodes::_notification(int p_what) {
 	if (p_what == NOTIFICATION_CHILD_ORDER_CHANGED) {
 		_child_states.clear();
 		_child_considerations.clear();
 		int num_children = get_child_count();
 		for (int i = 0; i < num_children; ++i) {
-			if (UtilityAIStateTreeNodes *stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(get_child(i))) {
+			if (UtilityAISTNodes *stnode = godot::Object::cast_to<UtilityAISTNodes>(get_child(i))) {
 				_child_states.push_back(stnode);
 			}
 			if (UtilityAIConsiderations *cons = godot::Object::cast_to<UtilityAIConsiderations>(get_child(i))) {

@@ -10,7 +10,7 @@
 	<tutorials>
 	</tutorials>
 	<members>
-		<member name="node_reference" type="UtilityAIBehaviourTreeNodes" setter="set_node_reference" getter="get_node_reference">
+		<member name="node_reference" type="UtilityAIBTNodes" setter="set_node_reference" getter="get_node_reference">
 			A behaviour tree node.
 		</member>
 	</members>

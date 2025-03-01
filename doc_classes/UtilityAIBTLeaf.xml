@@ -7,7 +7,7 @@
 		The leaf node is used for conditions and actions. You should define your own [method UtilityAIBTTaskNodes._tick] method where you do your logic.
 		Example:
 		[gdscript]
-		func _tick(blackboard: Variant, delta: float) -&gt; Status:
+		func on_tick(blackboard: Variant, delta: float) -&gt; Status:
 		    return Status.SUCCESS
 		[/gdscript]
 	</description>

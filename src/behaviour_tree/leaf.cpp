@@ -40,7 +40,7 @@ int  UtilityAIBTLeaf::get_tick_result() const {
 
 // Handling methods.
 
-UtilityAIBehaviourTreeNodes::Status UtilityAIBTLeaf::tick(Variant blackboard, float delta) {
+UtilityAIBTNodes::Status UtilityAIBTLeaf::tick(Variant blackboard, float delta) {
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;

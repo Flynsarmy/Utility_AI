@@ -64,14 +64,14 @@ TypedArray<UtilityAISTNode> UtilityAISTRoot::get_active_states() const {
 // Handling methods.
 
 void UtilityAISTRoot::transition_to(NodePath path_to_node, Variant blackboard, float delta) {
-	UtilityAIStateTreeNodes *new_state = get_node<UtilityAIStateTreeNodes>(path_to_node);
+	UtilityAISTNodes *new_state = get_node<UtilityAISTNodes>(path_to_node);
 	if (new_state == nullptr) {
 		return;
 	}
 	bool result = try_transition(new_state, blackboard, delta);
 }
 
-bool UtilityAISTRoot::try_transition(UtilityAIStateTreeNodes *transition_target_node, Variant blackboard, float delta) {
+bool UtilityAISTRoot::try_transition(UtilityAISTNodes *transition_target_node, Variant blackboard, float delta) {
 #ifdef DEBUG_ENABLED
 	uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
 #endif
@@ -98,7 +98,7 @@ bool UtilityAISTRoot::try_transition(UtilityAIStateTreeNodes *transition_target_
 		return false;
 	}
 	bool new_state_found = false;
-	if (UtilityAIStateTreeNodes *new_state = transition_target_node->evaluate_state_activation(blackboard, delta)) {
+	if (UtilityAISTNodes *new_state = transition_target_node->evaluate_state_activation(blackboard, delta)) {
 		// We got a new leaf state. Get the new state list.
 		_active_states_vector.clear();
 		TypedArray<UtilityAISTNode> new_active_states;
@@ -125,7 +125,7 @@ bool UtilityAISTRoot::try_transition(UtilityAIStateTreeNodes *transition_target_
 		_active_states = new_active_states;
 		for (int i = _active_states_vector.size() - 1; i > -1; --i) {
 			if (!is_existing_state[i]) {
-				//UtilityAIStateTreeNodes* cur_active_state = godot::Object::cast_to<UtilityAIStateTreeNodes>(_active_states[i]);
+				//UtilityAISTNodes* cur_active_state = godot::Object::cast_to<UtilityAISTNodes>(_active_states[i]);
 				//cur_active_state->on_enter_state(blackboard, delta);
 				_active_states_vector[i]->on_enter_state(blackboard, delta);
 			}
@@ -169,9 +169,9 @@ void UtilityAISTRoot::tick(Variant blackboard, float delta) {
 	// root to the active leaf.
 	if (_active_states_vector.size() > 0) {
 		for (int i = _active_states_vector.size() - 1; i > -1; --i) {
-			UtilityAIStateTreeNodes *stnode = _active_states_vector[i];
+			UtilityAISTNodes *stnode = _active_states_vector[i];
 
-			//if( UtilityAIStateTreeNodes* stnode = godot::Object::cast_to<UtilityAIStateTreeNodes>(_active_states[i]) ) {
+			//if( UtilityAISTNodes* stnode = godot::Object::cast_to<UtilityAISTNodes>(_active_states[i]) ) {
 			stnode->on_tick(blackboard, delta);
 			//}
 		}
@@ -185,6 +185,8 @@ void UtilityAISTRoot::tick(Variant blackboard, float delta) {
 // Godot virtuals.
 
 void UtilityAISTRoot::_notification(int p_what) {
+	UtilityAISTNodes::_notification(p_what);
+
 	if (p_what == NOTIFICATION_READY || p_what == NOTIFICATION_CHILD_ORDER_CHANGED) {
 		if (Engine::get_singleton()->is_editor_hint())
 			return;

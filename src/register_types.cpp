@@ -182,7 +182,7 @@ void register_scene_classes() {
 	GDREGISTER_CLASS(UtilityAIConsiderationGroupResource);
 
 	// Behaviour tree.
-	GDREGISTER_VIRTUAL_CLASS(UtilityAIBehaviourTreeNodes);
+	GDREGISTER_VIRTUAL_CLASS(UtilityAIBTNodes);
 	GDREGISTER_CLASS(UtilityAIBTRoot);
 
 	GDREGISTER_VIRTUAL_CLASS(UtilityAIBTCompositeNodes);
@@ -211,7 +211,7 @@ void register_scene_classes() {
 	GDREGISTER_CLASS(UtilityAIBTNodeReference);
 
 	// State tree.
-	GDREGISTER_VIRTUAL_CLASS(UtilityAIStateTreeNodes);
+	GDREGISTER_VIRTUAL_CLASS(UtilityAISTNodes);
 	GDREGISTER_CLASS(UtilityAISTRoot);
 	GDREGISTER_CLASS(UtilityAISTNode);
 

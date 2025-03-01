@@ -52,9 +52,9 @@ void UtilityAIBTScoreBasedPicker::reset_bt_node() {
 	_current_child_index = -1;
 	float current_highest_score = -99999999.9999;
 	//for( int i = 0; i < get_child_count(); ++i ) {
-	//    UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i));
+	//    UtilityAIBTNodes* btnode = godot::Object::cast_to<UtilityAIBTNodes>(get_child(i));
 	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
-		UtilityAIBehaviourTreeNodes *btnode = _child_btnodes[i];
+		UtilityAIBTNodes *btnode = _child_btnodes[i];
 		//if( btnode == nullptr ) {
 		//    continue;
 		//}
@@ -70,7 +70,7 @@ void UtilityAIBTScoreBasedPicker::reset_bt_node() {
 	} //endfor children
 }
 
-UtilityAIBehaviourTreeNodes::Status UtilityAIBTScoreBasedPicker::tick(Variant blackboard, float delta) {
+UtilityAIBTNodes::Status UtilityAIBTScoreBasedPicker::tick(Variant blackboard, float delta) {
 	if (get_internal_status() == BT_INTERNAL_STATUS_UNTICKED) {
 		reset_bt_node();
 	}
@@ -88,8 +88,8 @@ UtilityAIBehaviourTreeNodes::Status UtilityAIBTScoreBasedPicker::tick(Variant bl
 		return Status::FAILURE; // No valid child found.
 	}
 
-	//UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(_current_child_index));
-	UtilityAIBehaviourTreeNodes *btnode = _child_btnodes[_current_child_index];
+	//UtilityAIBTNodes* btnode = godot::Object::cast_to<UtilityAIBTNodes>(get_child(_current_child_index));
+	UtilityAIBTNodes *btnode = _child_btnodes[_current_child_index];
 	if (btnode != nullptr) {
 		Status return_value = btnode->tick(blackboard, delta);
 		set_tick_result(return_value);

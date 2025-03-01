@@ -30,13 +30,13 @@ void UtilityAIBTFixedResult::set_fixed_result(Status fixed_result) {
 	_fixed_result = fixed_result;
 }
 
-UtilityAIBehaviourTreeNodes::Status UtilityAIBTFixedResult::get_fixed_result() const {
+UtilityAIBTNodes::Status UtilityAIBTFixedResult::get_fixed_result() const {
 	return _fixed_result;
 }
 
 // Handling methods.
 
-UtilityAIBehaviourTreeNodes::Status UtilityAIBTFixedResult::tick(Variant blackboard, float delta) {
+UtilityAIBTNodes::Status UtilityAIBTFixedResult::tick(Variant blackboard, float delta) {
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
@@ -46,7 +46,7 @@ UtilityAIBehaviourTreeNodes::Status UtilityAIBTFixedResult::tick(Variant blackbo
 	set_tick_result(_fixed_result);
 	for (int i = 0; i < get_child_count(); ++i) {
 		Node *node = get_child(i);
-		if (UtilityAIBehaviourTreeNodes *btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(node)) {
+		if (UtilityAIBTNodes *btnode = godot::Object::cast_to<UtilityAIBTNodes>(node)) {
 			if (!btnode->get_is_active()) {
 				continue;
 			}

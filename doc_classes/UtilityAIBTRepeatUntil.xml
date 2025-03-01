@@ -14,6 +14,6 @@
 		<member name="max_repeat_times" type="int" setter="set_max_repeat_times" getter="get_max_repeat_times" default="-1">
 			The maximum times the limiter node can be ticked.
 		</member>
-		<member name="reset_rule" type="int" setter="set_reset_rule" getter="get_reset_rule" overrides="UtilityAIBehaviourTreeNodes" default="3" />
+		<member name="reset_rule" type="int" setter="set_reset_rule" getter="get_reset_rule" overrides="UtilityAIBTNodes" default="3" />
 	</members>
 </class>

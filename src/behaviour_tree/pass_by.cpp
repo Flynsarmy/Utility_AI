@@ -44,7 +44,7 @@ int  UtilityAIBTPassBy::get_tick_result() const {
 
 // Handling methods.
 
-UtilityAIBehaviourTreeNodes::Status UtilityAIBTPassBy::tick(Variant blackboard, float delta) {
+UtilityAIBTNodes::Status UtilityAIBTPassBy::tick(Variant blackboard, float delta) {
 	// The passBy node just calls its tick and then ticks the first
 	// behaviour tree node child and returns the result of the child.
 	// Otherwise it returns what ever is set as the tick result property.

@@ -36,7 +36,7 @@ private:
 protected:
 	static void _bind_methods();
 
-	void btree_add_child_nodes(Tree *tree, TreeItem *parent_node, UtilityAIBehaviourTreeNodes *parent_ai_node);
+	void btree_add_child_nodes(Tree *tree, TreeItem *parent_node, UtilityAIBTNodes *parent_ai_node);
 
 public:
 	UtilityAIEditorPlugin();

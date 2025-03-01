@@ -15,6 +15,8 @@ func test_active_child_on_ticked_root() -> void:
 	var _root: UtilityAISTRoot = UtilityAISTRoot.new()
 	var _child: UtilityAISTNode = UtilityAISTNode.new()
 	_root.add_child(_child)
+	# before first tick it'll be 0
+	assert(_root.get_active_states().size() == 0)
 	_root.tick({}, 0.1);
 	assert(_root.get_active_states().size() == 1)
 

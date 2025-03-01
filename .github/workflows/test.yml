@@ -16,12 +16,12 @@ jobs:
         uses: MikeSchulze/gdUnit4-action@v1.1.5
         with:
           godot-version: 4.4
-          godot-status: "rc2"
+          godot-status: "rc3"
           timeout: 3
           paths: "res://test"
           version: "installed"
           publish-report: false
-          report-name: report_Godot4.4-rc2_unit-tests
+          report-name: report_Godot4.4-rc3_unit-tests
       # - name: Download Godot
       #   shell: sh
       #   run: |

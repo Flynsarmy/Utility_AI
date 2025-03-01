@@ -11,7 +11,7 @@ using namespace godot;
 void UtilityAIBTNodeReference::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_node_reference", "node_reference"), &UtilityAIBTNodeReference::set_node_reference);
 	ClassDB::bind_method(D_METHOD("get_node_reference"), &UtilityAIBTNodeReference::get_node_reference);
-	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "node_reference", PROPERTY_HINT_NODE_TYPE, "UtilityAIBehaviourTreeNodes"), "set_node_reference", "get_node_reference");
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "node_reference", PROPERTY_HINT_NODE_TYPE, "UtilityAIBTNodes"), "set_node_reference", "get_node_reference");
 
 	//ClassDB::bind_method(D_METHOD("_tick", "blackboard", "delta"), &UtilityAIBTNodeReference::tick);
 }
@@ -28,7 +28,7 @@ UtilityAIBTNodeReference::~UtilityAIBTNodeReference() {
 
 // Getters and Setters.
 
-void UtilityAIBTNodeReference::set_node_reference(UtilityAIBehaviourTreeNodes *node_reference) {
+void UtilityAIBTNodeReference::set_node_reference(UtilityAIBTNodes *node_reference) {
 	if (_node_reference == node_reference || (node_reference != nullptr && (this == node_reference || node_reference->is_ancestor_of(this) || this->is_ancestor_of(node_reference)))) {
 		return;
 	}
@@ -37,7 +37,7 @@ void UtilityAIBTNodeReference::set_node_reference(UtilityAIBehaviourTreeNodes *n
 	_update_cache();
 }
 
-UtilityAIBehaviourTreeNodes *UtilityAIBTNodeReference::get_node_reference() const {
+UtilityAIBTNodes *UtilityAIBTNodeReference::get_node_reference() const {
 	return _node_reference;
 }
 
@@ -71,7 +71,7 @@ void UtilityAIBTNodeReference::reset() {
 	_node_reference->reset();
 }
 
-UtilityAIBehaviourTreeNodes::Status UtilityAIBTNodeReference::tick(Variant blackboard, float delta) {
+UtilityAIBTNodes::Status UtilityAIBTNodeReference::tick(Variant blackboard, float delta) {
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;

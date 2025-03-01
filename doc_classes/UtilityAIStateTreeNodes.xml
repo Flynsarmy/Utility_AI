@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="UtilityAIStateTreeNodes" inherits="UtilityAI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+<class name="UtilityAISTNodes" inherits="UtilityAI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
 		A state management structure that is a hybrid of a behaviour tree and a hierarchical state machine.
 	</brief_description>
@@ -23,7 +23,7 @@
 			</description>
 		</method>
 		<method name="get_tree_root" qualifiers="const">
-			<return type="UtilityAIStateTreeNodes" />
+			<return type="UtilityAISTNodes" />
 			<description>
 				Returns the root node of the state tree.
 			</description>
@@ -33,7 +33,7 @@
 			<param index="0" name="blackboard" type="Variant" />
 			<param index="1" name="delta" type="float" />
 			<description>
-				Do your logic here to decide when this node should be activated. Return [code]true[/code] or [code]false[/code] based on your logic.  This will execute before the corrosponding signal.
+				Do your logic here to decide when this node should be activated. Return [code]true[/code] or [code]false[/code] based on your logic. If this method isn't implemented in your node and no event is defined, this will return [code]true[/code].  This will execute before the corrosponding signal.
 			</description>
 		</method>
 		<method name="on_enter_state" qualifiers="virtual">

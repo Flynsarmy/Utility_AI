@@ -44,17 +44,15 @@ bool UtilityAIBTParallel::get_is_reactive() const {
 }
 /**/
 
-UtilityAIBehaviourTreeNodes::Status UtilityAIBTParallel::tick(Variant blackboard, float delta) {
+UtilityAIBTNodes::Status UtilityAIBTParallel::tick(Variant blackboard, float delta) {
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
 	//    emit_signal("btnode_entered", blackboard, delta);
 	//}
 	Status parallelresult = Status::SUCCESS;
-	//for( int i = 0; i < get_child_count(); ++i ) {
-	//    UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i));
 	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
-		UtilityAIBehaviourTreeNodes *btnode = _child_btnodes[i];
+		UtilityAIBTNodes *btnode = _child_btnodes[i];
 		//if( btnode != nullptr ) {
 		if (!btnode->get_is_active()) {
 			continue;
@@ -68,7 +66,7 @@ UtilityAIBehaviourTreeNodes::Status UtilityAIBTParallel::tick(Variant blackboard
 		//}//endif node was of correct type
 	} //endfor btnodes
 	//emit_signal("btnode_ticked", blackboard, delta);
-	if (parallelresult != 0) {
+	if (parallelresult != Status::RUNNING) {
 		set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
 		//emit_signal("btnode_exited", blackboard, delta);
 	}

@@ -48,10 +48,10 @@ void UtilityAIBTRandomSequence::reset_bt_node() {
 	// Create a random order.
 	_child_node_order.clear();
 	//for( int i = 0; i < get_child_count(); ++i ) {
-	//    UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i));
+	//    UtilityAIBTNodes* btnode = godot::Object::cast_to<UtilityAIBTNodes>(get_child(i));
 	//    if( btnode == nullptr ) continue;
 	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
-		UtilityAIBehaviourTreeNodes *btnode = _child_btnodes[i];
+		UtilityAIBTNodes *btnode = _child_btnodes[i];
 		if (!btnode->get_is_active()) {
 			continue;
 		}
@@ -60,7 +60,7 @@ void UtilityAIBTRandomSequence::reset_bt_node() {
 	_child_node_order.shuffle();
 }
 
-UtilityAIBehaviourTreeNodes::Status UtilityAIBTRandomSequence::tick(Variant blackboard, float delta) {
+UtilityAIBTNodes::Status UtilityAIBTRandomSequence::tick(Variant blackboard, float delta) {
 	if (get_internal_status() == BT_INTERNAL_STATUS_UNTICKED) {
 		reset_bt_node();
 	}
@@ -72,12 +72,12 @@ UtilityAIBehaviourTreeNodes::Status UtilityAIBTRandomSequence::tick(Variant blac
 	//}
 	//emit_signal("btnode_ticked", blackboard, delta);
 	while (_current_child_index < _child_node_order.size()) {
-		//UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(_child_node_order[_current_child_index]));
+		//UtilityAIBTNodes* btnode = godot::Object::cast_to<UtilityAIBTNodes>(get_child(_child_node_order[_current_child_index]));
 		//if( btnode != nullptr ) {
 		//if( !btnode->get_is_active() ) {
 		//    continue;
 		//}
-		UtilityAIBehaviourTreeNodes *btnode = _child_btnodes[(int)_child_node_order[_current_child_index]];
+		UtilityAIBTNodes *btnode = _child_btnodes[(int)_child_node_order[_current_child_index]];
 		Status result = btnode->tick(blackboard, delta);
 		set_tick_result(result);
 		if (result == Status::FAILURE) {

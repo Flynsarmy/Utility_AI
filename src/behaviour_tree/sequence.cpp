@@ -25,7 +25,7 @@ void UtilityAIBTSequence::reset_bt_node() {
 	_current_child_index = 0;
 }
 
-UtilityAIBehaviourTreeNodes::Status UtilityAIBTSequence::tick(Variant blackboard, float delta) {
+UtilityAIBTNodes::Status UtilityAIBTSequence::tick(Variant blackboard, float delta) {
 	if (get_internal_status() == BT_INTERNAL_STATUS_UNTICKED) {
 		_current_child_index = 0;
 		//emit_signal("btree_node_entered", blackboard, delta, this);
@@ -38,10 +38,10 @@ UtilityAIBehaviourTreeNodes::Status UtilityAIBTSequence::tick(Variant blackboard
 	//emit_signal("btnode_ticked", blackboard, delta);
 	//int num_children = get_child_count();
 	//while( _current_child_index < num_children ) {
-	//    UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(_current_child_index));
+	//    UtilityAIBTNodes* btnode = godot::Object::cast_to<UtilityAIBTNodes>(get_child(_current_child_index));
 	//    if( btnode != nullptr ) {
 	while (_current_child_index < (int)_num_child_btnodes) {
-		UtilityAIBehaviourTreeNodes *btnode = _child_btnodes[_current_child_index];
+		UtilityAIBTNodes *btnode = _child_btnodes[_current_child_index];
 		if (btnode->get_is_active()) {
 			Status result = btnode->tick(blackboard, delta);
 			set_tick_result(result);

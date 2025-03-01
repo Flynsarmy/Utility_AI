@@ -23,7 +23,7 @@ UtilityAIBTInverter::~UtilityAIBTInverter() {
 
 // Handling methods.
 
-UtilityAIBehaviourTreeNodes::Status UtilityAIBTInverter::tick(Variant blackboard, float delta) {
+UtilityAIBTNodes::Status UtilityAIBTInverter::tick(Variant blackboard, float delta) {
 	set_internal_status(BT_INTERNAL_STATUS_TICKED);
 	//if( _is_first_tick ) {
 	//    _is_first_tick = false;
@@ -32,16 +32,16 @@ UtilityAIBehaviourTreeNodes::Status UtilityAIBTInverter::tick(Variant blackboard
 
 	for (int i = 0; i < get_child_count(); ++i) {
 		Node *node = get_child(i);
-		if (UtilityAIBehaviourTreeNodes *btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(node)) {
+		if (UtilityAIBTNodes *btnode = godot::Object::cast_to<UtilityAIBTNodes>(node)) {
 			if (!btnode->get_is_active()) {
 				continue;
 			}
 			Status result = btnode->tick(blackboard, delta);
 
-			if (result == Status::RUNNING) {
+			if (result == Status::SUCCESS) {
 				result = Status::FAILURE;
 			} else if (result == Status::FAILURE) {
-				result = Status::RUNNING;
+				result = Status::SUCCESS;
 			}
 
 			set_tick_result(result);

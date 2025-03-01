@@ -63,7 +63,7 @@ void UtilityAIBTLimiter::reset_bt_node() {
 	_current_repeat_times = _max_repeat_times;
 }
 
-UtilityAIBehaviourTreeNodes::Status UtilityAIBTLimiter::tick(Variant blackboard, float delta) {
+UtilityAIBTNodes::Status UtilityAIBTLimiter::tick(Variant blackboard, float delta) {
 	//if( !get_is_active() ) return BT_SKIP;
 	if (Engine::get_singleton()->is_editor_hint())
 		return Status::FAILURE;
@@ -83,7 +83,7 @@ UtilityAIBehaviourTreeNodes::Status UtilityAIBTLimiter::tick(Variant blackboard,
 	}
 
 	for (int i = 0; i < get_child_count(); ++i) {
-		if (UtilityAIBehaviourTreeNodes *btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(get_child(i))) {
+		if (UtilityAIBTNodes *btnode = godot::Object::cast_to<UtilityAIBTNodes>(get_child(i))) {
 			if (!btnode->get_is_active()) {
 				continue;
 			}

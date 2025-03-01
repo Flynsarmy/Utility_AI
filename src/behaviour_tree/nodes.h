@@ -1,5 +1,5 @@
-#ifndef UtilityAIBehaviourTreeNodes_H_INCLUDED
-#define UtilityAIBehaviourTreeNodes_H_INCLUDED
+#ifndef UtilityAIBTNodes_H_INCLUDED
+#define UtilityAIBTNodes_H_INCLUDED
 
 #include "../agent_behaviours/considerations.h"
 #include "../resources/considerations/consideration_resources.h"
@@ -9,12 +9,12 @@
 
 namespace godot {
 
-class UtilityAIBehaviourTreeNodes : public UtilityAI {
-	GDCLASS(UtilityAIBehaviourTreeNodes, UtilityAI)
+class UtilityAIBTNodes : public UtilityAI {
+	GDCLASS(UtilityAIBTNodes, UtilityAI)
 
 public:
-	UtilityAIBehaviourTreeNodes();
-	~UtilityAIBehaviourTreeNodes();
+	UtilityAIBTNodes();
+	~UtilityAIBTNodes();
 
 	// Getters and setters for attributes.
 
@@ -36,7 +36,7 @@ public:
 		SUCCESS = 1,
 	};
 
-	enum UtilityAIBehaviourTreeNodesEvaluationMethod {
+	enum UtilityAIBTNodesEvaluationMethod {
 		Sum = 0,
 		Min = 1,
 		Max = 2,
@@ -58,7 +58,7 @@ public:
 	void set_reset_rule(int reset_rule);
 	int get_reset_rule() const;
 
-	enum UtilityAIBehaviourTreeNodesResetRule {
+	enum UtilityAIBTNodesResetRule {
 		WHEN_TICKED = 0,
 		WHEN_COMPLETED,
 		WHEN_TICKED_AFTER_BEING_COMPLETED,
@@ -79,7 +79,6 @@ public:
 	inline virtual bool has_completed() { return (_internal_status == BT_INTERNAL_STATUS_COMPLETED); };
 
 	// Godot virtuals.
-	// none.
 	virtual void _notification(int p_what);
 
 private:
@@ -97,7 +96,7 @@ protected:
 	static void _bind_methods();
 
 	//bool   _is_first_tick;
-	std::vector<UtilityAIBehaviourTreeNodes *> _child_btnodes;
+	std::vector<UtilityAIBTNodes *> _child_btnodes;
 	unsigned int _num_child_btnodes;
 	std::vector<UtilityAIConsiderations *> _child_considerations;
 	unsigned int _num_child_considerations;
@@ -109,6 +108,6 @@ protected:
 
 } //namespace godot
 
-VARIANT_ENUM_CAST(UtilityAIBehaviourTreeNodes::Status)
+VARIANT_ENUM_CAST(UtilityAIBTNodes::Status)
 
 #endif

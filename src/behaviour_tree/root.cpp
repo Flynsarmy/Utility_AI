@@ -52,7 +52,7 @@ uint64_t UtilityAIBTRoot::get_total_tick_usec() const {
 
 // Handling functions.
 
-UtilityAIBehaviourTreeNodes::Status UtilityAIBTRoot::tick(Variant blackboard, float delta) {
+UtilityAIBTNodes::Status UtilityAIBTRoot::tick(Variant blackboard, float delta) {
 #ifdef DEBUG_ENABLED
 	uint64_t method_start_time_usec = godot::Time::get_singleton()->get_ticks_usec();
 #endif
@@ -72,7 +72,7 @@ UtilityAIBehaviourTreeNodes::Status UtilityAIBTRoot::tick(Variant blackboard, fl
 	}
 #endif
 
-	if (get_reset_rule() == UtilityAIBehaviourTreeNodesResetRule::NEVER) {
+	if (get_reset_rule() == UtilityAIBTNodesResetRule::NEVER) {
 		if (get_internal_status() == BT_INTERNAL_STATUS_COMPLETED) {
 #ifdef DEBUG_ENABLED
 			_total_tick_usec = godot::Time::get_singleton()->get_ticks_usec() - method_start_time_usec;
@@ -95,7 +95,7 @@ UtilityAIBehaviourTreeNodes::Status UtilityAIBTRoot::tick(Variant blackboard, fl
 	} //endfor sensors
 
 	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
-		UtilityAIBehaviourTreeNodes *btnode = _child_btnodes[i];
+		UtilityAIBTNodes *btnode = _child_btnodes[i];
 		if (!btnode->get_is_active()) {
 			continue;
 		}
@@ -121,7 +121,7 @@ UtilityAIBehaviourTreeNodes::Status UtilityAIBTRoot::tick(Variant blackboard, fl
 			sensor->evaluate_sensor_value();
 			continue;
 		}
-		if( UtilityAIBehaviourTreeNodes* btnode = godot::Object::cast_to<UtilityAIBehaviourTreeNodes>(node) ) {
+		if( UtilityAIBTNodes* btnode = godot::Object::cast_to<UtilityAIBTNodes>(node) ) {
 			if( !btnode->get_is_active() ) {
 				continue;
 			}
@@ -149,18 +149,22 @@ UtilityAIBehaviourTreeNodes::Status UtilityAIBTRoot::tick(Variant blackboard, fl
 }
 
 // Godot virtuals.
-void UtilityAIBTRoot::_ready() {
+void UtilityAIBTRoot::_notification(int p_what) {
+	UtilityAIBTNodes::_notification(p_what);
+
+	if (p_what == NOTIFICATION_READY || p_what == NOTIFICATION_CHILD_ORDER_CHANGED) {
 #ifdef DEBUG_ENABLED
-	if (Engine::get_singleton()->is_editor_hint())
-		return;
-	UtilityAIDebuggerOverlay::get_singleton()->register_behaviour_tree(this->get_instance_id());
+		if (Engine::get_singleton()->is_editor_hint())
+			return;
+		UtilityAIDebuggerOverlay::get_singleton()->register_behaviour_tree(this->get_instance_id());
 #endif
-	_child_sensors.clear();
-	for (int i = 0; i < get_child_count(); ++i) {
-		if (UtilityAISensors *sensor = godot::Object::cast_to<UtilityAISensors>(get_child(i))) {
-			_child_sensors.push_back(sensor);
+		_child_sensors.clear();
+		for (int i = 0; i < get_child_count(); ++i) {
+			if (UtilityAISensors *sensor = godot::Object::cast_to<UtilityAISensors>(get_child(i))) {
+				_child_sensors.push_back(sensor);
+			}
 		}
+		_num_child_sensors = (unsigned int)_child_sensors.size();
+		reset();
 	}
-	_num_child_sensors = (unsigned int)_child_sensors.size();
-	reset();
 }

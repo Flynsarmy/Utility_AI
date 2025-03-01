@@ -1,5 +1,5 @@
-#ifndef UtilityAIStateTreeNodes_H_INCLUDED
-#define UtilityAIStateTreeNodes_H_INCLUDED
+#ifndef UtilityAISTNodes_H_INCLUDED
+#define UtilityAISTNodes_H_INCLUDED
 
 #include "../agent_behaviours/considerations.h"
 #include "../resources/considerations/consideration_resources.h"
@@ -9,8 +9,8 @@
 
 namespace godot {
 
-class UtilityAIStateTreeNodes : public UtilityAI {
-	GDCLASS(UtilityAIStateTreeNodes, UtilityAI)
+class UtilityAISTNodes : public UtilityAI {
+	GDCLASS(UtilityAISTNodes, UtilityAI)
 
 private:
 	bool _is_on_entered_condition_true;
@@ -18,9 +18,9 @@ private:
 	int _evaluation_method;
 	bool _invert_score;
 	int _child_state_selection_rule;
-	UtilityAIStateTreeNodes *_tree_root_node;
+	UtilityAISTNodes *_tree_root_node;
 	TypedArray<UtilityAIConsiderationResources> _considerations;
-	std::vector<UtilityAIStateTreeNodes *> _child_states;
+	std::vector<UtilityAISTNodes *> _child_states;
 	unsigned int _num_child_states;
 
 	std::vector<UtilityAIConsiderations *> _child_considerations;
@@ -34,8 +34,8 @@ protected:
 	uint64_t _last_visited_timestamp;
 #endif
 public:
-	UtilityAIStateTreeNodes();
-	~UtilityAIStateTreeNodes();
+	UtilityAISTNodes();
+	~UtilityAISTNodes();
 
 	// Getters and setters for attributes.
 
@@ -53,7 +53,7 @@ public:
 	void set_evaluation_method(int evaluation_method);
 	int get_evaluation_method() const;
 
-	enum UtilityAIStateTreeNodesEvaluationMethod {
+	enum UtilityAISTNodesEvaluationMethod {
 		Sum = 0,
 		Min = 1,
 		Max = 2,
@@ -66,13 +66,13 @@ public:
 	void set_score(float score);
 	float get_score() const;
 
-	UtilityAIStateTreeNodes *get_tree_root() const;
+	UtilityAISTNodes *get_tree_root() const;
 
 	void set_child_state_selection_rule(int child_state_selection_rule);
 	int get_child_state_selection_rule() const;
 
-	virtual void set_root_node(UtilityAIStateTreeNodes *tree_root_node);
-	//Dictionary get_child_nodes_as_dictionary(UtilityAIStateTreeNodes* tree_root_node );
+	virtual void set_root_node(UtilityAISTNodes *tree_root_node);
+	//Dictionary get_child_nodes_as_dictionary(UtilityAISTNodes* tree_root_node );
 
 	//inline virtual bool get_is_leaf() const { return false; };
 
@@ -96,7 +96,7 @@ public:
 	GDVIRTUAL2(on_tick, Variant, double);
 	GDVIRTUAL3(transition_to, NodePath, Variant, double);
 
-	virtual UtilityAIStateTreeNodes *evaluate_state_activation(Variant blackboard, float delta);
+	virtual UtilityAISTNodes *evaluate_state_activation(Variant blackboard, float delta);
 
 	// Godot virtuals.
 

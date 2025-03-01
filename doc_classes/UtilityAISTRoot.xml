@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="UtilityAISTRoot" inherits="UtilityAIStateTreeNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+<class name="UtilityAISTRoot" inherits="UtilityAISTNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
 		The root node for a State Tree.
 	</brief_description>
@@ -10,9 +10,9 @@
 	</tutorials>
 	<methods>
 		<method name="get_active_states" qualifiers="const">
-			<return type="UtilityAIStateTreeNodes[]" />
+			<return type="UtilityAISTNode[]" />
 			<description>
-				Returns a list of currently active states. This number won't update until [method UtilityAIStateTreeNodes.transition_to] is called.
+				Returns a list of currently active states. This number won't update until [method UtilityAISTNodes.transition_to] is called.
 			</description>
 		</method>
 		<method name="get_child_sensors">
@@ -26,7 +26,7 @@
 			<param index="0" name="blackboard" type="Variant" />
 			<param index="1" name="delta" type="float" />
 			<description>
-				The [method tick] method is used to update the State Tree state. You can provide any Godot variant type as a parameter (usually a node used as an actor or a dictionary used as a blackboard), along with a delta-time. [code]blackboard[/code] and [code]delta[/code] are passed to the [method UtilityAIStateTreeNodes.on_enter_state], [method UtilityAIStateTreeNodes.on_exit_state], [method UtilityAIStateTreeNodes.on_tick] and [method UtilityAIStateTreeNodes.on_enter_condition] methods of the child nodes.
+				The [method tick] method is used to update the State Tree state. You can provide any Godot variant type as a parameter (usually a node used as an actor or a dictionary used as a blackboard), along with a delta-time. [code]blackboard[/code] and [code]delta[/code] are passed to the [method UtilityAISTNodes.on_enter_state], [method UtilityAISTNodes.on_exit_state], [method UtilityAISTNodes.on_tick] and [method UtilityAISTNodes.on_enter_condition] methods of the child nodes.
 			</description>
 		</method>
 	</methods>
