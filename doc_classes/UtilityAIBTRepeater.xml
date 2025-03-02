@@ -4,7 +4,7 @@
 		Repeats its child node for [member max_repeat_times] number of times before returning [code]SUCCESS[/code].
 	</brief_description>
 	<description>
-		The Repeater node repeats its child node for [member max_repeat_times] number of successes before returning [code]SUCCESS[/code] until which point it returns [code]RUNNING[/code]. If the child returns [code]FAILURE[/code] this node immediately returns [code]FAILURE[/code].
+		The Repeater node repeats its child node for [member max_repeat_times] number of successes before returning [code]FAILURE[/code] until which point it returns [code]RUNNING[/code]. If the child returns [code]FAILURE[/code] this node immediately returns [code]FAILURE[/code].
 
 		If [member max_repeat_times] is set to [code]-1[/code] the child will be ticked indefinitely.
 	</description>

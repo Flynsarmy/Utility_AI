@@ -1,13 +1,13 @@
 #ifndef UtilityAIBTDecoratorNodes_H_INCLUDED
 #define UtilityAIBTDecoratorNodes_H_INCLUDED
 
-#include "nodes.h"
+#include "task_nodes.h"
 #include <godot_cpp/classes/node.hpp>
 
 namespace godot {
 
-class UtilityAIBTDecoratorNodes : public UtilityAIBTNodes {
-	GDCLASS(UtilityAIBTDecoratorNodes, UtilityAIBTNodes)
+class UtilityAIBTDecoratorNodes : public UtilityAIBTTaskNodes {
+	GDCLASS(UtilityAIBTDecoratorNodes, UtilityAIBTTaskNodes)
 
 private:
 protected:

@@ -30,28 +30,26 @@ UtilityAIBTNodes::Status UtilityAIBTInverter::tick(Variant blackboard, float del
 	//    emit_signal("btnode_entered", blackboard, delta);
 	//}
 
-	for (int i = 0; i < get_child_count(); ++i) {
-		Node *node = get_child(i);
-		if (UtilityAIBTNodes *btnode = godot::Object::cast_to<UtilityAIBTNodes>(node)) {
-			if (!btnode->get_is_active()) {
-				continue;
-			}
-			Status result = btnode->tick(blackboard, delta);
-
-			if (result == Status::SUCCESS) {
-				result = Status::FAILURE;
-			} else if (result == Status::FAILURE) {
-				result = Status::SUCCESS;
-			}
-
-			set_tick_result(result);
-			//emit_signal("btnode_ticked", blackboard, delta);
-			if (result != Status::RUNNING) {
-				set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-				//emit_signal("btnode_exited", blackboard, delta);
-			}
-			return result;
+	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
+		UtilityAIBTNodes *btnode = _child_btnodes[i];
+		if (!btnode->get_is_active()) {
+			continue;
 		}
+		Status result = btnode->tick(blackboard, delta);
+
+		if (result == Status::SUCCESS) {
+			result = Status::FAILURE;
+		} else if (result == Status::FAILURE) {
+			result = Status::SUCCESS;
+		}
+
+		set_tick_result(result);
+		//emit_signal("btnode_ticked", blackboard, delta);
+		if (result != Status::RUNNING) {
+			set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+			//emit_signal("btnode_exited", blackboard, delta);
+		}
+		return result;
 	}
 	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
 	set_tick_result(Status::FAILURE);

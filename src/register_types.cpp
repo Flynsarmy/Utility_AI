@@ -59,7 +59,6 @@
 // Decorators
 #include "behaviour_tree/cooldown_msec.h"
 #include "behaviour_tree/cooldown_ticks.h"
-#include "behaviour_tree/cooldown_usec.h"
 #include "behaviour_tree/decorator_nodes.h"
 #include "behaviour_tree/fixed_result.h"
 #include "behaviour_tree/inverter.h"
@@ -193,6 +192,12 @@ void register_scene_classes() {
 	GDREGISTER_CLASS(UtilityAIBTRandomSelector);
 	GDREGISTER_CLASS(UtilityAIBTScoreBasedPicker);
 
+	GDREGISTER_VIRTUAL_CLASS(UtilityAIBTTaskNodes);
+	GDREGISTER_CLASS(UtilityAIBTLeaf);
+	GDREGISTER_CLASS(UtilityAIBTRunNQSQuery);
+	GDREGISTER_CLASS(UtilityAIBTPassBy);
+	GDREGISTER_CLASS(UtilityAIBTNodeReference);
+
 	GDREGISTER_VIRTUAL_CLASS(UtilityAIBTDecoratorNodes);
 	GDREGISTER_CLASS(UtilityAIBTRepeater);
 	GDREGISTER_CLASS(UtilityAIBTRepeatUntil);
@@ -202,13 +207,6 @@ void register_scene_classes() {
 	GDREGISTER_CLASS(UtilityAIBTPassThrough);
 	GDREGISTER_CLASS(UtilityAIBTCooldownTicks);
 	GDREGISTER_CLASS(UtilityAIBTCooldownMsec);
-	GDREGISTER_CLASS(UtilityAIBTCooldownUsec);
-
-	GDREGISTER_VIRTUAL_CLASS(UtilityAIBTTaskNodes);
-	GDREGISTER_CLASS(UtilityAIBTLeaf);
-	GDREGISTER_CLASS(UtilityAIBTRunNQSQuery);
-	GDREGISTER_CLASS(UtilityAIBTPassBy);
-	GDREGISTER_CLASS(UtilityAIBTNodeReference);
 
 	// State tree.
 	GDREGISTER_VIRTUAL_CLASS(UtilityAISTNodes);

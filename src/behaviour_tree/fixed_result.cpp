@@ -44,16 +44,14 @@ UtilityAIBTNodes::Status UtilityAIBTFixedResult::tick(Variant blackboard, float 
 	//}
 
 	set_tick_result(_fixed_result);
-	for (int i = 0; i < get_child_count(); ++i) {
-		Node *node = get_child(i);
-		if (UtilityAIBTNodes *btnode = godot::Object::cast_to<UtilityAIBTNodes>(node)) {
-			if (!btnode->get_is_active()) {
-				continue;
-			}
-			btnode->tick(blackboard, delta);
-			//emit_signal("btnode_ticked", blackboard, delta);
-			break;
+	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
+		UtilityAIBTNodes *btnode = _child_btnodes[i];
+		if (!btnode->get_is_active()) {
+			continue;
 		}
+		btnode->tick(blackboard, delta);
+		//emit_signal("btnode_ticked", blackboard, delta);
+		break;
 	}
 	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
 	//emit_signal("btnode_exited", blackboard, delta);

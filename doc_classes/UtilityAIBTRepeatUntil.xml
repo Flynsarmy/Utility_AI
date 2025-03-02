@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="UtilityAIBTRepeatUntil" inherits="UtilityAIBTDecoratorNodes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Ticks its child either until the [member expected_tick_result] is returned by its child for [member max_repeat_times] number of times.
 	</brief_description>
 	<description>
-		The RepeatUntil node ticks its child either until the expected_tick_result is returned by its child or [member max_repeat_times]. If [member max_repeat_times] is set to -1, only the expected_tick_result will end the loop.
+		The RepeatUntil node ticks its child either until the [member expected_tick_result] is returned by its child for [member max_repeat_times] number of times. If [member max_repeat_times] is set to [code]-1[/code], only the [member expected_tick_result] will end the loop.
 	</description>
 	<tutorials>
 	</tutorials>

@@ -134,7 +134,7 @@ UtilityAIBTNodes::Status UtilityAIBTRepeater::tick(Variant blackboard, float del
 	}
 
 	set_internal_status(BT_INTERNAL_STATUS_UNTICKED);
-	set_tick_result(Status::SUCCESS);
+	set_tick_result(Status::FAILURE);
 	//emit_signal("btnode_exited", blackboard, delta);
-	return Status::SUCCESS;
+	return Status::FAILURE;
 }

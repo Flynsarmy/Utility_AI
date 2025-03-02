@@ -77,8 +77,7 @@ UtilityAIBTNodes::Status UtilityAIBTCooldownMsec::tick(Variant blackboard, float
 		}
 		_is_in_cooldown = false;
 	}
-	_is_in_cooldown = true;
-	_cooldown_start_timestamp = godot::Time::get_singleton()->get_ticks_msec();
+
 	for (int i = 0; i < get_child_count(); ++i) {
 		Node *node = get_child(i);
 		if (UtilityAIBTNodes *btnode = godot::Object::cast_to<UtilityAIBTNodes>(node)) {
@@ -86,8 +85,19 @@ UtilityAIBTNodes::Status UtilityAIBTCooldownMsec::tick(Variant blackboard, float
 				continue;
 			}
 			Status result = btnode->tick(blackboard, delta);
-			set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
-			set_tick_result(result);
+
+			if (result != Status::RUNNING) {
+				_is_in_cooldown = true;
+				_cooldown_start_timestamp = godot::Time::get_singleton()->get_ticks_msec();
+
+				set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
+				set_tick_result(result);
+				//emit_signal("btnode_exited", blackboard, delta);
+			} else {
+				set_internal_status(BT_INTERNAL_STATUS_TICKED);
+				set_tick_result(result);
+			}
+
 			//emit_signal("btnode_exited", blackboard, delta);
 			return result;
 		}

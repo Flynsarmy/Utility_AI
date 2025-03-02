@@ -22,7 +22,7 @@ void UtilityAIBTRepeatUntil::_bind_methods() {
 	//ADD_SUBGROUP("Debugging","");
 
 	//ClassDB::bind_method(D_METHOD("set_current_repeat_times", "current_repeat_times"), &UtilityAIBTRepeatUntil::set_current_max_repeat_times);
-	//ClassDB::bind_method(D_METHOD("get_current_repeat_times"), &UtilityAIBTRepeatUntil::get_current_max_repeat_times);
+	ClassDB::bind_method(D_METHOD("get_current_repeat_times"), &UtilityAIBTRepeatUntil::get_current_max_repeat_times);
 	//ADD_PROPERTY(PropertyInfo(Variant::INT, "current_repeat_times", PROPERTY_HINT_RANGE, "-1,100,or_greater"), "set_current_repeat_times","get_current_repeat_times");
 
 	//ClassDB::bind_method(D_METHOD("set_reset_rule", "reset_rule"), &UtilityAIBTRepeatUntil::set_reset_rule);
@@ -53,23 +53,18 @@ int UtilityAIBTRepeatUntil::get_max_repeat_times() const {
 }
 
 void UtilityAIBTRepeatUntil::set_current_max_repeat_times(int current_max_repeat_times) {
-	_current_max_repeat_times = current_max_repeat_times;
+	_current_max_repeat_times = get_max_repeat_times() - current_max_repeat_times;
 }
 
 int UtilityAIBTRepeatUntil::get_current_max_repeat_times() const {
-	return _current_max_repeat_times;
+	return get_max_repeat_times() - _current_max_repeat_times;
 }
 
-void UtilityAIBTRepeatUntil::set_expected_tick_result(int expected_tick_result) {
+void UtilityAIBTRepeatUntil::set_expected_tick_result(Status expected_tick_result) {
 	_expected_tick_result = expected_tick_result;
-	if (_expected_tick_result > 1) {
-		_expected_tick_result = 1;
-	} else if (_expected_tick_result < -1) {
-		_expected_tick_result = -1;
-	}
 }
 
-int UtilityAIBTRepeatUntil::get_expected_tick_result() const {
+UtilityAIBTNodes::Status UtilityAIBTRepeatUntil::get_expected_tick_result() const {
 	return _expected_tick_result;
 }
 

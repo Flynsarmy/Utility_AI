@@ -4,7 +4,7 @@
 		Base class for Utility AI behaviour tree task nodes.
 	</brief_description>
 	<description>
-		Provides a [method _tick] method for task nodes to implement to run their custom logic.
+		Provides a [method on_tick] method for task nodes to implement to run their custom logic.
 	</description>
 	<tutorials>
 	</tutorials>

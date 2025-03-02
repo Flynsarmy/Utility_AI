@@ -59,6 +59,10 @@ UtilityAIBTNodes::Status UtilityAIBTPassThrough::tick(Variant blackboard, float 
 	// }
 	// //emit_signal("btnode_ticked", blackboard, delta);
 
+	godot::Variant result;
+	result = call("on_tick", blackboard, delta);
+	Status return_value = static_cast<Status>((int64_t)result); // or result.operator int64_t();
+
 	//for( int i = 0; i < get_child_count(); ++i ) {
 	//    Node* node = get_child(i);
 	//    if( UtilityAIBTNodes* btnode = godot::Object::cast_to<UtilityAIBTNodes>(node) ) {
@@ -67,6 +71,7 @@ UtilityAIBTNodes::Status UtilityAIBTPassThrough::tick(Variant blackboard, float 
 		if (!btnode->get_is_active()) {
 			continue;
 		}
+
 		Status result = btnode->tick(blackboard, delta);
 		if (result != Status::RUNNING) {
 			set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
@@ -79,7 +84,7 @@ UtilityAIBTNodes::Status UtilityAIBTPassThrough::tick(Variant blackboard, float 
 	set_internal_status(BT_INTERNAL_STATUS_COMPLETED);
 	//emit_signal("btnode_exited", blackboard, delta);
 	// return _tick_result;
-	return Status::SUCCESS;
+	return return_value;
 }
 
 void UtilityAIBTPassThrough::_notification(int p_what) {

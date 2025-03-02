@@ -4,7 +4,7 @@ extends GdUnitTestSuite
 @warning_ignore('unused_parameter')
 @warning_ignore('return_value_discarded')
 
-func test_success_after_repeats() -> void:
+func test_failure_after_repeats() -> void:
 	var _root: UtilityAIBTRoot = UtilityAIBTRoot.new()
 	var _child: UtilityAIBTRepeater = UtilityAIBTRepeater.new()
 	var _grandchild: UtilityAIBTFixedResult = UtilityAIBTFixedResult.new()
@@ -19,7 +19,7 @@ func test_success_after_repeats() -> void:
 	assert(_root.tick_result == UtilityAIBTNodes.RUNNING)
 	assert(_child.get_times_repeated() == 1)
 	_root.tick(blackboard, 0.1)
-	assert(_root.tick_result == UtilityAIBTNodes.SUCCESS)
+	assert(_root.tick_result == UtilityAIBTNodes.FAILURE)
 	assert(_child.get_times_repeated() == 2)
 
 	_root.free()

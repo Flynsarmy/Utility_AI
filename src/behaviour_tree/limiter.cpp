@@ -82,18 +82,17 @@ UtilityAIBTNodes::Status UtilityAIBTLimiter::tick(Variant blackboard, float delt
 		return Status::FAILURE;
 	}
 
-	for (int i = 0; i < get_child_count(); ++i) {
-		if (UtilityAIBTNodes *btnode = godot::Object::cast_to<UtilityAIBTNodes>(get_child(i))) {
-			if (!btnode->get_is_active()) {
-				continue;
-			}
-			--_current_repeat_times;
-			Status result = btnode->tick(blackboard, delta);
-			set_tick_result(result);
-			if (result != Status::RUNNING) {
-				//emit_signal("btnode_exited", blackboard, delta);
-				return result;
-			}
+	for (unsigned int i = 0; i < _num_child_btnodes; ++i) {
+		UtilityAIBTNodes *btnode = _child_btnodes[i];
+		if (!btnode->get_is_active()) {
+			continue;
+		}
+		--_current_repeat_times;
+		Status result = btnode->tick(blackboard, delta);
+		set_tick_result(result);
+		if (result != Status::RUNNING) {
+			//emit_signal("btnode_exited", blackboard, delta);
+			return result;
 		}
 	}
 	//emit_signal("btnode_ticked", blackboard, delta);
